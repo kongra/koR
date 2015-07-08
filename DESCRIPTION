@@ -1,10 +1,12 @@
 Package: kongRa
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Contains some of my R codes.
 Version: 0.1
 Date: 2015-07-07
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Konrad Grzanek
+Maintainer: Konrad Grzanek <kongra@gmail.com>
+Description: Contains some of my R codes.
+License: 
 LazyData: TRUE
+Imports: dplyr,
+    pryr
