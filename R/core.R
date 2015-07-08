@@ -31,7 +31,7 @@ mostFrequent <- function(x, n = 10) {
 }
 
 modes <- function(x) {
-  ## Returns a data-frame of mode values, together with their frequency.
+  # Returns a data-frame of mode values, together with their frequency.
   df <- data_frame(x) %>% group_by(x) %>% summarise(freq = dplyr::n())
   df %>% filter(freq == max(df$freq))
 }
