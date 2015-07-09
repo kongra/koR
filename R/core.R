@@ -1,12 +1,14 @@
-# Copyright (c) Konrad Grzanek
-# Created 2015-07-08
+## Copyright (c) Konrad Grzanek
+## Created 2015-07-08
 
 library(dplyr)
 
-osize  <- pryr::object_size # Just alias
-memuse <- pryr::mem_used    # Likewise
+## Some useful aliases
+osize  <- pryr::object_size
+memuse <- pryr::mem_used
+timeit <- microbenchmark::microbenchmark
 
-rgc <- function(n = 10) {
+rgc <- function (n = 10) {
   ## Calls gc() n times, 1 when n is negative.
   if (n > 1) {
     for (i in 1:(n - 1)) {
@@ -16,22 +18,22 @@ rgc <- function(n = 10) {
   gc()
 }
 
-printCondition <- function(prefix = "ERROR: ") {
-  # Returns a condition handler that prints a prefixed conditionMessage.
-  function(e) {
+printCondition <- function (prefix = "ERROR: ") {
+  ## Returns a condition handler that prints a prefixed conditionMessage.
+  function (e) {
     print(paste(prefix, conditionMessage(e), sep = ""))
   }
 }
 
-mostFrequent <- function(x, n = 10) {
-  # Returns a data-frame of n most frequent elements in vector x
-  # together with their frequencies.
+mostFrequent <- function (x, n = 10) {
+  ## Returns a data-frame of n most frequent elements in vector x
+  ## together with their frequencies.
   data_frame(x) %>% group_by(x) %>% summarise(freq = n()) %>%
     arrange(desc(freq)) %>% head(n)
 }
 
-modes <- function(x) {
-  # Returns a data-frame of mode values, together with their frequency.
-  df <- data_frame(x) %>% group_by(x) %>% summarise(freq = dplyr::n())
+modes <- function (x) {
+  ## Returns a data-frame of mode values, together with their frequency.
+  df <- data_frame(x) %>% group_by(x) %>% summarise(freq = n())
   df %>% filter(freq == max(df$freq))
 }

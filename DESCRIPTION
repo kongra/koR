@@ -9,4 +9,5 @@ Description: Contains some of my R codes.
 License: 
 LazyData: TRUE
 Imports: dplyr,
-    pryr
+    pryr,
+    microbenchmark
