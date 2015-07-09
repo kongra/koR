@@ -1,2 +1,2 @@
 # kongRa
-Package that holds some of my R codes.
+Contains some of my R codes.

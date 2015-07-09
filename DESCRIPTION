@@ -1,13 +1,14 @@
-Package: kongRa
-Type: Package
-Title: Contains some of my R codes.
-Version: 0.1
-Date: 2015-07-07
-Author: Konrad Grzanek
-Maintainer: Konrad Grzanek <kongra@gmail.com>
+Package:     kongRa
+Type:        Package
+Title:       Contains some of my R codes
+Version:     0.1
+Date:        2015-07-07
+Authors@R:   person("Konrad", "Grzanek", email = "kongra@gmail.com",
+                    role = c("aut", "cre"))
+URL:         http://github.com/kongra/kongRa
 Description: Contains some of my R codes.
 License:
-LazyData: TRUE
+LazyData:    TRUE
 Imports:
     dplyr          (>= 0.4.2),
     pryr           (>= 0.1.2),
