@@ -52,7 +52,7 @@ modes <- function(x) {
 }
 
 #' Defaults for NULL values.
-`%||%` <- function(x, y) if (is.null(x)) y else x
+`%or%` <- function(x, y) if (is.null(x)) y else x
 
 #' Remove NULLs from a list.
 compact <- function(x) {
