@@ -1,10 +1,13 @@
 # Copyright (c) Konrad Grzanek
 # Created 2015-07-08
 
-library(dplyr)
-
+#' Alias for \code{pryr::object_size}
 osize  <- pryr::object_size
+
+#' Alias for \code{pryr::mem_used}
 memuse <- pryr::mem_used
+
+#' Alias for \code{microbenchmark::microbenchmark}
 timeit <- microbenchmark::microbenchmark
 
 #' Execute gc multiple times.
@@ -46,4 +49,12 @@ mostFrequent <- function(x, n = 10) {
 modes <- function(x) {
   df <- data_frame(x) %>% group_by(x) %>% summarise(freq = n())
   df %>% filter(freq == max(df$freq))
+}
+
+#' Defaults for NULL values.
+`%||%` <- function(x, y) if (is.null(x)) y else x
+
+#' Remove NULLs from a list.
+compact <- function(x) {
+  x[!vapply(x, is.null, logical(1))]
 }
