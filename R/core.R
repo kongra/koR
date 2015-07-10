@@ -1,6 +1,8 @@
 # Copyright (c) Konrad Grzanek
 # Created 2015-07-08
 
+#' @import dplyr
+
 #' Alias for \code{pryr::object_size}
 osize  <- pryr::object_size
 
