@@ -66,6 +66,7 @@ modes <- function(x) {
 `%or%` <- function(x, y) if (is.null(x)) y else x
 
 #' Remove NULLs from a list.
+#' @param x The list
 #' @export
 compact <- function(x) {
   x[!vapply(x, is.null, logical(1))]

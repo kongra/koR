@@ -6,6 +6,9 @@
 \usage{
 compact(x)
 }
+\arguments{
+\item{x}{The list}
+}
 \description{
 Remove NULLs from a list.
 }
