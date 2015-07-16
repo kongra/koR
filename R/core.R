@@ -1,7 +1,7 @@
 # Copyright (c) Konrad Grzanek
 # Created 2015-07-08
 
-#' @import dplyr
+#' @import data.table
 NULL
 
 #' Alias for \code{pryr::object_size}
@@ -46,19 +46,21 @@ printCondition <- function(prefix = "ERROR: ") {
   }
 }
 
-#' Returns a data-frame of n most frequent elements in vector x
+#' Returns a data.table of n most frequent elements in vector x
 #' together with their frequencies.
 #' @export
 mostFrequent <- function(x, n = 10) {
-  data_frame(x) %>% group_by(x) %>% summarise(freq = n()) %>%
-    arrange(desc(freq)) %>% head(n)
+  dt <- data.table(x = x)
+  head(dt[, .(freq = .N), by = x][order(-freq)], n)
 }
 
-#' Returns a data-frame of mode values, together with their frequency.
+#' Returns a data.table of mode values, together with their frequency.
 #' @export
 modes <- function(x) {
-  df <- data_frame(x) %>% group_by(x) %>% summarise(freq = n())
-  df %>% filter(freq == max(df$freq))
+  dt1 <- data.table(x = x)
+  dt2 <- dt1[, .(freq = .N), by = x]
+  maxFreq = max(dt2$freq)
+  dt2[freq == maxFreq, ]
 }
 
 #' Defaults for NULL values.

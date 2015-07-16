@@ -2,11 +2,11 @@
 % Please edit documentation in R/core.R
 \name{modes}
 \alias{modes}
-\title{Returns a data-frame of mode values, together with their frequency.}
+\title{Returns a data.table of mode values, together with their frequency.}
 \usage{
 modes(x)
 }
 \description{
-Returns a data-frame of mode values, together with their frequency.
+Returns a data.table of mode values, together with their frequency.
 }
 

@@ -2,13 +2,13 @@
 % Please edit documentation in R/core.R
 \name{mostFrequent}
 \alias{mostFrequent}
-\title{Returns a data-frame of n most frequent elements in vector x
+\title{Returns a data.table of n most frequent elements in vector x
 together with their frequencies.}
 \usage{
 mostFrequent(x, n = 10)
 }
 \description{
-Returns a data-frame of n most frequent elements in vector x
+Returns a data.table of n most frequent elements in vector x
 together with their frequencies.
 }
 
