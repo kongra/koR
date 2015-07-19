@@ -73,24 +73,3 @@ modes <- function(x) {
 compact <- function(x) {
   x[!vapply(x, is.null, logical(1))]
 }
-
-#' By name column selection.
-#'
-#' \code{colNamed} when called with a character name and a data frame or a
-#' data table returns its named column. When called with name only returns a
-#' corresponding clojure having a df argument.
-#' @param name The column name
-#' @param df Data frame or data table
-#' @return The column as a vector
-#' @export
-colNamed <- function(name, df = NULL) {
-  if(is.null(df)) {
-    function(df) {
-      colNamed(name, df)
-    }
-  }
-  else {
-    if(is.data.table(df)) df[, get(name)]
-    else df[, name]
-  }
-}
