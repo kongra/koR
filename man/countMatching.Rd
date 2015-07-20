@@ -4,10 +4,10 @@
 \alias{countMatching}
 \title{Reports the number of elements matching the predicate.}
 \usage{
-countMatching(.data, pred, ...)
+countMatching(x, pred, ...)
 }
 \arguments{
-\item{.data}{The data object (vector, frame).}
+\item{x}{The data object (vector, frame).}
 
 \item{pred}{The predicate.}
 

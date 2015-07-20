@@ -2,9 +2,12 @@
 
 S3method(countMatching,data.frame)
 S3method(countMatching,default)
+S3method(duplicatedBy,data.frame)
+S3method(duplicatedBy,data.table)
 export("%or%")
 export(compact)
 export(countMatching)
+export(duplicatedBy)
 export(memuse)
 export(modes)
 export(mostFrequent)
