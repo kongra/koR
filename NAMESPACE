@@ -2,11 +2,11 @@
 
 export("%or%")
 export(compact)
+export(countMatching)
 export(memuse)
 export(modes)
 export(mostFrequent)
 export(osize)
-export(printColsCounts)
 export(printCondition)
 export(rgc)
 export(timeit)
