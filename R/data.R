@@ -13,10 +13,12 @@ countMatching <- function(.data, pred, ...) {
   UseMethod("countMatching")
 }
 
+#' @export
 countMatching.default <- function(.data, pred, ...) {
   sum(pred(.data))
 }
 
+#' @export
 countMatching.data.frame <- function(.data, pred, keepZeros = FALSE) {
   result <- list()
   for(n in colnames(.data)) {
