@@ -21,9 +21,9 @@ countMatching.default <- function(.data, pred, ...) {
 #' @export
 countMatching.data.frame <- function(.data, pred, keepZeros = FALSE) {
   result <- list()
-  for(n in colnames(.data)) {
+  for (n in colnames(.data)) {
     v <- sum(pred(.data[[n]]))
-    if(keepZeros || v != 0) result[[n]] <- v
+    if (keepZeros || v != 0) result[[n]] <- v
   }
   result
 }
