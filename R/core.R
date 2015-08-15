@@ -6,11 +6,15 @@ NULL
 
 #' Alias for \code{pryr::object_size}
 #' @export
-osize  <- pryr::object_size
+osize <- pryr::object_size
 
 #' Alias for \code{pryr::mem_used}
 #' @export
 memuse <- pryr::mem_used
+
+#' Alias for \code{pryr::address}
+#' @export
+addr <- pryr::address
 
 #' Alias for \code{microbenchmark::microbenchmark}
 #' @export
