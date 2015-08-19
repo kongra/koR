@@ -77,3 +77,8 @@ modes <- function(x) {
 compact <- function(x) {
   x[!vapply(x, is.null, logical(1))]
 }
+
+#' Creates an empty hashmap (environment).
+#' @param size See new.env documentation
+#' @export
+hashmap <- function(size = NA) new.env(parent = emptyenv(), size = size)
