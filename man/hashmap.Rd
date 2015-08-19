@@ -4,7 +4,7 @@
 \alias{hashmap}
 \title{Creates an empty hashmap (environment).}
 \usage{
-hashmap(size = 29L)
+hashmap(size = NA)
 }
 \arguments{
 \item{size}{See new.env documentation}
