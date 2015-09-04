@@ -60,7 +60,7 @@ printCondition <- function(prefix = "ERROR: ") {
 chatty <- function(f, prefix = "Processing ") {
   function(x, ...) {
     res <- f(x, ...)
-    cat(prefix, x, "\n", sep = " ")
+    cat(prefix, x, "\n", sep = "")
     res
   }
 }
