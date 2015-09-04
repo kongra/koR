@@ -50,6 +50,21 @@ printCondition <- function(prefix = "ERROR: ") {
   }
 }
 
+#' Debug wrapper generator.
+#'
+#' Returns a diagnostic wrapper around f. Thanks H. Wickham.
+#'
+#' @param f Function to wrap
+#' @param prefix A prefix for the diagnostic message
+#' @export
+chatty <- function(f, prefix = "Processing ") {
+  function(x, ...) {
+    res <- f(x, ...)
+    cat(prefix, x, "\n", sep = " ")
+    res
+  }
+}
+
 #' Returns a data.table of n most frequent elements in vector x
 #' together with their frequencies.
 #' @export
