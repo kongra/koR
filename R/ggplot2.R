@@ -9,9 +9,9 @@ NULL
 
 ##' Custom pleasant theme from: http://minimaxir.com/2015/02/ggplot-tutorial/
 ##' @export
-fte_theme <- function() {
+fte_theme <- function(brewerPaletteName = "Greys") {
   ## Generate the colors for the chart procedurally with RColorBrewer
-  palette <- brewer.pal("Greys", n = 9)
+  palette <- brewer.pal(brewerPaletteName, n = 9)
   color.background = palette[2]
   color.grid.major = palette[3]
   color.axis.text  = palette[6]
