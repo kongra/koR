@@ -76,10 +76,9 @@ mostFrequent <- function(x, n = 10) {
 #' Returns a data.table of mode values, together with their frequency.
 #' @export
 modes <- function(x) {
-  dt1 <- data.table(x = x)
-  dt2 <- dt1[, .(freq = .N), by = x]
-  maxFreq = max(dt2$freq)
-  dt2[freq == maxFreq, ]
+  dt <- data.table(x = x)[, .(freq = .N), by = x]
+  maxFreq = max(dt$freq)
+  dt[freq == maxFreq]
 }
 
 #' Defaults for NULL values.
