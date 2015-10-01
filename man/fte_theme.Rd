@@ -4,7 +4,7 @@
 \alias{fte_theme}
 \title{Custom pleasant theme from: http://minimaxir.com/2015/02/ggplot-tutorial/}
 \usage{
-fte_theme()
+fte_theme(brewerPaletteName = "Greys")
 }
 \description{
 Custom pleasant theme from: http://minimaxir.com/2015/02/ggplot-tutorial/

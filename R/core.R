@@ -97,3 +97,10 @@ compact <- function(x) {
 #' @param size See new.env documentation
 #' @export
 hashmap <- function(size = NULL) new.env(parent = emptyenv(), size = size)
+
+##' Gets user installed packages.
+##' @return a data table containing all the relevant information
+##' @seealso installed.packages()
+##' @export
+userInstalledPackages <- function()
+  as.data.table(installed.packages())[is.na(Priority)]
