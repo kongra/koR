@@ -51,3 +51,10 @@ brewerTheme <- function(paletteName = "Greys", textSize = 7) {
   ## Plot margins
   theme(plot.margin = unit(c(0.35, 0.2, 0.3, 0.35), "cm"))
 }
+
+##' Theme compatible with LaTeX as much as possible.
+##' @export
+latexTheme <- function() {
+  theme_bw() +
+  theme(text = element_text(family = "CM Roman"))
+}
