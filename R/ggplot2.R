@@ -9,9 +9,9 @@ NULL
 
 ##' Custom pleasant theme from: http://minimaxir.com/2015/02/ggplot-tutorial/
 ##' @export
-fte_theme <- function(brewerPaletteName = "Greys") {
+brewerTheme <- function(paletteName = "Greys", textSize = 7) {
   ## Generate the colors for the chart procedurally with RColorBrewer
-  palette <- brewer.pal(brewerPaletteName, n = 9)
+  palette <- brewer.pal(paletteName, n = 9)
   color.background = palette[2]
   color.grid.major = palette[3]
   color.axis.text  = palette[6]
@@ -36,16 +36,16 @@ fte_theme <- function(brewerPaletteName = "Greys") {
   ## Format the legend, but hide by default
   theme(legend.position   = "none") +
   theme(legend.background = element_rect(fill = color.background)) +
-  theme(legend.text       = element_text(size = 7, color = color.axis.title)) +
+  theme(legend.text       = element_text(size = textSize, color = color.axis.title)) +
 
   ## Set title and axis labels, and format these and tick marks
-  theme(plot.title   = element_text(color = color.title, size = 10,
+  theme(plot.title   = element_text(color = color.title, size = textSize + 2,
                                     vjust = 1.25)) +
-  theme(axis.text.x  = element_text(size  = 7,color = color.axis.text)) +
-  theme(axis.text.y  = element_text(size  = 7,color = color.axis.text)) +
-  theme(axis.title.x = element_text(size  = 8,color = color.axis.title,
+  theme(axis.text.x  = element_text(size  = textSize, color = color.axis.text)) +
+  theme(axis.text.y  = element_text(size  = textSize, color = color.axis.text)) +
+  theme(axis.title.x = element_text(size  = textSize + 1 ,color = color.axis.title,
                                     vjust = 0)) +
-  theme(axis.title.y = element_text(size  = 8,color = color.axis.title,
+  theme(axis.title.y = element_text(size  = textSize + 1, color = color.axis.title,
                                     vjust = 1.25)) +
 
   ## Plot margins
