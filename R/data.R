@@ -2,6 +2,8 @@
 # Created 2015-07-20
 
 #' @import data.table
+#' @useDynLib kongRa
+#' @importFrom Rcpp sourceCpp
 NULL
 
 #' Reports the number of elements matching the predicate.
@@ -51,4 +53,15 @@ duplicatedBy.data.frame <- function(df, by, ...) {
   i    <- which(duplicated(df[[by]], ...))
   dups <- df[i, by]
   df[df[[by]] %in% dups, ]
+}
+
+##' A wrapper around \code{skewnessRcpp} safe with respect to NAs.
+##' @export
+skewness <- function(x, na.rm = FALSE) {
+  if (any(ina <- is.na(x))) {
+    if (na.rm)
+      x <- x[!ina]
+    else return(NA)
+  }
+  skewnessRcpp(x)
 }
