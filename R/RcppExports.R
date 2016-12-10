@@ -9,3 +9,9 @@ skewnessRcpp <- function(x) {
     .Call('kongRa_skewnessRcpp', PACKAGE = 'kongRa', x)
 }
 
+#' Some test for Armadillo
+#' @export
+armaTest <- function() {
+    .Call('kongRa_armaTest', PACKAGE = 'kongRa')
+}
+
