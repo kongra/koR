@@ -4,8 +4,8 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-#define ARMA_DONT_USE_WRAPPER
-#include <armadillo>
+// #define ARMA_DONT_USE_WRAPPER
+// #include <armadillo>
 
 //' Returns the skewness of the vector. No NAs assumed.
 //'
@@ -28,13 +28,4 @@ double skewnessRcpp(NumericVector x) {
   return cubesSum / ((n - 1) * sqrt(v * v * v));
 }
 
-//' Some test for Armadillo
-//' @export
-// [[Rcpp::export]]
-double armaTest() {
-  using namespace arma;
-  const mat A = randu<mat>(4000, 4000);
-  const mat B = randu<mat>(4000, 4000);
-  const mat C = A * B;
-  return 0;
-}
+

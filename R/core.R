@@ -18,7 +18,7 @@ addr <- pryr::address
 
 #' Alias for \code{microbenchmark::microbenchmark}
 #' @export
-timeit <- microbenchmark::microbenchmark
+qbench <- microbenchmark::microbenchmark
 
 #' Execute gc multiple times.
 #'

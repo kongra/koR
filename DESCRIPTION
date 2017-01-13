@@ -9,9 +9,10 @@ URL: http://github.com/kongra/kongRa
 Description: Contains some of my R codes.
 License: 
 LazyData: TRUE
-Imports: 
+Imports:
     data.table     (>= 1.9.4),
     pryr           (>= 0.1.2),
     microbenchmark (>= 1.4-2),
     Rcpp
 LinkingTo: Rcpp
+RoxygenNote: 5.0.1
