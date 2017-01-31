@@ -103,3 +103,23 @@ hashmap <- function(size = NULL) new.env(parent = emptyenv(), size = size)
 ##' @export
 userInstalledPackages <- function()
   as.data.table(installed.packages())[is.na(Priority)]
+
+##' Returns a a decorator of f that prints . every n.
+##' @export
+dotEvery <- function(n, f) {
+  i <- 1
+  function(...) {
+    if (i %% n == 0) cat(".")
+    i <<- i + 1
+    f(...)
+  }
+}
+
+##' Returns a decorator of f that sleeps time (in seconds) before executing f.
+##' @export
+sysSleeping <- function(time, f) {
+  function(...) {
+    Sys.sleep(time)
+    f(...)
+  }
+}
