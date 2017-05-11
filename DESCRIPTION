@@ -10,9 +10,9 @@ Description: Contains some of my R codes.
 License: 
 LazyData: TRUE
 Imports:
-    data.table     (>= 1.9.4),
-    pryr           (>= 0.1.2),
-    microbenchmark (>= 1.4-2),
+    data.table,
+    pryr,
+    microbenchmark,
     Rcpp
 LinkingTo: Rcpp
 RoxygenNote: 5.0.1
