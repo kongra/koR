@@ -10,4 +10,3 @@ qbench(..., list = NULL, times = 100L, unit, check = NULL,
 \description{
 Alias for \code{microbenchmark::microbenchmark}
 }
-

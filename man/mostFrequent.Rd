@@ -11,4 +11,3 @@ mostFrequent(x, n = 10)
 Returns a data.table of n most frequent elements in vector x
 together with their frequencies.
 }
-

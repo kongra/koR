@@ -9,4 +9,3 @@ modes(x)
 \description{
 Returns a data.table of mode values, together with their frequency.
 }
-

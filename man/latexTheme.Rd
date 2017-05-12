@@ -9,4 +9,3 @@ latexTheme()
 \description{
 Theme compatible with LaTeX as much as possible.
 }
-

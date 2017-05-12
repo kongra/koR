@@ -9,4 +9,3 @@ brewerTheme(paletteName = "Greys", textSize = 7)
 \description{
 Custom pleasant theme from: http://minimaxir.com/2015/02/ggplot-tutorial/
 }
-

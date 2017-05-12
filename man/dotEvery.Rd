@@ -9,4 +9,3 @@ dotEvery(n, f)
 \description{
 Returns a a decorator of f that prints . every n.
 }
-

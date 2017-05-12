@@ -16,4 +16,3 @@ A condition handler.
 \code{printCondition} returns a condition handler that prints a
 prefixed conditionMessage.
 }
-

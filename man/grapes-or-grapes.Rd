@@ -9,4 +9,3 @@ x \%or\% y
 \description{
 Defaults for NULL values.
 }
-

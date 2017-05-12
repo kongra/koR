@@ -14,4 +14,3 @@ chatty(f, prefix = "Processing ")
 \description{
 Returns a diagnostic wrapper around f. Thanks H. Wickham.
 }
-

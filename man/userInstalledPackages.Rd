@@ -15,4 +15,3 @@ Gets user installed packages.
 \seealso{
 installed.packages()
 }
-

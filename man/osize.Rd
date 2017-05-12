@@ -9,4 +9,3 @@ osize(..., env = parent.frame())
 \description{
 Alias for \code{pryr::object_size}
 }
-

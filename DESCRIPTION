@@ -13,6 +13,7 @@ Imports:
     data.table,
     pryr,
     microbenchmark,
-    Rcpp
+    Rcpp,
+    chR
 LinkingTo: Rcpp
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

@@ -9,4 +9,3 @@ addr(x)
 \description{
 Alias for \code{pryr::address}
 }
-

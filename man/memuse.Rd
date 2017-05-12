@@ -9,4 +9,3 @@ memuse()
 \description{
 Alias for \code{pryr::mem_used}
 }
-

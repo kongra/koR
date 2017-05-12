@@ -4,7 +4,7 @@
 \alias{rgc}
 \title{Execute gc multiple times.}
 \usage{
-rgc(n = 10)
+rgc(n = 10L)
 }
 \arguments{
 \item{n}{Number of calls.}
@@ -15,4 +15,3 @@ The result of the last gc() call.
 \description{
 \code{rgc} Calls gc() n times, 1 when n is negative.
 }
-
