@@ -136,8 +136,8 @@ assocKvs <- function(m, kvs) chRecursive({
   n   <- chEvenInt(length(kvs))
   if (n > 0L) {
     for (i in (1:(n/2))) {
-      k <- kvs[[2 * i - 1]]
-      v <- kvs[[2 * i]]
+      k      <- kvs[[2 * i - 1]]
+      v      <- kvs[[2 * i]]
       m[[k]] <- v
     }
   }
