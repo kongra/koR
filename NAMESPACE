@@ -2,8 +2,11 @@
 
 export("%or%")
 export(addr)
+export(assocKvs)
 export(brewerTheme)
 export(chatty)
+export(createEnvMap)
+export(createListMap)
 export(dotEvery)
 export(latexTheme)
 export(memuse)
