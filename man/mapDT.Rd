@@ -4,7 +4,7 @@
 \alias{mapDT}
 \title{Maps f over each singleton data.tables representing the rows of dt}
 \usage{
-mapDT(dt, f)
+mapDT(dt, f, na.rm = TRUE)
 }
 \arguments{
 \item{dt}{chDT}
