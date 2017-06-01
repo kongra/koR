@@ -40,4 +40,3 @@ mapDT <- function(dt, f, na.rm = TRUE) chDT({
   })
   result
 })
-
