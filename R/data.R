@@ -34,10 +34,9 @@ mapDT <- function(dt, f, na.rm = TRUE) chDT({
   by(dt, seq_len(nrow(dt)), function (rowDT) {
     r <- f(rowDT)
     if (is.na(r) || is.null(r))
-      if (!na.rm) chDT1(r) # False assertion here
+      if (!na.rm) chDT01(r) # False assertion here
     else
-      # We require the resulting r to have exactly 1 row, empty r should be NULL/NA
-      result <- rbindlist(list(result, chDT1(r)), fill = TRUE)
+      result <- rbindlist(list(result, chDT01(r)), fill = TRUE)
   })
   result
 })
