@@ -22,19 +22,17 @@ bindDTs <- function(..., fill = FALSE) chDT({
   result
 })
 
-chMapDTRow <- chOr(chDT01, chUnit, chNA)
-
 #' Maps f over each singleton data.tables representing the rows of dt
 #' @param dt chDT
-#' @param f chFun chDT1 chDT1
+#' @param f chFun chDT1 → chDT
 #' @return chDT
 #' @export
 mapDT <- function(dt, f) chDT({
   chDT(dt)
   chFun(f)
   result <- data.table()
-  by(dt, seq_len(nrow(dt)), function (rowDT) {
-    result <<- rbindlist(list(result, rowDT %>% f %>% chMapDTRow), fill = TRUE)
+  by(dt, seq_len(nrow(dt)), function (row) {
+    result <<- rbindlist(list(result, row %>% f %>% chDT), fill = TRUE)
   })
   result
 })
