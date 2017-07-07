@@ -2,7 +2,6 @@
 # Created 2015-07-20
 
 #' @import data.table
-#' @import purrr
 #' @import chR
 NULL
 
@@ -32,7 +31,7 @@ mapDT <- function(dt, f) chDT({
   chFun(f)
   result <- data.table()
   by(dt, seq_len(nrow(dt)), function (row) {
-    result <<- rbindlist(list(result, row %>% f %>% chDT), fill = TRUE)
+    result <<- rbindlist(list(result, chDT(f(row))), fill = TRUE)
   })
   result
 })
