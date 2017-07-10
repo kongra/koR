@@ -13,11 +13,9 @@ Imports:
     data.table,
     pryr,
     microbenchmark,
-    Rcpp,
     chR,
     RColorBrewer,
     ggplot2,
     grid,
     scales
-LinkingTo: Rcpp
 RoxygenNote: 6.0.1
