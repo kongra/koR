@@ -17,5 +17,6 @@ Imports:
     RColorBrewer,
     ggplot2,
     grid,
-    scales
+    scales,
+    purrr
 RoxygenNote: 6.0.1

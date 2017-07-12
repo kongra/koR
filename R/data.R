@@ -35,3 +35,11 @@ mapDT <- function(dt, f) chDT({
   })
   result
 })
+
+#' @export
+reduceDTcols <- function(dt, cols, f, ...) chVector({
+  chDT(dt)
+  chStrings(cols)
+  chFun(f)
+  purrr::reduce(as.list(cols), function(x, c) f(x, dt[[c]]), ...)
+})
