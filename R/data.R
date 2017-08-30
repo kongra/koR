@@ -47,27 +47,27 @@ reduceDTcols <- function(dt, cols, f, ...) chVector({
 
 #'Thanks to: https://stackoverflow.com/questions/18339370/reordering-columns-in-a-large-dataframe
 #' @export
-moveNames <- function(names, tomove, pos = "last", what = NULL) chStrings({
+moveNames <- function(names, toMove, pos = "last", what = NULL) chStrings({
   chStrings(names)
-  chStrings(tomove)
+  chStrings(toMove)
   chString (pos)
   chMaybe  (chString, what)
 
-  assert_that(all(tomove %in% names))
+  assert_that(all(toMove %in% names))
 
-  temp <- setdiff(names, tomove)
+  temp <- setdiff(names, toMove)
   switch(pos,
-         first = c(tomove, temp),
-         last  = c(temp, tomove),
+         first = c(toMove, temp),
+         last  = c(temp, toMove),
          before = {
            if (is.null(what)) stop("what must be specified when using `before`")
            assert_that(what %in% names)
-           append(temp, values = tomove, after = (match(what, temp)-1))
+           append(temp, values = toMove, after = (match(what, temp)-1))
          },
          after = {
            if (is.null(what)) stop("what must be specified when using `after`")
            assert_that(what %in% names)
-           append(temp, values = tomove, after = (match(what, temp)))
+           append(temp, values = toMove, after = (match(what, temp)))
          })
 })
 
