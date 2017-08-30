@@ -18,5 +18,6 @@ Imports:
     ggplot2,
     grid,
     scales,
-    purrr
+    purrr,
+    assertthat
 RoxygenNote: 6.0.1
