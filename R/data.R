@@ -47,26 +47,34 @@ reduceDTcols <- function(dt, cols, f, ...) chVector({
 
 #'Thanks to: https://stackoverflow.com/questions/18339370/reordering-columns-in-a-large-dataframe
 #' @export
-moveNames <- function(names, tomove, where = "last", col = NULL) chStrings({
+moveNames <- function(names, tomove, pos = "last", what = NULL) chStrings({
   chStrings(names)
   chStrings(tomove)
-  chString(where)
-  chMaybe(chString, col)
+  chString (pos)
+  chMaybe  (chString, what)
 
   assert_that(all(tomove %in% names))
 
   temp <- setdiff(names, tomove)
-  switch(where,
+  switch(pos,
          first = c(tomove, temp),
          last  = c(temp, tomove),
          before = {
-           if (is.null(col)) stop("col must be specified when using `before`")
-           assert_that(col %in% names)
-           append(temp, values = tomove, after = (match(col, temp)-1))
+           if (is.null(what)) stop("what must be specified when using `before`")
+           assert_that(what %in% names)
+           append(temp, values = tomove, after = (match(what, temp)-1))
          },
          after = {
-           if (is.null(col)) stop("col must be specified when using `after`")
-           assert_that(col %in% names)
-           append(temp, values = tomove, after = (match(col, temp)))
+           if (is.null(what)) stop("what must be specified when using `after`")
+           assert_that(what %in% names)
+           append(temp, values = tomove, after = (match(what, temp)))
          })
+})
+
+#' Uses \code{moveNames} to set a new column ordering (destructive on dt)
+#' @export
+moveDTcols <- function(dt, ...) chDT({
+  chDT(dt)
+  setcolorder(dt, moveNames(colnames(dt), ...))
+  dt
 })
