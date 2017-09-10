@@ -4,7 +4,7 @@
 \alias{moveNames}
 \title{Thanks to: https://stackoverflow.com/questions/18339370/reordering-columns-in-a-large-dataframe}
 \usage{
-moveNames(names, tomove, pos = "last", what = NULL)
+moveNames(names, toMove, pos = "last", what = NULL)
 }
 \description{
 Thanks to: https://stackoverflow.com/questions/18339370/reordering-columns-in-a-large-dataframe

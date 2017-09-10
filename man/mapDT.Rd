@@ -4,12 +4,14 @@
 \alias{mapDT}
 \title{Maps f over each singleton data.tables representing the rows of dt}
 \usage{
-mapDT(dt, f)
+mapDT(dt, f, fill = FALSE)
 }
 \arguments{
 \item{dt}{chDT}
 
 \item{f}{chFun chDT1 → chDT}
+
+\item{fill}{a Bool}
 }
 \value{
 chDT

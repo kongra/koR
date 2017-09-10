@@ -25,14 +25,16 @@ bindDTs <- function(..., fill = FALSE) chDT({
 #' Maps f over each singleton data.tables representing the rows of dt
 #' @param dt chDT
 #' @param f chFun chDT1 → chDT
+#' @param fill a Bool
 #' @return chDT
 #' @export
-mapDT <- function(dt, f) chDT({
+mapDT <- function(dt, f, fill = FALSE) chDT({
   chDT(dt)
   chFun(f)
+  chBool(fill)
   result <- data.table()
   by(dt, seq_len(nrow(dt)), function (row) {
-    result <<- rbindlist(list(result, chDT(f(row))), fill = TRUE)
+    result <<- rbindlist(list(result, chDT(f(row))), fill = fill)
   })
   result
 })
@@ -77,4 +79,15 @@ moveDTcols <- function(dt, ...) chDT({
   chDT(dt)
   setcolorder(dt, moveNames(colnames(dt), ...))
   dt
+})
+
+#' Builds a data.table by using only cols of dt
+#' @param dt a data.table
+#' @param cols a vector of Strings
+#' @export
+selectDTcols <- function(dt, cols) chDT({
+  chDT(dt)
+  chStrings(cols)
+  assert_that(all(cols %in% colnames(dt)))
+  dt[, ..cols]
 })
