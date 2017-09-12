@@ -85,9 +85,23 @@ moveDTcols <- function(dt, ...) chDT({
 #' @param dt a data.table
 #' @param cols a vector of Strings
 #' @export
-selectDTcols <- function(dt, cols) chDT({
+withDTcols <- function(dt, cols) chDT({
   chDT(dt)
   chStrings(cols)
   assert_that(all(cols %in% colnames(dt)))
+  dt[, ..cols]
+})
+
+#' Builds a data.table by removing cols of dt
+#' @param dt a data.table
+#' @param cols a vector of Strings
+#' @export
+withoutDTcols <- function(dt, cols) chDT({
+  chDT(dt)
+  chStrings(cols)
+
+  colNames <- colnames(dt)
+  assert_that(all(cols %in% colNames))
+  cols <- setdiff(colNames, cols)
   dt[, ..cols]
 })
