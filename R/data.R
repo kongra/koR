@@ -34,7 +34,7 @@ mapDT <- function(dt, f, fill = FALSE) chDT({
   chBool(fill)
   result <- data.table()
   by(dt, seq_len(nrow(dt)), function (row) {
-    result <- rbindlist(list(result, chDT(f(row))), fill = fill)
+    result <<- rbindlist(list(result, chDT(f(row))), fill = fill)
   })
   result
 })
