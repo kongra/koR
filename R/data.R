@@ -34,9 +34,18 @@ mapDT <- function(dt, f, fill = FALSE) chDT({
   chBool(fill)
   result <- data.table()
   by(dt, seq_len(nrow(dt)), function (row) {
-    result <<- rbindlist(list(result, chDT(f(row))), fill = fill)
+    result <- rbindlist(list(result, chDT(f(row))), fill = fill)
   })
   result
+})
+
+#' Executes f for every row of dt
+#' @export
+forDT <- function(dt, f) chUnit({
+  chDT(dt)
+  chFun(f)
+  by(dt, seq_len(nrow(dt)), f)
+  NULL
 })
 
 #' @export
