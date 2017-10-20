@@ -89,11 +89,18 @@ assertDTcolnames <- function(dt, names) chDT({
   chStrings(names)
 
   colNames <- colnames(dt)
+
+  dups <- colNames[duplicated(colNames)]
+  if (length(dups) != 0) stop("dt contains duplicated column(s) ", dups)
+
+  dups <- names[duplicated(names)]
+  if (length(dups) != 0) stop("names contains duplicated value(s) ", dups)
+
   diff1 <- setdiff(colNames, names)
   diff2 <- setdiff(names, colNames)
 
-  if (length(diff1) != 0) stop("colnames(dt) contains unrecognized column ", diff1)
-  if (length(diff2) != 0) stop("colnames(dt) lacks required column "       , diff2)
+  if (length(diff1) != 0) stop("colnames(dt) contains unrecognized column(s) ", diff1)
+  if (length(diff2) != 0) stop("colnames(dt) lacks required column(s) "       , diff2)
 
   dt
 })
