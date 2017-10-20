@@ -82,11 +82,35 @@ moveNames <- function(names, toMove, pos = "last", what = NULL) chStrings({
          })
 })
 
+#' Asserts that colnames(dt) equals names
+#' @export
+assertDTcolnames <- function(dt, names) chDT({
+  chDT     (dt)
+  chStrings(names)
+
+  colNames <- colnames(dt)
+  diff1 <- setdiff(colNames, names)
+  diff2 <- setdiff(names, colNames)
+
+  if (length(diff1) != 0) stop("colnames(dt) contains unrecognized column ", diff1)
+  if (length(diff2) != 0) stop("colnames(dt) lacks required column "       , diff2)
+
+  dt
+})
+
+#' Sets columns ordering in dt
+#' @export
+setDTcolorder <- function(dt, neworder) chDT({
+  chDT(dt)
+  chStrings(neworder)
+  dt %>% assertDTcolnames(neworder) %>% setcolorder(neworder)
+})
+
 #' Uses \code{moveNames} to set a new column ordering (destructive on dt)
 #' @export
 moveDTcols <- function(dt, ...) chDT({
   chDT(dt)
-  setcolorder(dt, moveNames(colnames(dt), ...))
+  setDTcolorder(dt, moveNames(colnames(dt), ...))
   dt
 })
 
