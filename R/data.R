@@ -101,9 +101,10 @@ assertDTcolnames <- function(dt, names) chDT({
 #' Sets columns ordering in dt
 #' @export
 setDTcolorder <- function(dt, neworder) chDT({
-  chDT(dt)
+  chDT     (dt)
   chStrings(neworder)
-  dt %>% assertDTcolnames(neworder) %>% setcolorder(neworder)
+  assertDTcolnames(dt, neworder)
+  setcolorder(dt, neworder)
 })
 
 #' Uses \code{moveNames} to set a new column ordering (destructive on dt)
