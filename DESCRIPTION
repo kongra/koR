@@ -1,13 +1,13 @@
-Package: kongRa
+Package: koR
 Type: Package
 Title: Contains some of my R codes
 Version: 0.1
 Date: 2015-07-07
 Authors@R: person("Konrad", "Grzanek", email = "kongra@gmail.com",
                     role = c("aut", "cre"))
-URL: http://github.com/kongra/kongRa
+URL: http://github.com/kongra/koR
 Description: Contains some of my R codes.
-License: 
+License:
 LazyData: TRUE
 Imports:
     data.table,

@@ -1,2 +1,2 @@
-# kongRa
-Contains some of my R codes.
+# koR
+Some common R codes
