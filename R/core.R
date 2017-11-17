@@ -21,6 +21,25 @@ addr <- pryr::address
 #' @export
 qbench <- microbenchmark::microbenchmark
 
+#' \code{cat}s (logs) time elapsed for expr to evaluate
+#' @param expr expression to be evaluated
+#' @param msg  optional message for easier identification of what was evaluated
+#' @param off  optional flag for turning off when needed
+#' @return     the value of evaluated expr
+#' @export
+catimela <- function(expr, msg = "", off = FALSE) {
+  if (off)
+    expr
+  else {
+    start <- Sys.time()
+    value <- expr # expr is lazy, the evaluation takes place here
+    end   <- Sys.time()
+    cat({ if (msg != "") paste0(msg, " elapsed") else "elapsed" },
+        as.double(end - start) * 1e3, "msecs\n")
+    value
+  }
+}
+
 #' Execute gc multiple times.
 #'
 #' \code{rgc} Calls gc() n times, 1 when n is negative.
