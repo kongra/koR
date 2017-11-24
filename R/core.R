@@ -40,6 +40,12 @@ catimela <- function(expr, msg = "", off = FALSE) {
   }
 }
 
+#' Works like \code{str(object, ...)} but prints to String rather than to out
+#' @export
+strs <- function(object, ...) chString({
+  stringr::str_trim(capture.output(str(object, ...)))
+})
+
 #' Execute gc multiple times.
 #'
 #' \code{rgc} Calls gc() n times, 1 when n is negative.

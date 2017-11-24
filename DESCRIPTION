@@ -7,7 +7,7 @@ Authors@R: person("Konrad", "Grzanek", email = "kongra@gmail.com",
                     role = c("aut", "cre"))
 URL: http://github.com/kongra/koR
 Description: Contains some of my R codes.
-License:
+License: 
 LazyData: TRUE
 Imports:
     data.table,
@@ -19,5 +19,6 @@ Imports:
     grid,
     scales,
     purrr,
-    assertthat
+    assertthat,
+    stringr
 RoxygenNote: 6.0.1
