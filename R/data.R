@@ -82,27 +82,35 @@ moveNames <- function(names, toMove, pos = "last", what = NULL) chStrings({
          })
 })
 
-#' Asserts that colnames(dt) equals names
+#' Asserts that colnames(dt) equals cols
 #' @export
-assertDTcolnames <- function(dt, names) chDT({
+assertDTcols <- function(dt, cols) chDT({
   chDT     (dt)
-  chStrings(names)
+  chStrings(cols)
 
   colNames <- colnames(dt)
 
   dups <- colNames[duplicated(colNames)]
   if (length(dups) != 0) stop("dt contains duplicated column(s) ", dups)
 
-  dups <- names[duplicated(names)]
-  if (length(dups) != 0) stop("names contains duplicated value(s) ", dups)
+  dups <- cols[duplicated(cols)]
+  if (length(dups) != 0) stop("cols contain duplicated value(s) ", dups)
 
-  diff1 <- setdiff(colNames, names)
-  diff2 <- setdiff(names, colNames)
+  diff1 <- setdiff(colNames, cols)
+  diff2 <- setdiff(cols, colNames)
 
-  if (length(diff1) != 0) stop("colnames(dt) contains unrecognized column(s) ", diff1)
-  if (length(diff2) != 0) stop("colnames(dt) lacks required column(s) "       , diff2)
+  if (length(diff1) != 0) stop("colnames(dt) contain unrecognized column(s) ", diff1)
+  if (length(diff2) != 0) stop("colnames(dt) lack required column(s) "       , diff2)
 
   dt
+})
+
+#' Checks if cols are valid colnames(dt)
+#' @export
+hasDTcols <- function(dt, cols) chBools({
+  chDT     (dt)
+  chStrings(cols)
+  all(cols %in% colnames(dt))
 })
 
 #' Sets columns ordering in dt
