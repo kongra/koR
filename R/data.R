@@ -116,10 +116,10 @@ hasDTcols <- function(dt, cols) chBools({
 #' Sets columns ordering in dt
 #' @export
 setDTcolorder <- function(dt, neworder) chDT({
-  chDT     (dt)
-  chStrings(neworder)
-  assertDTcolnames(dt, neworder)
-  setcolorder(dt, neworder)
+  chDT        (dt)
+  chStrings   (neworder)
+  assertDTcols(dt, neworder)
+  setcolorder (dt, neworder)
 })
 
 #' Uses \code{moveNames} to set a new column ordering (destructive on dt)
