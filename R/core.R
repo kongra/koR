@@ -128,9 +128,9 @@ userInstalledPackages <- function() chDT({
 
 #' Returns a a decorator of f that prints . every n.
 #' @export
-dotEvery <- function(n, f) {
-  chPosInt(n)
+dotEvery <- function(f, n) {
   chFun(f)
+  chPosInt(n)
   i <- 1L
   function(...) {
     if (i %% n == 0) cat(".")
@@ -141,9 +141,9 @@ dotEvery <- function(n, f) {
 
 #' Returns a decorator of f that sleeps time (in seconds) before executing f.
 #' @export
-sysSleeping <- function(time, f) chFun({
-  chPosInt(time)
+sysSleeping <- function(f, time) chFun({
   chFun(f)
+  chPosInt(time)
   function(...) {
     Sys.sleep(time)
     f(...)
