@@ -4,7 +4,7 @@
 \alias{sysSleeping}
 \title{Returns a decorator of f that sleeps time (in seconds) before executing f.}
 \usage{
-sysSleeping(time, f)
+sysSleeping(f, time)
 }
 \description{
 Returns a decorator of f that sleeps time (in seconds) before executing f.

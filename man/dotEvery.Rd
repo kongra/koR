@@ -4,7 +4,7 @@
 \alias{dotEvery}
 \title{Returns a a decorator of f that prints . every n.}
 \usage{
-dotEvery(n, f)
+dotEvery(f, n)
 }
 \description{
 Returns a a decorator of f that prints . every n.
