@@ -184,3 +184,15 @@ createListMap <- function(...) chList({
 createEnvMap <- function(...) chEnv({
   assocKvs(new.env(hash = TRUE), list(...))
 })
+
+#' Splits xs into partitions of length n, thanks to
+#' https://stackoverflow.com/questions/3318333/split-a-vector-into-chunks-in-r
+#' @param xs an atomic vector to partition
+#' @param n  the partition size
+#' @return a list containing the partitions
+#' @export
+partition <- function(xs, n) chList({
+  chAtomic(xs)
+  chPosInt(n)
+  split(xs, ceiling(seq_along(xs) / n))
+})
