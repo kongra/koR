@@ -1,5 +1,6 @@
 # Copyright (c) Konrad Grzanek
 # Created 2015-07-08
+#
 
 #' @import data.table
 #' @import chR

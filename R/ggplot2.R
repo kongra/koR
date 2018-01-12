@@ -1,5 +1,6 @@
 # Copyright (c) Konrad Grzanek
 # Created 2015-09-10
+#
 
 #' @import ggplot2
 #' @import scales
