@@ -155,3 +155,19 @@ withoutDTcols <- function(dt, cols) chDT({
   cols <- setdiff(colNames, cols)
   dt[, ..cols]
 })
+
+#' Returns a set of dt columns c such that match predicate pred on values.
+#' @param dt a data.table
+#' @param pred a function
+#' @param quant rows-related quantifier function, e.g. any, every
+#' @return a resulting set of columns
+#' @export
+getDTcolsMatching <- function(dt, pred, quant = any) chStrings({
+  chDT (dt)
+  chFun(pred)
+  chFun(quant)
+  purrr::keep(. = colnames(dt), .p = function(c) {
+    vals <- dt[, get(c)]
+    quant(pred(vals))
+  })
+})
