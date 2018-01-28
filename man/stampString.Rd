@@ -4,7 +4,7 @@
 \alias{stampString}
 \title{Returns a timestamp string with the tzone appended.}
 \usage{
-stampString(tzone = "CEST")
+stampString(tzone = "CEST", hsep = "_")
 }
 \description{
 Returns a timestamp string with the tzone appended.
