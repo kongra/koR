@@ -123,6 +123,54 @@ modes <- function(x) chDT({
 #' @export
 `%==NA%` <- function(x, y) ifelse(is.na(x) & is.na(y), TRUE, x == y)
 
+#' Returns TRUE iff |x - y| <= e
+#' @export
+epsiEqual <- function(x, y, e = 0.00001) abs(x - y) <= e
+
+#' Returns TRUE iff |x - y| <= 0.1
+#' @export
+`%==e1%`  <- function(x, y) epsiEqual(x, y, e =   0.1)
+
+#' Returns TRUE iff |x - y| <= 0.01
+#' @export
+`%==e2%`  <- function(x, y) epsiEqual(x, y, e =  0.01)
+
+#' Returns TRUE iff |x - y| <= 0.001
+#' @export
+`%==e3%`  <- function(x, y) epsiEqual(x, y, e = 0.001)
+
+#' Returns TRUE iff |x - y| <= 1e-4
+#' @export
+`%==e4%`  <- function(x, y) epsiEqual(x, y, e =  1e-4)
+
+#' Returns TRUE iff |x - y| <= 1e-5
+#' @export
+`%==e5%`  <- function(x, y) epsiEqual(x, y, e =  1e-5)
+
+#' Returns TRUE iff |x - y| <= 1e-6
+#' @export
+`%==e6%`  <- function(x, y) epsiEqual(x, y, e =  1e-6)
+
+#' Returns TRUE iff |x - y| <= 1e-7
+#' @export
+`%==e7%`  <- function(x, y) epsiEqual(x, y, e =  1e-7)
+
+#' Returns TRUE iff |x - y| <= 1e-8
+#' @export
+`%==e8%`  <- function(x, y) epsiEqual(x, y, e =  1e-8)
+
+#' Returns TRUE iff |x - y| <= 1e-9
+#' @export
+`%==e9%`  <- function(x, y) epsiEqual(x, y, e =  1e-9)
+
+#' Returns TRUE iff |x - y| <= 1e-12
+#' @export
+`%==e12%` <- function(x, y) epsiEqual(x, y, e = 1e-12)
+
+#' Returns TRUE iff |x - y| <= 1e-16
+#' @export
+`%==e16%` <- function(x, y) epsiEqual(x, y, e = 1e-16)
+
 #' Gets user installed packages.
 #' @return a data table containing all the relevant information
 #' @seealso installed.packages()
