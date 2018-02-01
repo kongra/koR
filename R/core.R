@@ -119,6 +119,10 @@ modes <- function(x) chDT({
 #' @export
 `%or%` <- function(x, y) if (is.null(x)) y else x
 
+#' Works like == but for NA == NA returns TRUE and not NA (like ==)
+#' @export
+`%==NA%` <- function(x, y) ifelse(is.na(x) & is.na(y), TRUE, x == y)
+
 #' Gets user installed packages.
 #' @return a data table containing all the relevant information
 #' @seealso installed.packages()
