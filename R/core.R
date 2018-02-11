@@ -249,3 +249,13 @@ partition <- function(xs, n) chList({
   chPosInt(n)
   split(xs, ceiling(seq_along(xs) / n))
 })
+
+#' Sets class(x) to c and returns x
+#' @param x an object to set the class c to
+#' @param c a class
+#' @return the x argument
+#' @export
+setClass <- function(x, c) {
+  class(x) <- c
+  x
+}
