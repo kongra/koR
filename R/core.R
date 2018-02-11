@@ -255,7 +255,7 @@ partition <- function(xs, n) chList({
 #' @param c a class
 #' @return the x argument
 #' @export
-setClass <- function(x, c) {
+settingClass <- function(x, c) {
   class(x) <- c
   x
 }
