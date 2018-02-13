@@ -59,3 +59,16 @@ latexTheme <- function() {
   theme_bw() +
   theme(text = element_text(family = "CM Roman"))
 }
+
+#' Saves a plot using a graphics device and returns the plot.
+#' @param p (not only) ggplot2 plot
+#' @param grDevice graphis device
+#' @param ... arguments to grDevice(...)
+#' @return p
+#' @export
+savePlot <- function(p, grDevice, ...) {
+  grDevice(...)
+  print(p)
+  dev.off()
+  p
+}
