@@ -9,7 +9,7 @@ savePlot(p, grDevice, ...)
 \arguments{
 \item{p}{(not only) ggplot2 plot}
 
-\item{grDevice}{graphis device}
+\item{grDevice}{graphics device}
 
 \item{...}{arguments to grDevice(...)}
 }

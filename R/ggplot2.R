@@ -62,7 +62,7 @@ latexTheme <- function() {
 
 #' Saves a plot using a graphics device and returns the plot.
 #' @param p (not only) ggplot2 plot
-#' @param grDevice graphis device
+#' @param grDevice graphics device
 #' @param ... arguments to grDevice(...)
 #' @return p
 #' @export
