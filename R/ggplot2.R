@@ -68,7 +68,13 @@ latexTheme <- function() {
 #' @export
 savePlot <- function(p, grDevice, ...) {
   grDevice(...)
-  print(p)
-  dev.off()
+  tryCatch({
+    print(p)
+  }, finally = { dev.off() })
   p
 }
+
+# library(ggplot2)
+# library(purrr)
+# (ggplot(mtcars, aes(x = factor(cyl), y = mpg)) + geom_point()) %>%
+#   savePlot(png, filename = "/home/kongra/Temp/out.png")
