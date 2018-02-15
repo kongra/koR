@@ -20,5 +20,6 @@ Imports:
     scales,
     purrr,
     assertthat,
-    stringr
+    stringr,
+    proxy
 RoxygenNote: 6.0.1

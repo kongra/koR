@@ -171,6 +171,71 @@ epsiEqual <- function(x, y, e = 0.00001) abs(x - y) <= e
 #' @export
 `%==e16%` <- function(x, y) epsiEqual(x, y, e = 1e-16)
 
+#' @export
+doublesProximity <- function(x, y, ...) chDouble({
+  chDoubles(x)
+  chDoubles(y)
+  proxy::simil(list(x, y), ...)[1]
+})
+
+#' @export
+percDiffs <- function(x, y) chDoubles({
+  ifelse(is.na(x) | is.na(y),
+    NA_real_, # x = NA | y = NA => NA
+  # else
+    {
+      ifelse(y == 0.0,
+        ifelse(x == 0.0,
+          0.0,       # x =  0 & y = 0 => 0
+        # else
+          NA_real_), # x <> 0 & y = 0 => NA
+      # else
+        (x - y) / y * 100.0)
+    })
+})
+
+#' @export
+safeBool <- function(b) chBool({
+  chAtomic(b)
+  if (length(b) == 0 || # length(NULL) is 0
+      is.na (b))
+    FALSE
+  else
+    as.logical(b)
+})
+
+#' @export
+safeMin <- function(xs) {
+  chNumerics(xs)
+  xs <- xs[!is.na(xs)]
+  if (length(xs) == 0L) Inf else min(xs)
+}
+
+#' @export
+safeMax <- function(xs) {
+  chNumerics(xs)
+  xs <- xs[!is.na(xs)]
+  if (length(xs) == 0L) -Inf else max(xs)
+}
+
+#' @export
+atomicsNthFirst <- function(nth = 1L) chFun({
+  chPosInt(nth)
+  function(xs) chScalar({
+    chAtomic(xs)
+    xs[nth]
+  })
+})
+
+#' @export
+atomicsNthLast <- function(nth = 1L) chFun({
+  chPosInt(nth)
+  function(xs) chScalar({
+    chAtomic(xs)
+    rev(xs)[nth]
+  })
+})
+
 #' Gets user installed packages.
 #' @return a data table containing all the relevant information
 #' @seealso installed.packages()
