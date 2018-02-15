@@ -206,14 +206,12 @@ safeBool <- function(b) chBool({
 
 #' @export
 safeMin <- function(xs) {
-  chNumerics(xs)
   xs <- xs[!is.na(xs)]
   if (length(xs) == 0L) Inf else min(xs)
 }
 
 #' @export
 safeMax <- function(xs) {
-  chNumerics(xs)
   xs <- xs[!is.na(xs)]
   if (length(xs) == 0L) -Inf else max(xs)
 }
