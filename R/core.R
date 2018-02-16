@@ -205,15 +205,15 @@ safeBool <- function(b) chBool({
 })
 
 #' @export
-safeMin <- function(xs) {
-  xs <- xs[!is.na(xs)]
-  if (length(xs) == 0L) Inf else min(xs)
+safeMin <- function(xs, na.rm = TRUE) {
+  if (na.rm) xs <- xs[!is.na(xs)]
+  if (length(xs) == 0L) Inf else base::min(xs)
 }
 
 #' @export
-safeMax <- function(xs) {
-  xs <- xs[!is.na(xs)]
-  if (length(xs) == 0L) -Inf else max(xs)
+safeMax <- function(xs, na.rm = TRUE) {
+  if (na.rm) xs <- xs[!is.na(xs)]
+  if (length(xs) == 0L) -Inf else base::max(xs)
 }
 
 #' @export
