@@ -217,6 +217,16 @@ safeMax <- function(xs) {
 }
 
 #' @export
+minNW <- function(...) withCallingHandlers(
+  suppressWarnings(base::min(...)),
+  warning = function(w) {})
+
+#' @export
+maxNW <- function(...) withCallingHandlers(
+  suppressWarnings(base::min(...)),
+  warning = function(w) {})
+
+#' @export
 atomicsNthFirst <- function(nth = 1L) chFun({
   chPosInt(nth)
   function(xs) chScalar({
