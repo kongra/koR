@@ -33,7 +33,8 @@ catimela <- function(expr, msg = "", off = FALSE) {
     expr
   else {
     start <- Sys.time()
-    value <- expr # expr is lazy, the evaluation takes place here
+    force(expr)
+    value <- expr
     end   <- Sys.time()
     cat({ if (msg != "") paste0(msg, " elapsed") else "elapsed" },
         as.double(end - start) * 1e3, "msecs\n")
