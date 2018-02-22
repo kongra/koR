@@ -66,7 +66,7 @@ latexTheme <- function() {
 #' @param ... arguments to grDevice(...)
 #' @return p
 #' @export
-savePlot <- function(p, grDevice, ...) {
+savingPlot <- function(p, grDevice, ...) {
   grDevice(...)
   tryCatch({
     print(p)
