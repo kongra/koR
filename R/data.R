@@ -83,6 +83,21 @@ moveNames <- function(names, toMove, pos = "last", what = NULL) chStrings({
          })
 })
 
+#' Takes a vector of Strings and returns a new vector with a new String s2 moving
+#' it onto a pos related to s1.
+#' @param s a vector of Strings
+#' @param s2 a new String
+#' @param pos see \code{moveNames}
+#' @param s1 an element in s according to which we position s2
+#' @return a new vector of Strings with s2 pos(itioned) according to s1
+#' @export
+withStr <- function(s, s2, pos = "after", s1) chStrings({
+  chStrings(s)
+  chString (s1)
+  chString (s2)
+  moveNames(c(s, s2), s2, pos, s1)
+})
+
 #' Asserts that colnames(dt) equals cols
 #' @export
 assertDTcols <- function(dt, cols) chDT({
