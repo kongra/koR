@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{settingClass}
 \alias{settingClass}
-\title{Sets class(x) to c and returns x}
+\title{Sets class(x) to c and returns x.}
 \usage{
 settingClass(x, c)
 }
@@ -15,5 +15,5 @@ settingClass(x, c)
 the x argument
 }
 \description{
-Sets class(x) to c and returns x
+Sets class(x) to c and returns x.
 }

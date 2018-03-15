@@ -22,7 +22,7 @@ addr <- pryr::address
 #' @export
 qbench <- microbenchmark::microbenchmark
 
-#' \code{cat}s (logs) time elapsed for expr to evaluate
+#' \code{cat}s (logs) time elapsed for expr to evaluate.
 #' @param expr expression to be evaluated
 #' @param msg  optional message for easier identification of what was evaluated
 #' @param off  optional flag for turning off when needed
@@ -42,14 +42,13 @@ catimela <- function(expr, msg = "", off = FALSE) {
   }
 }
 
-#' Works like \code{str(object, ...)} but prints to String rather than to out
+#' Works like \code{str(object, ...)} but prints to String rather than to out.
 #' @export
 strs <- function(object, ...) chString({
   stringr::str_trim(capture.output(str(object, ...)))
 })
 
 #' Execute gc multiple times.
-#'
 #' \code{rgc} Calls gc() n times, 1 when n is negative.
 #'
 #' @param n Number of calls.
@@ -67,10 +66,8 @@ rgc <- function(n = 10L) chUnit({
 })
 
 #' Condition handler generator.
-#'
 #' \code{printCondition} returns a condition handler that prints a
 #' prefixed conditionMessage.
-#'
 #' @param prefix Prefix for the condition message.
 #' @return A condition handler.
 #' @export
@@ -82,9 +79,7 @@ printCondition <- function(prefix = "ERROR: ") chFun({
 })
 
 #' Debug wrapper generator.
-#'
 #' Returns a diagnostic wrapper around f. Thanks H. Wickham.
-#'
 #' @param f Function to wrap
 #' @param prefix A prefix for the diagnostic message
 #' @export
@@ -120,7 +115,7 @@ modes <- function(x) chDT({
 #' @export
 `%or%` <- function(x, y) if (is.null(x)) y else x
 
-#' Works like == but for NA == NA returns TRUE and not NA (like ==)
+#' Works like == but for NA == NA returns TRUE and not NA (like ==).
 #' @export
 `%==NA%` <- function(x, y) ifelse(is.na(x) & is.na(y), TRUE, x == y)
 
@@ -128,47 +123,47 @@ modes <- function(x) chDT({
 #' @export
 epsiEqual <- function(x, y, e = 0.00001) abs(x - y) <= e
 
-#' Returns TRUE iff |x - y| <= 0.1
+#' Returns TRUE iff |x - y| <= 0.1.
 #' @export
 `%==e1%`  <- function(x, y) epsiEqual(x, y, e =   0.1)
 
-#' Returns TRUE iff |x - y| <= 0.01
+#' Returns TRUE iff |x - y| <= 0.01.
 #' @export
 `%==e2%`  <- function(x, y) epsiEqual(x, y, e =  0.01)
 
-#' Returns TRUE iff |x - y| <= 0.001
+#' Returns TRUE iff |x - y| <= 0.001.
 #' @export
 `%==e3%`  <- function(x, y) epsiEqual(x, y, e = 0.001)
 
-#' Returns TRUE iff |x - y| <= 1e-4
+#' Returns TRUE iff |x - y| <= 1e-4.
 #' @export
 `%==e4%`  <- function(x, y) epsiEqual(x, y, e =  1e-4)
 
-#' Returns TRUE iff |x - y| <= 1e-5
+#' Returns TRUE iff |x - y| <= 1e-5.
 #' @export
 `%==e5%`  <- function(x, y) epsiEqual(x, y, e =  1e-5)
 
-#' Returns TRUE iff |x - y| <= 1e-6
+#' Returns TRUE iff |x - y| <= 1e-6.
 #' @export
 `%==e6%`  <- function(x, y) epsiEqual(x, y, e =  1e-6)
 
-#' Returns TRUE iff |x - y| <= 1e-7
+#' Returns TRUE iff |x - y| <= 1e-7.
 #' @export
 `%==e7%`  <- function(x, y) epsiEqual(x, y, e =  1e-7)
 
-#' Returns TRUE iff |x - y| <= 1e-8
+#' Returns TRUE iff |x - y| <= 1e-8.
 #' @export
 `%==e8%`  <- function(x, y) epsiEqual(x, y, e =  1e-8)
 
-#' Returns TRUE iff |x - y| <= 1e-9
+#' Returns TRUE iff |x - y| <= 1e-9.
 #' @export
 `%==e9%`  <- function(x, y) epsiEqual(x, y, e =  1e-9)
 
-#' Returns TRUE iff |x - y| <= 1e-12
+#' Returns TRUE iff |x - y| <= 1e-12.
 #' @export
 `%==e12%` <- function(x, y) epsiEqual(x, y, e = 1e-12)
 
-#' Returns TRUE iff |x - y| <= 1e-16
+#' Returns TRUE iff |x - y| <= 1e-16.
 #' @export
 `%==e16%` <- function(x, y) epsiEqual(x, y, e = 1e-16)
 
@@ -277,7 +272,7 @@ sysSleeping <- function(f, time) chFun({
   }
 })
 
-#' Puts all key/value mapping pairs into m
+#' Puts all key/value mapping pairs into m.
 #' @param m associative container, list or env
 #' @param kvs list of key/value pairs (must be even in size)
 #' @return updated m
@@ -296,7 +291,7 @@ assocKvs <- function(m, kvs) chRecursive({
   m
 })
 
-#' Creates a list using the enumerated collection of key/value mapping pairs
+#' Creates a list using the enumerated collection of key/value mapping pairs.
 #' @param ... collection of key/value pairs (must be even in size)
 #' @return the resulting list
 #' @export
@@ -304,7 +299,7 @@ createListMap <- function(...) chList({
   assocKvs(list(), list(...))
 })
 
-#' Creates an env using the enumerated collection of key/value mapping pairs
+#' Creates an env using the enumerated collection of key/value mapping pairs.
 #' @param ... collection of key/value pairs (must be even in size)
 #' @return the resulting env
 #' @export
@@ -324,7 +319,7 @@ partition <- function(xs, n) chList({
   split(xs, ceiling(seq_along(xs) / n))
 })
 
-#' Sets class(x) to c and returns x
+#' Sets class(x) to c and returns x.
 #' @param x an object to set the class c to
 #' @param c a class
 #' @return the x argument
@@ -332,4 +327,24 @@ partition <- function(xs, n) chList({
 settingClass <- function(x, c) {
   class(x) <- c
   x
+}
+
+#' Removes (discards) elements in list l for which p is TRUE.
+#' @param l a list
+#' @param p a predicate
+#' @return  a resulting list
+#' @export
+listDiscard <- function(l, p) l[!sapply(l, p)]
+
+#' Keeps elements in list l for which p is TRUE.
+#' @param l a list
+#' @param p a predicate
+#' @return  a resulting list
+listKeep <- function(l, p) l[sapply(l, p)]
+
+#' Works like \code{do.call} but optionaly removes all NULL args.
+#' @export
+doCall <- function(what, args, quote = FALSE, envir = parent.frame(), null.rm = TRUE) {
+  if (null.rm) args <- listDiscard(args, is.null)
+  do.call(what = what, args = args, quote = quote, envir = envir)
 }

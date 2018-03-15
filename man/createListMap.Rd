@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{createListMap}
 \alias{createListMap}
-\title{Creates a list using the enumerated collection of key/value mapping pairs}
+\title{Creates a list using the enumerated collection of key/value mapping pairs.}
 \usage{
 createListMap(...)
 }
@@ -13,5 +13,5 @@ createListMap(...)
 the resulting list
 }
 \description{
-Creates a list using the enumerated collection of key/value mapping pairs
+Creates a list using the enumerated collection of key/value mapping pairs.
 }

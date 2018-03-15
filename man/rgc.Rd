@@ -2,7 +2,8 @@
 % Please edit documentation in R/core.R
 \name{rgc}
 \alias{rgc}
-\title{Execute gc multiple times.}
+\title{Execute gc multiple times.
+\code{rgc} Calls gc() n times, 1 when n is negative.}
 \usage{
 rgc(n = 10L)
 }
@@ -13,5 +14,6 @@ rgc(n = 10L)
 The result of the last gc() call.
 }
 \description{
+Execute gc multiple times.
 \code{rgc} Calls gc() n times, 1 when n is negative.
 }

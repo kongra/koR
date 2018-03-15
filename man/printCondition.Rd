@@ -2,7 +2,9 @@
 % Please edit documentation in R/core.R
 \name{printCondition}
 \alias{printCondition}
-\title{Condition handler generator.}
+\title{Condition handler generator.
+\code{printCondition} returns a condition handler that prints a
+prefixed conditionMessage.}
 \usage{
 printCondition(prefix = "ERROR: ")
 }
@@ -13,6 +15,7 @@ printCondition(prefix = "ERROR: ")
 A condition handler.
 }
 \description{
+Condition handler generator.
 \code{printCondition} returns a condition handler that prints a
 prefixed conditionMessage.
 }

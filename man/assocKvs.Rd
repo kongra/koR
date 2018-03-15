@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{assocKvs}
 \alias{assocKvs}
-\title{Puts all key/value mapping pairs into m}
+\title{Puts all key/value mapping pairs into m.}
 \usage{
 assocKvs(m, kvs)
 }
@@ -15,5 +15,5 @@ assocKvs(m, kvs)
 updated m
 }
 \description{
-Puts all key/value mapping pairs into m
+Puts all key/value mapping pairs into m.
 }

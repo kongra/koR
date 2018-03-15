@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{createEnvMap}
 \alias{createEnvMap}
-\title{Creates an env using the enumerated collection of key/value mapping pairs}
+\title{Creates an env using the enumerated collection of key/value mapping pairs.}
 \usage{
 createEnvMap(...)
 }
@@ -13,5 +13,5 @@ createEnvMap(...)
 the resulting env
 }
 \description{
-Creates an env using the enumerated collection of key/value mapping pairs
+Creates an env using the enumerated collection of key/value mapping pairs.
 }

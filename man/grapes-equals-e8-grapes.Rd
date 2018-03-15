@@ -2,10 +2,10 @@
 % Please edit documentation in R/core.R
 \name{\%==e8\%}
 \alias{\%==e8\%}
-\title{Returns TRUE iff |x - y| <= 1e-8}
+\title{Returns TRUE iff |x - y| <= 1e-8.}
 \usage{
 x \%==e8\% y
 }
 \description{
-Returns TRUE iff |x - y| <= 1e-8
+Returns TRUE iff |x - y| <= 1e-8.
 }

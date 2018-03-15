@@ -2,7 +2,8 @@
 % Please edit documentation in R/core.R
 \name{chatty}
 \alias{chatty}
-\title{Debug wrapper generator.}
+\title{Debug wrapper generator.
+Returns a diagnostic wrapper around f. Thanks H. Wickham.}
 \usage{
 chatty(f, prefix = "Processing ")
 }
@@ -12,5 +13,6 @@ chatty(f, prefix = "Processing ")
 \item{prefix}{A prefix for the diagnostic message}
 }
 \description{
+Debug wrapper generator.
 Returns a diagnostic wrapper around f. Thanks H. Wickham.
 }

@@ -2,10 +2,10 @@
 % Please edit documentation in R/core.R
 \name{strs}
 \alias{strs}
-\title{Works like \code{str(object, ...)} but prints to String rather than to out}
+\title{Works like \code{str(object, ...)} but prints to String rather than to out.}
 \usage{
 strs(object, ...)
 }
 \description{
-Works like \code{str(object, ...)} but prints to String rather than to out
+Works like \code{str(object, ...)} but prints to String rather than to out.
 }

@@ -2,10 +2,10 @@
 % Please edit documentation in R/core.R
 \name{\%==NA\%}
 \alias{\%==NA\%}
-\title{Works like == but for NA == NA returns TRUE and not NA (like ==)}
+\title{Works like == but for NA == NA returns TRUE and not NA (like ==).}
 \usage{
 x \%==NA\% y
 }
 \description{
-Works like == but for NA == NA returns TRUE and not NA (like ==)
+Works like == but for NA == NA returns TRUE and not NA (like ==).
 }

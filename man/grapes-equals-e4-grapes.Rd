@@ -2,10 +2,10 @@
 % Please edit documentation in R/core.R
 \name{\%==e4\%}
 \alias{\%==e4\%}
-\title{Returns TRUE iff |x - y| <= 1e-4}
+\title{Returns TRUE iff |x - y| <= 1e-4.}
 \usage{
 x \%==e4\% y
 }
 \description{
-Returns TRUE iff |x - y| <= 1e-4
+Returns TRUE iff |x - y| <= 1e-4.
 }

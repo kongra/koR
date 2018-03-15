@@ -2,7 +2,7 @@
 % Please edit documentation in R/core.R
 \name{catimela}
 \alias{catimela}
-\title{\code{cat}s (logs) time elapsed for expr to evaluate}
+\title{\code{cat}s (logs) time elapsed for expr to evaluate.}
 \usage{
 catimela(expr, msg = "", off = FALSE)
 }
@@ -17,5 +17,5 @@ catimela(expr, msg = "", off = FALSE)
 the value of evaluated expr
 }
 \description{
-\code{cat}s (logs) time elapsed for expr to evaluate
+\code{cat}s (logs) time elapsed for expr to evaluate.
 }
