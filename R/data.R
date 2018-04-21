@@ -186,3 +186,25 @@ getDTcolsMatching <- function(dt, pred, quant = any) chStrings({
     quant(pred(vals))
   })
 })
+
+#' Sets data.table's column value to value and returns the data.table.
+#' @param dt a data.table
+#' @param col a column of dt
+#' @param value to set
+#' @return dt
+#' @export
+setDT <- function(dt, col, value) {
+  data.table::set(x = dt, j = col, value = value)
+  dt
+}
+
+#' Sets data.table's new value of a column to a value of a function call
+#' with an old value of the column. Does not check if column exists in dt.
+#' @param dt a data.table
+#' @param col a column of dt
+#' @param f a function
+#' @return dt
+#' @export
+overDT <- function(dt, col, f) {
+  setDT(dt, col, f(dt[[col]]))
+}
