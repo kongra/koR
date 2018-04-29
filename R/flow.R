@@ -7,7 +7,7 @@ NULL
 
 #' Ensures that either file argument or its archived version exist
 #' @param file path/to/some/file.ext
-#' @return path/to/some/file.ext or path/to/some/archive/file.ext
+#' @return path/to/some/file.ext or archive/path/to/some/file.ext
 #' @export
 ensureF <- function(file, archFile = NULL) chString({
   chString(file)
@@ -16,7 +16,7 @@ ensureF <- function(file, archFile = NULL) chString({
   if (file.exists(file))
     file
   else {
-    if (is.null(archFile)) archFile <- paste0(dirname(file), "/archive/", basename(file))
+    if (is.null(archFile)) archFile <- paste0("archive/", file)
     if (file.exists(archFile))
       archFile
     else
@@ -26,11 +26,11 @@ ensureF <- function(file, archFile = NULL) chString({
 
 #' Moves the file to a proper archive/ subdir
 #' @param file path/to/some/file.ext
-#' @return path/to/some/archive/file.ext
+#' @return archive/path/to/some/file.ext
 #' @export
 archF <- function(file) chString({
   chString(file)
-  archFile <- paste0(dirname(file), "/archive/", basename(file))
+  archFile <- paste0("archive/", file)
   file     <- ensureF(file, archFile)
   if (file != archFile) { # otherwise already in archive/
     archDir <- dirname(archFile)
