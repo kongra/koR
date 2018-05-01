@@ -24,3 +24,4 @@ Imports:
     proxy
 RoxygenNote: 6.0.1
 ByteCompile: true
+LinkingTo: Rcpp

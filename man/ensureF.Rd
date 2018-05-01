@@ -10,7 +10,7 @@ ensureF(file, archFile = NULL)
 \item{file}{path/to/some/file.ext}
 }
 \value{
-path/to/some/file.ext or path/to/some/archive/file.ext
+path/to/some/file.ext or archive/path/to/some/file.ext
 }
 \description{
 Ensures that either file argument or its archived version exist

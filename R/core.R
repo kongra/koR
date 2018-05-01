@@ -4,6 +4,8 @@
 
 #' @import data.table
 #' @import chR
+#' @useDynLib koR
+#' @importFrom Rcpp sourceCpp
 NULL
 
 #' Alias for \code{pryr::object_size}
@@ -347,4 +349,14 @@ listKeep <- function(l, p) l[sapply(l, p)]
 doCall <- function(what, args, quote = FALSE, envir = parent.frame(), null.rm = TRUE) {
   if (null.rm) args <- listDiscard(args, is.null)
   do.call(what = what, args = args, quote = quote, envir = envir)
+}
+
+#' Short-circuit evaluator for Boolean values
+#' @param b a boolean vector of some length n
+#' @param x a vector of lenght presumably equal to n
+#' @param pred a predicate to evaluate on these elements of x for which b is TRUE
+#' @return a boolean vector of length n
+#' @export
+boolsAnd <- function(b, x, pred) {
+  if (sum(b) == 0L) b else boolsAndInterveawe(b, pred(x[b]))
 }

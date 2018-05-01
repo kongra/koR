@@ -10,7 +10,7 @@ archF(file)
 \item{file}{path/to/some/file.ext}
 }
 \value{
-path/to/some/archive/file.ext
+archive/path/to/some/file.ext
 }
 \description{
 Moves the file to a proper archive/ subdir
