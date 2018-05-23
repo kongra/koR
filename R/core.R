@@ -360,3 +360,15 @@ doCall <- function(what, args, quote = FALSE, envir = parent.frame(), null.rm = 
 boolsAnd <- function(b, x, pred) {
   if (sum(b) == 0L) b else boolsAndInterveawe(b, pred(x[b]))
 }
+
+#' Peformance optimized base::setdiff
+#' @param x an input vector
+#' @param y vector of elements to filter out from x
+#' @return x without elements of y
+#' @export
+disj <- function(x, y) {
+  if (length(y) == 1L)
+    x[x != y]
+  else
+    x[!(x %in% y)]
+}
