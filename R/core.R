@@ -331,6 +331,16 @@ ofClass <- function(x, c) {
   x
 }
 
+#' Adds c to class(x) and returns x.
+#' @param x an object to add the class c to
+#' @param c a class
+#' @return the x argument
+#' @export
+addClass <- function(x, c) {
+  class(x) <- base::c(class(x), c)
+  x
+}
+
 #' Removes (discards) elements in list l for which p is TRUE.
 #' @param l a list
 #' @param p a predicate
