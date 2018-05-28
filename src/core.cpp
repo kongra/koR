@@ -19,3 +19,9 @@ LogicalVector boolsAndInterveawe(LogicalVector b, LogicalVector other) {
 
   return result;
 }
+
+template<typename V>
+static inline V setClass(V x, StringVector cls) {
+  x.attr("class") = cls;
+  return x;
+}

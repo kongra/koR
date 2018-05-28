@@ -2,18 +2,18 @@
 % Please edit documentation in R/core.R
 \name{addClass}
 \alias{addClass}
-\title{Adds c to class(x) and returns x.}
+\title{Adds cls to class(x).}
 \usage{
-addClass(x, c)
+addClass(x, cls)
 }
 \arguments{
-\item{x}{an object to add the class c to}
+\item{x}{an object to add the class cls to}
 
-\item{c}{a class}
+\item{cls}{a class}
 }
 \value{
 the x argument
 }
 \description{
-Adds c to class(x) and returns x.
+Adds cls to class(x).
 }

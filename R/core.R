@@ -321,24 +321,28 @@ partition <- function(xs, n) chList({
   split(xs, ceiling(seq_along(xs) / n))
 })
 
-#' Sets class(x) to c and returns x.
+#' Sets class(x) to cls.
 #' @param x an object to set the class c to
-#' @param c a class
-#' @return the x argument
+#' @param cls a class
+#' @return the x argument with class(x) set to cls
 #' @export
-ofClass <- function(x, c) {
-  class(x) <- c
+ofClass <- function(x, cls) {
+  class(x) <- cls
   x
 }
 
-#' Adds c to class(x) and returns x.
-#' @param x an object to add the class c to
-#' @param c a class
+#' Adds cls to class(x).
+#' @param x an object to add the class cls to
+#' @param cls a class
 #' @return the x argument
 #' @export
-addClass <- function(x, c) {
-  class(x) <- base::c(class(x), c)
-  x
+addClass <- function(x, cls) {
+  if (inherits(x, cls))
+    x
+  else {
+    class(x) <- c(class(x), cls)
+    x
+  }
 }
 
 #' Removes (discards) elements in list l for which p is TRUE.

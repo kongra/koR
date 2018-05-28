@@ -2,18 +2,18 @@
 % Please edit documentation in R/core.R
 \name{ofClass}
 \alias{ofClass}
-\title{Sets class(x) to c and returns x.}
+\title{Sets class(x) to cls.}
 \usage{
-ofClass(x, c)
+ofClass(x, cls)
 }
 \arguments{
 \item{x}{an object to set the class c to}
 
-\item{c}{a class}
+\item{cls}{a class}
 }
 \value{
-the x argument
+the x argument with class(x) set to cls
 }
 \description{
-Sets class(x) to c and returns x.
+Sets class(x) to cls.
 }

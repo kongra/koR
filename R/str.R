@@ -67,3 +67,47 @@ strWrapAll <- function(s, pattern, prefix, suffix, ignoreCase = TRUE) {
     s
   }
 }
+
+TRIMMED_CLASS    <- "koR::Trimmed"
+#' @export
+chTrimmedStrings <- chInstance (TRIMMED_CLASS)
+#' @export
+chTrimmedString  <- chInstance1(TRIMMED_CLASS)
+
+#' Trims given strings (both ends)
+#' @param s a vector of strings to trim
+#' @return a vector of trimmed strings
+#' @export
+trimStrings <- function(s) {
+  if (inherits(s, TRIMMED_CLASS))
+    s
+  else {
+    chStrings(s)
+    ofClass(if (length(s) < 150L) trimws(s) else str_trim(s),
+            TRIMMED_CLASS)
+  }
+}
+
+#' Explicitly marks given strings as trimmed. User takes responsibility.
+#' @param s a string to mark as trimmed
+#' @return s
+#' @export
+asTrimmed <- function(s) {
+  chStrings(s)
+  addClass(s, TRIMMED_CLASS)
+}
+
+NON_BLANKS_CLASS <- "koR::NonBlanks"
+#' @export
+chNonBlanks <- chInstance (NON_BLANKS_CLASS)
+#' @export
+chNonBlank  <- chInstance1(NON_BLANKS_CLASS)
+
+#' Explicitly marks given strings as trimmed. User takes responsibility.
+#' @param s a string to mark as trimmed
+#' @return s
+#' @export
+asNonBlanks <- function(s) {
+  chStrings(s)
+  addClass(s, NON_BLANKS_CLASS)
+}
