@@ -59,9 +59,9 @@ strWrapAll <- function(s, pattern, prefix, suffix, ignoreCase = TRUE) {
     for (i in 1:N) {
       start <- occurences[i, 1]
       end   <- occurences[i, 2]
-      s     <- s %>% strInsertBeforeIndex(start + off, prefix)
+      s     <- strInsertBeforeIndex(s, start + off, prefix)
       off   <- off + INC1
-      s     <- s %>% strInsertAfterIndex(end + off, suffix)
+      s     <- strInsertAfterIndex(s, end + off, suffix)
       off   <- off + INC2
     }
     s
@@ -70,15 +70,15 @@ strWrapAll <- function(s, pattern, prefix, suffix, ignoreCase = TRUE) {
 
 TRIMMED_CLASS    <- "koR::Trimmed"
 #' @export
-chTrimmedStrings <- chInstance (TRIMMED_CLASS)
+chTrimmeds <- chInstance (TRIMMED_CLASS)
 #' @export
-chTrimmedString  <- chInstance1(TRIMMED_CLASS)
+chTrimmed  <- chInstance1(TRIMMED_CLASS)
 
 #' Trims given strings (both ends)
 #' @param s a vector of strings to trim
 #' @return a vector of trimmed strings
 #' @export
-trimStrings <- function(s) {
+trimmeds <- function(s) {
   if (inherits(s, TRIMMED_CLASS))
     s
   else {
@@ -92,16 +92,16 @@ trimStrings <- function(s) {
 #' @param s a string to mark as trimmed
 #' @return s
 #' @export
-asTrimmed <- function(s) {
+asTrimmeds <- function(s) {
   chStrings(s)
-  addClass(s, TRIMMED_CLASS)
+  ofClass(s, TRIMMED_CLASS)
 }
 
-NON_BLANKS_CLASS <- "koR::NonBlanks"
+NON_BLANK_CLASS <- "koR::NonBlank"
 #' @export
-chNonBlanks <- chInstance (NON_BLANKS_CLASS)
+chNonBlanks <- chInstance (NON_BLANK_CLASS)
 #' @export
-chNonBlank  <- chInstance1(NON_BLANKS_CLASS)
+chNonBlank  <- chInstance1(NON_BLANK_CLASS)
 
 #' Explicitly marks given strings as trimmed. User takes responsibility.
 #' @param s a string to mark as trimmed
@@ -109,5 +109,20 @@ chNonBlank  <- chInstance1(NON_BLANKS_CLASS)
 #' @export
 asNonBlanks <- function(s) {
   chStrings(s)
-  addClass(s, NON_BLANKS_CLASS)
+  ofClass(s, NON_BLANK_CLASS)
+}
+
+#' Asserts non-blankness and returns koR::Trimmed strings as NonBlank.
+#' @param s koR::Trimmed strings
+#' @return koR::NonBlank strings
+#' @export
+nonBlanks <- function(s) {
+  if (inherits(s, NON_BLANK_CLASS))
+    s
+  else {
+    chTrimmeds(s)
+    i <- which(s == "")
+    if (length(i) != 0L) stop("Blank string(s) at ", i)
+    ofClass(s, NON_BLANK_CLASS)
+  }
 }
