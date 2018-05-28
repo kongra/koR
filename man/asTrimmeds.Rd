@@ -2,7 +2,8 @@
 % Please edit documentation in R/str.R
 \name{asTrimmeds}
 \alias{asTrimmeds}
-\title{Explicitly marks given strings as trimmed. User takes responsibility.}
+\title{Explicitly marks given strings as trimmed.
+User takes responsibility.}
 \usage{
 asTrimmeds(s)
 }
@@ -13,5 +14,6 @@ asTrimmeds(s)
 s
 }
 \description{
-Explicitly marks given strings as trimmed. User takes responsibility.
+Explicitly marks given strings as trimmed.
+User takes responsibility.
 }

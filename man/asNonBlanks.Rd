@@ -2,7 +2,8 @@
 % Please edit documentation in R/str.R
 \name{asNonBlanks}
 \alias{asNonBlanks}
-\title{Explicitly marks given strings as trimmed. User takes responsibility.}
+\title{Explicitly marks given strings as trimmed and non-blank.
+User takes responsibility.}
 \usage{
 asNonBlanks(s)
 }
@@ -13,5 +14,6 @@ asNonBlanks(s)
 s
 }
 \description{
-Explicitly marks given strings as trimmed. User takes responsibility.
+Explicitly marks given strings as trimmed and non-blank.
+User takes responsibility.
 }

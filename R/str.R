@@ -68,48 +68,50 @@ strWrapAll <- function(s, pattern, prefix, suffix, ignoreCase = TRUE) {
   }
 }
 
-TRIMMED_CLASS    <- "koR::Trimmed"
+TRIMMED    <- "koR::Trimmed"
 #' @export
-chTrimmeds <- chInstance (TRIMMED_CLASS)
+chTrimmeds <- chInstance (TRIMMED)
 #' @export
-chTrimmed  <- chInstance1(TRIMMED_CLASS)
+chTrimmed  <- chInstance1(TRIMMED)
 
 #' Trims given strings (both ends)
 #' @param s a vector of strings to trim
 #' @return a vector of trimmed strings
 #' @export
 trimmeds <- function(s) {
-  if (inherits(s, TRIMMED_CLASS))
+  if (inherits(s, TRIMMED))
     s
   else {
     chStrings(s)
     addClass(if (length(s) < 150L) trimws(s) else str_trim(s),
-            TRIMMED_CLASS)
+             TRIMMED)
   }
 }
 
-#' Explicitly marks given strings as trimmed. User takes responsibility.
+#' Explicitly marks given strings as trimmed.
+#' User takes responsibility.
 #' @param s a string to mark as trimmed
 #' @return s
 #' @export
 asTrimmeds <- function(s) {
   chStrings(s)
-  addClass(s, TRIMMED_CLASS)
+  addClass(s, TRIMMED)
 }
 
-NON_BLANK_CLASS <- "koR::NonBlank"
+NON_BLANK <- "koR::NonBlank"
 #' @export
-chNonBlanks <- chInstance (NON_BLANK_CLASS)
+chNonBlanks <- chInstance (NON_BLANK)
 #' @export
-chNonBlank  <- chInstance1(NON_BLANK_CLASS)
+chNonBlank  <- chInstance1(NON_BLANK)
 
-#' Explicitly marks given strings as trimmed. User takes responsibility.
+#' Explicitly marks given strings as trimmed and non-blank.
+#' User takes responsibility.
 #' @param s a string to mark as trimmed
 #' @return s
 #' @export
 asNonBlanks <- function(s) {
   chStrings(s)
-  addClass(s, NON_BLANK_CLASS)
+  addClass(addClass(s, TRIMMED), NON_BLANK)
 }
 
 #' Asserts non-blankness and returns koR::Trimmed strings as NonBlank.
@@ -117,12 +119,12 @@ asNonBlanks <- function(s) {
 #' @return koR::NonBlank strings
 #' @export
 nonBlanks <- function(s) {
-  if (inherits(s, NON_BLANK_CLASS))
+  if (inherits(s, NON_BLANK))
     s
   else {
     chTrimmeds(s)
     i <- which(s == "")
     if (length(i) != 0L) stop("Blank string(s) at ", i)
-    addClass(s, NON_BLANK_CLASS)
+    addClass(s, NON_BLANK)
   }
 }
