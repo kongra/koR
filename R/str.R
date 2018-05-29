@@ -83,8 +83,8 @@ trimmeds <- function(s) {
     s
   else {
     chStrings(s)
-    addClass(if (length(s) < 150L) trimws(s) else str_trim(s),
-             TRIMMED)
+    ofClass(if (length(s) < 150L) trimws(s) else stringr::str_trim(s),
+            TRIMMED)
   }
 }
 
@@ -95,7 +95,7 @@ trimmeds <- function(s) {
 #' @export
 asTrimmeds <- function(s) {
   chStrings(s)
-  addClass(s, TRIMMED)
+  ofClass(s, TRIMMED)
 }
 
 NON_BLANK <- "koR::NonBlank"
@@ -111,7 +111,7 @@ chNonBlank  <- chInstance1(NON_BLANK)
 #' @export
 asNonBlanks <- function(s) {
   chStrings(s)
-  addClass(addClass(s, TRIMMED), NON_BLANK)
+  ofClass(s, c(TRIMMED, NON_BLANK))
 }
 
 #' Asserts non-blankness and returns koR::Trimmed strings as NonBlank.
@@ -125,6 +125,6 @@ nonBlanks <- function(s) {
     chTrimmeds(s)
     i <- which(s == "")
     if (length(i) != 0L) stop("Blank string(s) at ", i)
-    addClass(s, NON_BLANK)
+    ofClass(s, c(TRIMMED, NON_BLANK))
   }
 }
