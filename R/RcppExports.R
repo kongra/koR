@@ -6,3 +6,15 @@ boolsAndInterveawe <- function(b, other) {
     .Call('_koR_boolsAndInterveawe', PACKAGE = 'koR', b, other)
 }
 
+#' Works like System.arraycopy(...) in Java for integer vectors.
+#' @export
+copyInts <- function(src, srcPos, dest, destPos, length) {
+    invisible(.Call('_koR_copyInts', PACKAGE = 'koR', src, srcPos, dest, destPos, length))
+}
+
+#' Works like System.arraycopy(...) in Java for double vectors.
+#' @export
+copyDoubles <- function(src, srcPos, dest, destPos, length) {
+    invisible(.Call('_koR_copyDoubles', PACKAGE = 'koR', src, srcPos, dest, destPos, length))
+}
+
