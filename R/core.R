@@ -301,12 +301,18 @@ createListMap <- function(...) chList({
   assocKvs(list(), list(...))
 })
 
+#' Returns an empty hash map implemented as an environment.
+#' @export
+emptyHashMap <- function() chEnv({
+  new.env(hash = TRUE, parent = emptyenv())
+})
+
 #' Creates an env using the enumerated collection of key/value mapping pairs.
 #' @param ... collection of key/value pairs (must be even in size)
 #' @return the resulting env
 #' @export
-createEnvMap <- function(...) chEnv({
-  assocKvs(new.env(hash = TRUE), list(...))
+hashMap <- function(...) chEnv({
+  assocKvs(emptyHashMap(), list(...))
 })
 
 #' Splits xs into partitions of length n, thanks to
