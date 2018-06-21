@@ -15,11 +15,12 @@ setClass("koR::Fmt", slots = list(
 
 #' @export
 fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) {
-  chFun(ch)
-  chFun(fromStrings)
-  chFun(toStrings)
-  chFun(fromUxs)
-  chFun(toUxs)
+  chFun (ch)
+  chFun (fromStrings)
+  chFun (toStrings)
+  chFun (fromUxs)
+  chFun (toUxs)
+  chBool(ident)
 
   new("koR::Fmt",
       ch          = ch,
@@ -132,11 +133,29 @@ safe2Strings <- function(f) {
   }
 }
 
-formatNumerics <- safe2Strings(function(xs, dp = 2L) { # chStrings
-  chNumerics(xs)
-  chNatInt  (dp)
-  trimws(format(round(xs, dp), nsmall = dp, scientific = FALSE))
-})
+#' @export
+formatNumerics <- {
+  NUM_FORMAT <- safe2Strings(function(xs, dp)
+    trimws(format(round(xs, dp), nsmall = dp, scientific = FALSE)))
+
+  safe2Strings(function(xs, dp = 2L, inf2NAs = TRUE) {
+    chNatInt(dp)
+    chBool  (inf2NAs)
+    NUM_FORMAT(xs = if (inf2NAs) nonFinite2NAs(xs) else xs, dp = dp)
+  })
+}
+
+#' @export
+formatUSD <- {
+  USD_FORMAT <- safe2Strings(scales::dollar_format(
+    prefix             = "",
+    largest_with_cents = .Machine$integer.max))
+
+  safe2Strings(function(d, inf2NAs = TRUE) { # chStrings
+    chBool(inf2NAs)
+    USD_FORMAT(if (inf2NAs) nonFinite2NAs(d) else d)
+  })
+}
 
 # OTHER FORMATTERS
 #
@@ -156,8 +175,8 @@ FmtUSDates <- {
 
 #' @export
 FmtUSD <-
-  fmt(ch          = chDoubles,
-      fromStrings = as.double,
+  fmt(ch          = chNumerics,
+      fromStrings = as.numeric,
       toStrings   = as.character,
 
       fromUxs = function(s) {
@@ -166,6 +185,19 @@ FmtUSD <-
         suppressWarnings(as.double(s))
       },
 
-      toUxs = safe2Strings(scales::dollar_format(
-        prefix             = "",
-        largest_with_cents = .Machine$integer.max)))
+      toUxs = formatUSD)
+
+#' @export
+FmtNumerics <-
+  fmt(ch          = chNumerics,
+      fromStrings = as.numeric,
+      toStrings   = as.character,
+      fromUxs     = as.numeric,
+      toUxs       = formatNumerics)
+
+# FmtFactors <-
+#   fmt(ch          = chFactors,
+#       fromStrings = as.factor,
+#       toStrings   = as.character,
+#       fromUxs     = as.factor,
+#       toUxs       = as.character)
