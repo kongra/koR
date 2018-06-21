@@ -184,6 +184,15 @@ doublesProximity <- function(x, y, ...) chDouble({
 })
 
 #' @export
+nonFinite2NAs <- function(xs) { # chDoubles
+  chNumerics(xs)
+  if (length(xs) == 0L)
+    double()
+  else
+    ifelse(is.finite(xs), xs, NA_real_)
+}
+
+#' @export
 percDiffs <- function(x, y) chDoubles({
   ifelse(is.na(x) | is.na(y),
     NA_real_, # x = NA | y = NA => NA

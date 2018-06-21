@@ -9,11 +9,12 @@ setClass("koR::Fmt", slots = list(
   fromStrings = "function",
   toStrings   = "function",
   fromUxs     = "function",
-  toUxs       = "function"
+  toUxs       = "function",
+  ident       = "logical"
 ))
 
 #' @export
-fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs) {
+fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) {
   chFun(ch)
   chFun(fromStrings)
   chFun(toStrings)
@@ -25,7 +26,8 @@ fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs) {
       fromStrings = fromStrings,
       toStrings   = toStrings,
       fromUxs     = fromUxs,
-      toUxs       = toUxs)
+      toUxs       = toUxs,
+      ident       = ident)
 }
 
 #' @export
@@ -39,9 +41,9 @@ fmtFromStrings <- function(fmt, s, ...) {
 }
 
 #' @export
-fmtToStrings <- function(fmt, x, ...) {
+fmt2Strings <- function(fmt, x, ...) {
   fmt@ch(x)
-  chStrings(fmt@toStrings(x))
+  chStrings(fmt@toStrings(x, ...))
 }
 
 #' @export
@@ -52,9 +54,9 @@ fmtFromUxs <- function(fmt, s, ...) {
 }
 
 #' @export
-fmtToUxs <- function(fmt, x, ...) {
+fmt2Uxs <- function(fmt, x, ...) {
   fmt@ch(x)
-  chStrings(fmt@toUxs(x))
+  chStrings(fmt@toUxs(x, ...))
 }
 
 # COMMON FORMATTERS
@@ -118,7 +120,7 @@ FmtDates <-
 # FORMATTING SUPPORT
 #
 #' @export
-safeToStrings <- function(f) {
+safe2Strings <- function(f) {
   function(xs, ...) {
     if (length(xs) == 0L)
       character(0L)
@@ -130,12 +132,40 @@ safeToStrings <- function(f) {
   }
 }
 
-US_DATE_FORMAT_LOCALE <- readr::locale(date_format = "%m/%d/%Y")
+formatNumerics <- safe2Strings(function(xs, dp = 2L) { # chStrings
+  chNumerics(xs)
+  chNatInt  (dp)
+  trimws(format(round(xs, dp), nsmall = dp, scientific = FALSE))
+})
+
+# OTHER FORMATTERS
+#
 
 #' @export
-FmtUSDates <-
+FmtUSDates <- {
+  LOCALE      <- readr::locale(date_format = "%m/%d/%Y")
+  fromStrings <- function(s) readr::parse_date(s, locale = LOCALE)
+  toStrings   <- function(d) format(d, "%m/%d/%Y")
+
   fmt(ch          = chDates,
-      fromStrings = function(s) readr::parse_date(s, locale = US_DATE_FORMAT_LOCALE),
-      toStrings   = function(d) format(d, "%m/%d/%Y"),
-      fromUxs     = function(s) readr::parse_date(s, locale = US_DATE_FORMAT_LOCALE),
-      toUxs       = function(d) format(d, "%m/%d/%Y"))
+      fromStrings = fromStrings,
+      toStrings   = toStrings,
+      fromUxs     = fromStrings,
+      toUxs       = toStrings)
+}
+
+#' @export
+FmtUSD <-
+  fmt(ch          = chDoubles,
+      fromStrings = as.double,
+      toStrings   = as.character,
+
+      fromUxs = function(s) {
+        s <- str_replace    (s, "\\$", "")
+        s <- str_replace_all(s, ",",   "")
+        suppressWarnings(as.double(s))
+      },
+
+      toUxs = safe2Strings(scales::dollar_format(
+        prefix             = "",
+        largest_with_cents = .Machine$integer.max)))
