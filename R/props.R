@@ -60,52 +60,82 @@ fmtToUxs <- function(fmt, x, ...) {
 # COMMON FORMATTERS
 #
 #' @export
-FmtStrings <- fmt(ch          = chStrings,
-                  fromStrings = base::identity,
-                  toStrings   = base::identity,
-                  fromUxs     = base::identity,
-                  toUxs       = base::identity)
+FmtStrings <-
+  fmt(ch          = chStrings,
+      fromStrings = base::identity,
+      toStrings   = base::identity,
+      fromUxs     = base::identity,
+      toUxs       = base::identity)
 
 #' @export
-FmtInts <- fmt(ch             = chInts,
-               fromStrings    = as.integer,
-               toStrings      = as.character,
-               fromUxs        = as.integer,
-               toUxs          = as.character)
+FmtInts <-
+  fmt(ch          = chInts,
+      fromStrings = as.integer,
+      toStrings   = as.character,
+      fromUxs     = as.integer,
+      toUxs       = as.character)
 
 #' @export
-FmtNatInts <- fmt(ch          = chNatInts,
-                  fromStrings = as.integer,
-                  toStrings   = as.character,
-                  fromUxs     = as.integer,
-                  toUxs       = as.character)
+FmtNatInts <-
+  fmt(ch          = chNatInts,
+      fromStrings = as.integer,
+      toStrings   = as.character,
+      fromUxs     = as.integer,
+      toUxs       = as.character)
 
 #' @export
-FmtPosInts <- fmt(ch          = chPosInts,
-                  fromStrings = as.integer,
-                  toStrings   = as.character,
-                  fromUxs     = as.integer,
-                  toUxs       = as.character)
+FmtPosInts <-
+  fmt(ch          = chPosInts,
+      fromStrings = as.integer,
+      toStrings   = as.character,
+      fromUxs     = as.integer,
+      toUxs       = as.character)
 
 #' @export
-FmtDoubles <- fmt(ch          = chDoubles,
-                  fromStrings = as.double,
-                  toStrings   = as.character,
-                  fromUxs     = as.double,
-                  toUxs       = as.character)
+FmtDoubles <-
+  fmt(ch          = chDoubles,
+      fromStrings = as.double,
+      toStrings   = as.character,
+      fromUxs     = as.double,
+      toUxs       = as.character)
 
 #' @export
-FmtBools <- fmt(ch            = chBools,
-                fromStrings   = as.logical,
-                toStrings     = as.character,
-                fromUxs       = as.logical,
-                toUxs         = as.character)
+FmtBools <-
+  fmt(ch          = chBools,
+      fromStrings = as.logical,
+      toStrings   = as.character,
+      fromUxs     = as.logical,
+      toUxs       = as.character)
 
 #' @export
-FmtDates <- fmt(ch            = chDates,
-                fromStrings   = as.Date,
-                toStrings     = as.character,
-                fromUxs       = as.Date,
-                toUxs         = as.character)
+FmtDates <-
+  fmt(ch          = chDates,
+      fromStrings = as.Date,
+      toStrings   = as.character,
+      fromUxs     = as.Date,
+      toUxs       = as.character)
 
+# FORMATTING SUPPORT
+#
+#' @export
+safeToStrings <- function(f) {
+  function(xs, ...) {
+    if (length(xs) == 0L)
+      character(0L)
+    else
+      ifelse(is.na(xs),
+        NA_character_,
+      # else
+        chStrings(f(xs, ...)))
+  }
+}
 
+US_DATE_FORMAT_LOCALE <- readr::locale(date_format = "%m/%d/%Y")
+
+#' @export
+FmtUSDates <-
+  fmt(ch          = chDates,
+      fromStrings = function(s) readr::parse_date(s, locale = US_DATE_FORMAT_LOCALE),
+      toStrings   = function(d) format(d, "%m/%d/%Y"),
+      fromUxs     = function(s) readr::parse_date(s, locale = US_DATE_FORMAT_LOCALE),
+      toUxs       = function(d) format(d, "%m/%d/%Y"))

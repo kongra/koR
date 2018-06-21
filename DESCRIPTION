@@ -20,7 +20,8 @@ Imports:
     scales,
     assertthat,
     stringr,
-    proxy
+    proxy,
+    readr
 RoxygenNote: 6.0.1
 ByteCompile: true
 LinkingTo: Rcpp
