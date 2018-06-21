@@ -2,11 +2,6 @@
 # Created 2015-07-20
 #
 
-#' @import data.table
-#' @import assertthat
-#' @import chR
-NULL
-
 #' Binds the data.table arguments into one data.table, optionally filling
 #' @return the resulting data.table
 #' @export

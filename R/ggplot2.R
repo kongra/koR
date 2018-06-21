@@ -2,12 +2,6 @@
 # Created 2015-09-10
 #
 
-#' @import ggplot2
-#' @import scales
-#' @import grid
-#' @import RColorBrewer
-NULL
-
 #' Custom pleasant theme from: http://minimaxir.com/2015/02/ggplot-tutorial/
 #' @export
 brewerTheme <- function(paletteName = "Greys", textSize = 7) {

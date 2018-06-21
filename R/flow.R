@@ -2,9 +2,6 @@
 # Created 2017-09-17 20_30_24 CEST
 #
 
-#' @import chR
-NULL
-
 #' Ensures that either file argument or its archived version exist
 #' @param file path/to/some/file.ext
 #' @return path/to/some/file.ext or archive/path/to/some/file.ext

@@ -2,10 +2,6 @@
 # Created 2018-01-12 12_04_55 CEST
 #
 
-#' @import chR
-#' @import stringr
-NULL
-
 #' Inserts what before positive index i in string s. Vectorized over all args.
 #' @param s a string to transform
 #' @param i a positive index

@@ -2,8 +2,15 @@
 # Created 2015-07-08
 #
 
+# PUT ALL IMPORTS HERE
 #' @import data.table
 #' @import chR
+#' @import stringr
+#' @import assertthat
+#' @import ggplot2
+#' @import scales
+#' @import grid
+#' @import RColorBrewer
 #' @useDynLib koR
 #' @importFrom Rcpp sourceCpp
 NULL

@@ -1,9 +1,6 @@
 # Copyright (c) Konrad Grzanek
 # Created 2017-06-02
 #
-#' @import stringr
-#' @import chR
-NULL
 
 #' Returns a timestamp string with the tzone appended.
 #' @export
