@@ -276,14 +276,14 @@ propsetDisj <- function(pset, names) {
 propsetTransients <- function(pset) chStrings({
   chPropset(pset)
   index <- pset@index
-  purrr::map_chr(pset@props, function(p) index[[p]]@transient)
+  purrr::keep(pset@props, function(p) index[[p]]@transient)
 })
 
 #' @export
 propsetNonTransients <- function(pset) chStrings({
   chPropset(pset)
   index <- pset@index
-  purrr::map_chr(pset@props, function(p) !(index[[p]]@transient))
+  purrr::keep(pset@props, function(p) !(index[[p]]@transient))
 })
 
 #' @return chFmt
@@ -326,7 +326,7 @@ propsetDTfmt <- function(dt, pset, f, ...) chDT({
     if (p %in% colNames) { # Always forgiving (skipMissing)
       fmt <- propFmt(p, pset)
       if (!fmt@ident) # When identity fmt, no need to do anything
-        setDT(dt, p, f(fmt, dt[[p]], ...))
+        koR::setDT(dt, p, f(fmt, dt[[p]], ...))
     }
 
   dt
@@ -349,3 +349,20 @@ assertDTpropset <- function(dt, pset) {
   chPropset(pset)
   assertDTcols(dt, pset@props)
 }
+
+# library(chR)
+# library(koR)
+# library(microbenchmark)
+#
+# Cens_PSET <- propset(
+#   prop("$ Regular",    FmtUSD    ),
+#   prop("$ Gross Wage", FmtUSD    ),
+#   prop("Hire Date",    FmtUSDates, transient = TRUE)
+# )
+#
+# dt <- data.table(`$ Regular` = "Inf", `$ Gross Wage` = "125,000.00", `Hire Date` = "6/22/2018")
+# assertDTpropset(dt, Cens_PSET)
+#
+# propsetDTFromUxs (dt, Cens_PSET)
+# propsetDT2Uxs    (dt, Cens_PSET)
+# propsetDT2Strings(dt, Cens_PSET)
