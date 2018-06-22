@@ -258,6 +258,20 @@ propset <- function(...) {
       index = purrr::reduce(purrr::map(args, function(a) a@index), c))
 }
 
+#' @return chPropset
+#' @export
+propsetDisj <- function(pset, names) {
+  chPropset(pset)
+  chStrings(names)
+
+  index <- pset@index
+  for (p in names) index[[p]] <- NULL
+
+  new("koR::Propset",
+      props = disj(pset@props, names),
+      index = index)
+}
+
 #' @return chFmt
 #' @export
 propFmt <- function(name, pset) pset@index[[name]]@fmt
@@ -281,14 +295,22 @@ propsetDTproject <- function(dt, pset) chDT({
 overDTpropset <- function(dt, pset, f, ...) chDT({
   chDT     (dt)
   chPropset(pset)
-  for (p in pset@props) overDT(dt, p, f, ...)
+
+  colNames <- colnames(dt)
+  for (p in pset@props)
+    if (p %in% colNames)
+      overDT(dt, p, f, ...)
   dt
 })
 
 propsetDTfmt <- function(dt, pset, f, ...) chDT({
   chDT     (dt)
   chPropset(pset)
-  for (p in pset@props) setDT(dt, p, f(propFmt(p, pset), dt[[p]], ...))
+
+  colNames <- colnames(dt)
+  for (p in pset@props)
+    if (p %in% colNames)
+      setDT(dt, p, f(propFmt(p, pset), dt[[p]], ...))
   dt
 })
 
