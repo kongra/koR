@@ -56,6 +56,7 @@ fmt2Uxs <- function(fmt, x, ...) {
 
 # COMMON FORMATTERS
 #
+
 #' @export
 FmtStrings <-
   fmt(ch          = chStrings,
@@ -220,8 +221,6 @@ setClass("koR::Prop", slots = list(
   transient = "logical"
 ))
 
-chProp <- chInstance("koR::Prop")
-
 setClass("koR::Propset", slots = list(
   props = "character",
   index = "list"
@@ -241,9 +240,15 @@ prop <- function(name, fmt, transient = FALSE) { # chPropset
 #' @export
 propset <- function(...) { # chPropset
   args <- list(...)
+
+  props <- reduce(map(args, function(a) a@props), c)
+  dups  <- props[duplicated(props)]
+  if (length(dups) > 0L) stop(
+    "Duplicates occured: ", paste(dups, collapse = ", "))
+
   new("koR::Propset",
-      props = unique(reduce(map(args, function(a) a@props), c)),
-      index =        reduce(map(args, function(a) a@index), c))
+      props = props,
+      index = reduce(map(args, function(a) a@index), c))
 }
 
 # Info_PSET <- propset(
@@ -257,16 +262,28 @@ propset <- function(...) { # chPropset
 #   "$ Regular"    %>% prop(FmtUSD)
 # )
 #
+# Cens_PSET <- propset(
+#   Info_PSET,
+#   # Info_PSET,
+#   # Info_PSET,
+#   # Info_PSET,
+#   Gross_PSET,
+#   # Gross_PSET,
+#   # Gross_PSET,
+#   # Gross_PSET,
+#   "$ Hours" %>% prop(FmtNumerics)
+# )
+#
 # microbenchmark::microbenchmark(
-#   Cens_PSET <- propset(
+#   propset(
 #     Info_PSET,
-#     Info_PSET,
-#     Info_PSET,
-#     Info_PSET,
+#     # Info_PSET,
+#     # Info_PSET,
+#     # Info_PSET,
 #     Gross_PSET,
-#     Gross_PSET,
-#     Gross_PSET,
-#     Gross_PSET,
+#     # Gross_PSET,
+#     # Gross_PSET,
+#     # Gross_PSET,
 #     "$ Hours" %>% prop(FmtNumerics)
 #   )
 # )
