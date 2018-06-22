@@ -272,6 +272,20 @@ propsetDisj <- function(pset, names) {
       index = index)
 }
 
+#' @export
+propsetTransients <- function(pset) chStrings({
+  chPropset(pset)
+  index <- pset@index
+  purrr::map_chr(pset@props, function(p) index[[p]]@transient)
+})
+
+#' @export
+propsetNonTransients <- function(pset) chStrings({
+  chPropset(pset)
+  index <- pset@index
+  purrr::map_chr(pset@props, function(p) !(index[[p]]@transient))
+})
+
 #' @return chFmt
 #' @export
 propFmt <- function(name, pset) pset@index[[name]]@fmt
@@ -309,8 +323,12 @@ propsetDTfmt <- function(dt, pset, f, ...) chDT({
 
   colNames <- colnames(dt)
   for (p in pset@props)
-    if (p %in% colNames)
-      setDT(dt, p, f(propFmt(p, pset), dt[[p]], ...))
+    if (p %in% colNames) { # Always forgiving (skipMissing)
+      fmt <- propFmt(p, pset)
+      if (!fmt@ident) # When identity fmt, no need to do anything
+        setDT(dt, p, f(fmt, dt[[p]], ...))
+    }
+
   dt
 })
 
@@ -325,3 +343,9 @@ propsetDT2Uxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmt2Uxs, ...)
 
 #' @export
 propsetDTFromUxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtFromUxs, ...)
+
+#' @export
+assertDTpropset <- function(dt, pset) {
+  chPropset(pset)
+  assertDTcols(dt, pset@props)
+}
