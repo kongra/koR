@@ -349,20 +349,3 @@ assertDTpropset <- function(dt, pset) {
   chPropset(pset)
   assertDTcols(dt, pset@props)
 }
-
-# library(chR)
-# library(koR)
-# library(microbenchmark)
-#
-# Cens_PSET <- propset(
-#   prop("$ Regular",    FmtUSD    ),
-#   prop("$ Gross Wage", FmtUSD    ),
-#   prop("Hire Date",    FmtUSDates, transient = TRUE)
-# )
-#
-# dt <- data.table(`$ Regular` = "Inf", `$ Gross Wage` = "125,000.00", `Hire Date` = "6/22/2018")
-# assertDTpropset(dt, Cens_PSET)
-#
-# propsetDTFromUxs (dt, Cens_PSET)
-# propsetDT2Uxs    (dt, Cens_PSET)
-# propsetDT2Strings(dt, Cens_PSET)
