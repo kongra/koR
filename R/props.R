@@ -195,9 +195,25 @@ FmtNumerics <-
       fromUxs     = as.numeric,
       toUxs       = formatNumerics)
 
-# FmtFactors <-
-#   fmt(ch          = chFactors,
-#       fromStrings = as.factor,
-#       toStrings   = as.character,
-#       fromUxs     = as.factor,
-#       toUxs       = as.character)
+#' @export
+FmtFactor <- {
+  DEFAULT <- fmt(ch          = chFactors,
+                 fromStrings = as.factor,
+                 toStrings   = as.character,
+                 fromUxs     = as.factor,
+                 toUxs       = as.character)
+
+  function(levels = NULL) {
+    if (is.null(levels))
+      DEFAULT
+    else {
+      chStrings(levels)
+      asFactor <- function(x) factor(x = x, levels = levels)
+      fmt(ch          = chFactors,
+          fromStrings = asFactor,
+          toStrings   = as.character,
+          fromUxs     = asFactor,
+          toUxs       = as.character)
+    }
+  }
+}
