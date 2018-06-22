@@ -241,14 +241,14 @@ prop <- function(name, fmt, transient = FALSE) { # chPropset
 propset <- function(...) { # chPropset
   args <- list(...)
 
-  props <- reduce(map(args, function(a) a@props), c)
+  props <- purrr::reduce(purrr::map(args, function(a) a@props), c)
   dups  <- props[duplicated(props)]
   if (length(dups) > 0L) stop(
     "Duplicates occured: ", paste(dups, collapse = ", "))
 
   new("koR::Propset",
       props = props,
-      index = reduce(map(args, function(a) a@index), c))
+      index = purr::reduce(purrr::map(args, function(a) a@index), c))
 }
 
 # Info_PSET <- propset(

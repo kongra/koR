@@ -4,7 +4,6 @@
 
 # PUT ALL IMPORTS HERE
 #' @import data.table
-#' @import purrr
 #' @import assertthat
 #' @import stringr
 #' @import ggplot2
