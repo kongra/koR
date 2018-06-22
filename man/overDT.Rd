@@ -5,7 +5,7 @@
 \title{Sets data.table's new value of a column to a value of a function call
 with an old value of the column. Does not check if column exists in dt.}
 \usage{
-overDT(dt, col, f)
+overDT(dt, col, f, ...)
 }
 \arguments{
 \item{dt}{a data.table}
@@ -13,6 +13,8 @@ overDT(dt, col, f)
 \item{col}{a column of dt}
 
 \item{f}{a function}
+
+\item{...}{additional arguments to f call}
 }
 \value{
 dt

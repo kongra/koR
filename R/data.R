@@ -198,8 +198,9 @@ setDT <- function(dt, col, value) {
 #' @param dt a data.table
 #' @param col a column of dt
 #' @param f a function
+#' @param ... additional arguments to f call
 #' @return dt
 #' @export
-overDT <- function(dt, col, f) {
-  setDT(dt, col, f(dt[[col]]))
+overDT <- function(dt, col, f, ...) {
+  setDT(dt, col, f(dt[[col]], ...))
 }

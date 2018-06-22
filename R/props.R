@@ -16,8 +16,9 @@ setClass("koR::Fmt", slots = list(
 #' @export
 chFmt <- chInstance("koR::Fmt")
 
+#' @return chFmt
 #' @export
-fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) { # chFmt
+fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) {
   chBool(ident)
   new("koR::Fmt",
       ch          = ch,
@@ -129,6 +130,7 @@ safe2Strings <- function(f) {
   }
 }
 
+#' @return chStrings
 #' @export
 formatNumerics <- {
   NUM_FORMAT <- safe2Strings(function(xs, dp)
@@ -141,13 +143,14 @@ formatNumerics <- {
   })
 }
 
+#' @return chStrings
 #' @export
 formatUSD <- {
   USD_FORMAT <- safe2Strings(scales::dollar_format(
     prefix             = "",
     largest_with_cents = .Machine$integer.max))
 
-  safe2Strings(function(d, inf2NAs = TRUE) { # chStrings
+  safe2Strings(function(d, inf2NAs = TRUE) {
     chBool(inf2NAs)
     USD_FORMAT(if (inf2NAs) nonFinite2NAs(d) else d)
   })
@@ -229,16 +232,20 @@ setClass("koR::Propset", slots = list(
 #' @export
 chPropset <- chInstance("koR::Propset")
 
+#' @return chPropset
 #' @export
-prop <- function(name, fmt, transient = FALSE) { # chPropset
+prop <- function(name, fmt, transient = FALSE) {
   chString(name)
+  chBool  (transient)
+
   index <- list()
   index[[name]] <- new("koR::Prop", fmt = fmt, transient = transient)
   new("koR::Propset", props = name, index = index)
 }
 
+#' @return chPropset
 #' @export
-propset <- function(...) { # chPropset
+propset <- function(...) {
   args <- list(...)
 
   props <- purrr::reduce(purrr::map(args, function(a) a@props), c)
@@ -248,42 +255,51 @@ propset <- function(...) { # chPropset
 
   new("koR::Propset",
       props = props,
-      index = purr::reduce(purrr::map(args, function(a) a@index), c))
+      index = purrr::reduce(purrr::map(args, function(a) a@index), c))
 }
 
-# Info_PSET <- propset(
-#   "Employee Number"     %>% prop(FmtPosInts),
-#   "Employee First Name" %>% prop(FmtStrings),
-#   "Employee Last Name"  %>% prop(FmtStrings)
-# )
+#' @return chFmt
+#' @export
+propFmt <- function(name, pset) pset@index[[name]]@fmt
+
+#' @return chBool
+#' @export
+propTransient <- function(name, pset) pset@index[[name]]@transient
+
+# SOME DT (data.table) UTILS
 #
-# Gross_PSET <- propset(
-#   "$ Gross Wage" %>% prop(FmtUSD),
-#   "$ Regular"    %>% prop(FmtUSD)
-# )
-#
-# Cens_PSET <- propset(
-#   Info_PSET,
-#   # Info_PSET,
-#   # Info_PSET,
-#   # Info_PSET,
-#   Gross_PSET,
-#   # Gross_PSET,
-#   # Gross_PSET,
-#   # Gross_PSET,
-#   "$ Hours" %>% prop(FmtNumerics)
-# )
-#
-# microbenchmark::microbenchmark(
-#   propset(
-#     Info_PSET,
-#     # Info_PSET,
-#     # Info_PSET,
-#     # Info_PSET,
-#     Gross_PSET,
-#     # Gross_PSET,
-#     # Gross_PSET,
-#     # Gross_PSET,
-#     "$ Hours" %>% prop(FmtNumerics)
-#   )
-# )
+
+#' @export
+propsetDTproject <- function(dt, pset) chDT({
+  chDT     (dt)
+  chPropset(pset)
+  props <- pset@props
+  dt[, ..props]
+})
+
+#' @export
+overDTpropset <- function(dt, pset, f, ...) chDT({
+  chDT     (dt)
+  chPropset(pset)
+  for (p in pset@props) overDT(dt, p, f, ...)
+  dt
+})
+
+propsetDTfmt <- function(dt, pset, f, ...) chDT({
+  chDT     (dt)
+  chPropset(pset)
+  for (p in pset@props) setDT(dt, p, f(propFmt(p, pset), dt[[p]], ...))
+  dt
+})
+
+#' @export
+propsetDT2Strings <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmt2Strings, ...)
+
+#' @export
+propsetDTFromStrings <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtFromStrings, ...)
+
+#' @export
+propsetDT2Uxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmt2Uxs, ...)
+
+#' @export
+propsetDTFromUxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtFromUxs, ...)
