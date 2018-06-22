@@ -21,7 +21,8 @@ Imports:
     assertthat,
     stringr,
     proxy,
-    readr
+    readr,
+    purrr
 RoxygenNote: 6.0.1
 ByteCompile: true
 LinkingTo: Rcpp

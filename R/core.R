@@ -4,12 +4,12 @@
 
 # PUT ALL IMPORTS HERE
 #' @import data.table
-#' @import chR
-#' @import stringr
+#' @import purrr
 #' @import assertthat
+#' @import stringr
 #' @import ggplot2
-#' @import scales
 #' @import grid
+#' @import chR
 #' @import RColorBrewer
 #' @useDynLib koR
 #' @importFrom Rcpp sourceCpp

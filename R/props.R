@@ -14,14 +14,11 @@ setClass("koR::Fmt", slots = list(
 ))
 
 #' @export
-fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) {
-  chFun (ch)
-  chFun (fromStrings)
-  chFun (toStrings)
-  chFun (fromUxs)
-  chFun (toUxs)
-  chBool(ident)
+chFmt <- chInstance("koR::Fmt")
 
+#' @export
+fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) { # chFmt
+  chBool(ident)
   new("koR::Fmt",
       ch          = ch,
       fromStrings = fromStrings,
@@ -30,9 +27,6 @@ fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) {
       toUxs       = toUxs,
       ident       = ident)
 }
-
-#' @export
-chFmt <- chInstance("koR::Fmt")
 
 #' @export
 fmtFromStrings <- function(fmt, s, ...) {
@@ -68,7 +62,8 @@ FmtStrings <-
       fromStrings = base::identity,
       toStrings   = base::identity,
       fromUxs     = base::identity,
-      toUxs       = base::identity)
+      toUxs       = base::identity,
+      ident       = TRUE)
 
 #' @export
 FmtInts <-
@@ -217,3 +212,61 @@ FmtFactor <- {
     }
   }
 }
+
+# PROPS/PROPSETS API
+#
+setClass("koR::Prop", slots = list(
+  fmt       = "koR::Fmt",
+  transient = "logical"
+))
+
+chProp <- chInstance("koR::Prop")
+
+setClass("koR::Propset", slots = list(
+  props = "character",
+  index = "list"
+))
+
+#' @export
+chPropset <- chInstance("koR::Propset")
+
+#' @export
+prop <- function(name, fmt, transient = FALSE) { # chPropset
+  chString(name)
+  index <- list()
+  index[[name]] <- new("koR::Prop", fmt = fmt, transient = transient)
+  new("koR::Propset", props = name, index = index)
+}
+
+#' @export
+propset <- function(...) { # chPropset
+  args <- list(...)
+  new("koR::Propset",
+      props = unique(reduce(map(args, function(a) a@props), c)),
+      index =        reduce(map(args, function(a) a@index), c))
+}
+
+# Info_PSET <- propset(
+#   "Employee Number"     %>% prop(FmtPosInts),
+#   "Employee First Name" %>% prop(FmtStrings),
+#   "Employee Last Name"  %>% prop(FmtStrings)
+# )
+#
+# Gross_PSET <- propset(
+#   "$ Gross Wage" %>% prop(FmtUSD),
+#   "$ Regular"    %>% prop(FmtUSD)
+# )
+#
+# microbenchmark::microbenchmark(
+#   Cens_PSET <- propset(
+#     Info_PSET,
+#     Info_PSET,
+#     Info_PSET,
+#     Info_PSET,
+#     Gross_PSET,
+#     Gross_PSET,
+#     Gross_PSET,
+#     Gross_PSET,
+#     "$ Hours" %>% prop(FmtNumerics)
+#   )
+# )
