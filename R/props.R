@@ -270,6 +270,21 @@ propsetDisj <- function(pset, names) chPropset({
 })
 
 #' @export
+propsetKeep <- function(pset, names) chPropset({
+  chPropset(pset)
+  chStrings(names)
+
+  # names MAY NOT be a subset of pset@props
+  props <- pset@props
+  index <- pset@index
+  for (p in props) if (!(p %in% names)) index[[p]] <- NULL
+
+  new("koR::Propset",
+      props = props[props %in% names],
+      index = index)
+})
+
+#' @export
 propsetTransients <- function(pset) chStrings({
   chPropset(pset)
   index <- pset@index
