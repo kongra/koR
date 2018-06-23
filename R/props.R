@@ -16,9 +16,8 @@ setClass("koR::Fmt", slots = list(
 #' @export
 chFmt <- chInstance("koR::Fmt")
 
-#' @return chFmt
 #' @export
-fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) {
+fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) chFmt({
   chBool(ident)
   new("koR::Fmt",
       ch          = ch,
@@ -27,15 +26,15 @@ fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) {
       fromUxs     = fromUxs,
       toUxs       = toUxs,
       ident       = ident)
-}
+})
 
 #' @export
 fmtFromStrings <- function(fmt, s, ...) {
   chStrings(s)
-  result <- fmt@fromStrings(s, ...)
-  fmt@ch(result)
+  fmt@ch(fmt@fromStrings(s, ...))
 }
 
+#' @return :chStrings
 #' @export
 fmt2Strings <- function(fmt, x, ...) {
   fmt@ch(x)
@@ -45,10 +44,10 @@ fmt2Strings <- function(fmt, x, ...) {
 #' @export
 fmtFromUxs <- function(fmt, s, ...) {
   chStrings(s)
-  result <- fmt@fromUxs(s, ...)
-  fmt@ch(result)
+  fmt@ch(fmt@fromUxs(s, ...))
 }
 
+#' @return :chStrings
 #' @export
 fmt2Uxs <- function(fmt, x, ...) {
   fmt@ch(x)
@@ -117,9 +116,10 @@ FmtDates <-
 
 # FORMATTING SUPPORT
 #
+
 #' @export
 safe2Strings <- function(f) {
-  function(xs, ...) {
+  function(xs, ...) { # chStrings
     if (length(xs) == 0L)
       character(0L)
     else
@@ -130,7 +130,7 @@ safe2Strings <- function(f) {
   }
 }
 
-#' @return chStrings
+#' @return :chStrings
 #' @export
 formatNumerics <- {
   NUM_FORMAT <- safe2Strings(function(xs, dp)
@@ -143,7 +143,7 @@ formatNumerics <- {
   })
 }
 
-#' @return chStrings
+#' @return :chStrings
 #' @export
 formatUSD <- {
   USD_FORMAT <- safe2Strings(scales::dollar_format(
@@ -232,20 +232,18 @@ setClass("koR::Propset", slots = list(
 #' @export
 chPropset <- chInstance("koR::Propset")
 
-#' @return chPropset
 #' @export
-prop <- function(name, fmt, transient = FALSE) {
+prop <- function(name, fmt, transient = FALSE) chPropset({
   chString(name)
   chBool  (transient)
 
   index <- list()
   index[[name]] <- new("koR::Prop", fmt = fmt, transient = transient)
   new("koR::Propset", props = name, index = index)
-}
+})
 
-#' @return chPropset
 #' @export
-propset <- function(...) {
+propset <- function(...) chPropset({
   args <- list(...)
 
   props <- purrr::reduce(purrr::map(args, function(a) a@props), c)
@@ -256,11 +254,10 @@ propset <- function(...) {
   new("koR::Propset",
       props = props,
       index = purrr::reduce(purrr::map(args, function(a) a@index), c))
-}
+})
 
-#' @return chPropset
 #' @export
-propsetDisj <- function(pset, names) {
+propsetDisj <- function(pset, names) chPropset({
   chPropset(pset)
   chStrings(names)
 
@@ -270,7 +267,7 @@ propsetDisj <- function(pset, names) {
   new("koR::Propset",
       props = disj(pset@props, names),
       index = index)
-}
+})
 
 #' @export
 propsetTransients <- function(pset) chStrings({
@@ -286,11 +283,11 @@ propsetNonTransients <- function(pset) chStrings({
   purrr::keep(pset@props, function(p) !(index[[p]]@transient))
 })
 
-#' @return chFmt
+#' @return :chFmt
 #' @export
 propFmt <- function(name, pset) pset@index[[name]]@fmt
 
-#' @return chBool
+#' @return :chBool
 #' @export
 propTransient <- function(name, pset) pset@index[[name]]@transient
 
@@ -332,18 +329,23 @@ propsetDTfmt <- function(dt, pset, f, ...) chDT({
   dt
 })
 
+#' @return :chDT
 #' @export
 propsetDT2Strings <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmt2Strings, ...)
 
+#' @return :chDT
 #' @export
 propsetDTFromStrings <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtFromStrings, ...)
 
+#' @return :chDT
 #' @export
 propsetDT2Uxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmt2Uxs, ...)
 
+#' @return :chDT
 #' @export
 propsetDTFromUxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtFromUxs, ...)
 
+#' @return :chDT
 #' @export
 assertDTpropset <- function(dt, pset) {
   chPropset(pset)
