@@ -6,6 +6,7 @@
 #
 setClass("koR::Fmt", slots = list(
   ch          = "function",
+  typePred    = "function",
   fromStrings = "function",
   toStrings   = "function",
   fromUxs     = "function",
@@ -17,10 +18,11 @@ setClass("koR::Fmt", slots = list(
 chFmt <- chInstance("koR::Fmt")
 
 #' @export
-fmt <- function(ch, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) chFmt({
+fmt <- function(ch, typePred, fromStrings, toStrings, fromUxs, toUxs, ident = FALSE) chFmt({
   chBool(ident)
   new("koR::Fmt",
       ch          = ch,
+      typePred    = typePred,
       fromStrings = fromStrings,
       toStrings   = toStrings,
       fromUxs     = fromUxs,
@@ -54,12 +56,18 @@ fmt2Uxs <- function(fmt, x, ...) {
   chStrings(fmt@toUxs(x, ...))
 }
 
+#' @export
+fmtCoerce <- function(fmt, x, fmtFrom = fmtFromStrings, ...) {
+  if(fmt@typePred(x)) x else fmtFrom(fmt, x, ...)
+}
+
 # COMMON FORMATTERS
 #
 
 #' @export
 FmtStrings <-
   fmt(ch          = chStrings,
+      typePred    = is.character,
       fromStrings = base::identity,
       toStrings   = base::identity,
       fromUxs     = base::identity,
@@ -69,6 +77,7 @@ FmtStrings <-
 #' @export
 FmtInts <-
   fmt(ch          = chInts,
+      typePred    = is.integer,
       fromStrings = as.integer,
       toStrings   = as.character,
       fromUxs     = as.integer,
@@ -77,6 +86,7 @@ FmtInts <-
 #' @export
 FmtNatInts <-
   fmt(ch          = chNatInts,
+      typePred    = function(x) is.integer(x) && areNatInts(x),
       fromStrings = as.integer,
       toStrings   = as.character,
       fromUxs     = as.integer,
@@ -85,6 +95,7 @@ FmtNatInts <-
 #' @export
 FmtPosInts <-
   fmt(ch          = chPosInts,
+      typePred    = function(x) is.integer(x) && arePosInts(x),
       fromStrings = as.integer,
       toStrings   = as.character,
       fromUxs     = as.integer,
@@ -93,6 +104,7 @@ FmtPosInts <-
 #' @export
 FmtDoubles <-
   fmt(ch          = chDoubles,
+      typePred    = is.double,
       fromStrings = as.double,
       toStrings   = as.character,
       fromUxs     = as.double,
@@ -101,6 +113,7 @@ FmtDoubles <-
 #' @export
 FmtBools <-
   fmt(ch          = chBools,
+      typePred    = is.logical,
       fromStrings = as.logical,
       toStrings   = as.character,
       fromUxs     = as.logical,
@@ -109,6 +122,7 @@ FmtBools <-
 #' @export
 FmtDates <-
   fmt(ch          = chDates,
+      typePred    = function(x) inherits(x, "Date"),
       fromStrings = as.Date,
       toStrings   = as.character,
       fromUxs     = as.Date,
@@ -166,6 +180,7 @@ FmtUSDates <- {
   toStrings   <- function(d) format(d, "%m/%d/%Y")
 
   fmt(ch          = chDates,
+      typePred    = function(x) inherits(x, "Date"),
       fromStrings = fromStrings,
       toStrings   = toStrings,
       fromUxs     = fromStrings,
@@ -175,6 +190,7 @@ FmtUSDates <- {
 #' @export
 FmtUSD <-
   fmt(ch          = chNumerics,
+      typePred    = is.numeric,
       fromStrings = as.numeric,
       toStrings   = as.character,
 
@@ -189,6 +205,7 @@ FmtUSD <-
 #' @export
 FmtNumerics <-
   fmt(ch          = chNumerics,
+      typePred    = is.numeric,
       fromStrings = as.numeric,
       toStrings   = as.character,
       fromUxs     = as.numeric,
@@ -197,6 +214,7 @@ FmtNumerics <-
 #' @export
 FmtFactor <- {
   DEFAULT <- fmt(ch          = chFactors,
+                 typePred    = is.factor,
                  fromStrings = as.factor,
                  toStrings   = as.character,
                  fromUxs     = as.factor,
@@ -209,6 +227,7 @@ FmtFactor <- {
       chStrings(levels)
       asFactor <- function(x) factor(x = x, levels = levels)
       fmt(ch          = chFactors,
+          typePred    = function(x) is.factor(x) && all(levels == base::levels(x)),
           fromStrings = asFactor,
           toStrings   = as.character,
           fromUxs     = asFactor,
@@ -337,7 +356,9 @@ propsetDTfmt <- function(dt, pset, f, ...) chDT({
   for (p in pset@props)
     if (p %in% colNames) { # Always forgiving (skipMissing)
       fmt <- propFmt(p, pset)
-      if (!fmt@ident) # When identity fmt, no need to do anything
+      if (fmt@ident)
+        fmt@ch(dt[[p]]) # For identities only make a check
+      else
         koR::setDT(dt, p, f(fmt, dt[[p]], ...))
     }
 
@@ -359,6 +380,10 @@ propsetDT2Uxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmt2Uxs, ...)
 #' @return :chDT
 #' @export
 propsetDTFromUxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtFromUxs, ...)
+
+#' @return :chDT
+#' @export
+propsetDTcoerce <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtCoerce, ...)
 
 #' @return :chDT
 #' @export
