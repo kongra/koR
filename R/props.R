@@ -384,6 +384,8 @@ propsetDTfmt <- function(dt, pset, f, ...) chDT({
     }
   }, error = function(e) {
     stop("Error(s) fmt'ing prop ", p, ": ", e)
+  }, warning = function(w) {
+    base::warning("Warnings(s) fmt'ing prop ", p, ": ", w)
   })
   dt
 })
