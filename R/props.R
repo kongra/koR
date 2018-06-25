@@ -374,7 +374,7 @@ propsetDTfmt <- function(dt, pset, f, ...) chDT({
   chPropset(pset)
 
   colNames <- colnames(dt)
-  for (p in pset@props)
+  for (p in pset@props) tryCatch({
     if (p %in% colNames) { # Always forgiving (skipMissing)
       fmt <- propFmt(p, pset)
       if (fmt@ident)
@@ -382,7 +382,9 @@ propsetDTfmt <- function(dt, pset, f, ...) chDT({
       else
         koR::setDT(dt, p, f(fmt, dt[[p]], ...))
     }
-
+  }, error = function(e) {
+    stop("Error(s) fmt'ing prop ", p, ": ", e)
+  })
   dt
 })
 
