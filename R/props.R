@@ -416,27 +416,8 @@ propsetDTFromUxs <- function(dt, pset, suppWgsFor = character(0), ...)
 
 #' @return :chDT
 #' @export
-propsetDTcoerce <- function(dt, pset, suppWgsFor = character(0), ...) {
-  chDT     (dt)
-  chPropset(pset)
-  chStrings(suppWgsFor)
-
-  colNames <- colnames(dt)
-  for (p in pset@props)
-    tryCatch({
-      if (p %in% colNames) { # Always forgiving (skipMissing)
-        fmt <- propFmt(p, pset)
-        koR::setDT(dt, p, fmt@ch(fmt@coercer(dt[[p]])))
-      }
-    }, error = function(e) {
-      stop("Error(s) fmt'ing prop ", p, ": ", e)
-    }, warning = function(w) {
-      if (!(p %in% suppWgsFor))
-        base::warning("Warnings(s) fmt'ing prop ", p, ": ", w)
-    })
-
-  dt
-}
+propsetDTcoerce <- function(dt, pset, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmtCoerce, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
