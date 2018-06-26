@@ -206,10 +206,10 @@ FmtUSDates <- {
 
 #' @export
 FmtUSD <-
-  fmt(ch          = chNumerics,
-      typePred    = is.numeric,
-      coercer     = as.numeric,
-      fromStrings = as.numeric,
+  fmt(ch          = chDoubles,
+      typePred    = is.double,
+      coercer     = as.double,
+      fromStrings = as.double,
       toStrings   = as.character,
 
       fromUxs = function(s) {
