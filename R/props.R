@@ -369,46 +369,74 @@ overDTpropset <- function(dt, pset, f, ...) chDT({
   dt
 })
 
-propsetDTfmt <- function(dt, pset, f, ...) chDT({
+propsetDTfmt <- function(dt, pset, f, suppWgsFor, ...) chDT({
   chDT     (dt)
   chPropset(pset)
+  chStrings(suppWgsFor)
 
   colNames <- colnames(dt)
-  for (p in pset@props) tryCatch({
-    if (p %in% colNames) { # Always forgiving (skipMissing)
-      fmt <- propFmt(p, pset)
-      if (fmt@ident)
-        fmt@ch(dt[[p]]) # For identities only make a check
-      else
-        koR::setDT(dt, p, f(fmt, dt[[p]], ...))
-    }
-  }, error = function(e) {
-    stop("Error(s) fmt'ing prop ", p, ": ", e)
-  }, warning = function(w) {
-    base::warning("Warnings(s) fmt'ing prop ", p, ": ", w)
-  })
+  for (p in pset@props)
+    tryCatch({
+      if (p %in% colNames) { # Always forgiving (skipMissing)
+        fmt <- propFmt(p, pset)
+        if (fmt@ident)
+          fmt@ch(dt[[p]]) # For identities only make a check
+        else
+          koR::setDT(dt, p, f(fmt, dt[[p]], ...))
+      }
+    }, error = function(e) {
+      stop("Error(s) fmt'ing prop ", p, ": ", e)
+    }, warning = function(w) {
+      if (!(p %in% suppWgsFor))
+        base::warning("Warnings(s) fmt'ing prop ", p, ": ", w)
+    })
+
   dt
 })
 
 #' @return :chDT
 #' @export
-propsetDT2Strings <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmt2Strings, ...)
+propsetDT2Strings <- function(dt, pset, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmt2Strings, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTFromStrings <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtFromStrings, ...)
+propsetDTFromStrings <- function(dt, pset, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmtFromStrings, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDT2Uxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmt2Uxs, ...)
+propsetDT2Uxs <- function(dt, pset, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmt2Uxs, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTFromUxs <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtFromUxs, ...)
+propsetDTFromUxs <- function(dt, pset, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmtFromUxs, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTcoerce <- function(dt, pset, ...) propsetDTfmt(dt, pset, fmtCoerce, ...)
+propsetDTcoerce <- function(dt, pset, suppWgsFor = character(0), ...) {
+  chDT     (dt)
+  chPropset(pset)
+  chStrings(suppWgsFor)
+
+  colNames <- colnames(dt)
+  for (p in pset@props)
+    tryCatch({
+      if (p %in% colNames) { # Always forgiving (skipMissing)
+        fmt <- propFmt(p, pset)
+        koR::setDT(dt, p, fmt@ch(fmt@coercer(dt[[p]])))
+      }
+    }, error = function(e) {
+      stop("Error(s) fmt'ing prop ", p, ": ", e)
+    }, warning = function(w) {
+      if (!(p %in% suppWgsFor))
+        base::warning("Warnings(s) fmt'ing prop ", p, ": ", w)
+    })
+
+  dt
+}
 
 #' @return :chDT
 #' @export
