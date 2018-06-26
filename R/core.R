@@ -119,9 +119,13 @@ modes <- function(x) chDT({
   dt[freq == maxFreq]
 })
 
-#' Defaults for NULL values.
+#' Defaults for NULL value.
 #' @export
 `%or%` <- function(x, y) if (is.null(x)) y else x
+
+#' Defaults for a single NA value.
+#' @export
+`%NAor%` <- function(x, y) if (is.na(x)) y else x
 
 #' Works like == but for NA == NA returns TRUE and not NA (like ==).
 #' @export

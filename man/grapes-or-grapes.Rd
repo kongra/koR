@@ -2,10 +2,10 @@
 % Please edit documentation in R/core.R
 \name{\%or\%}
 \alias{\%or\%}
-\title{Defaults for NULL values.}
+\title{Defaults for NULL value.}
 \usage{
 x \%or\% y
 }
 \description{
-Defaults for NULL values.
+Defaults for NULL value.
 }
