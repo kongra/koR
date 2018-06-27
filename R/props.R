@@ -418,10 +418,3 @@ propsetDTFromUxs <- function(dt, pset, suppWgsFor = character(0), ...)
 #' @export
 propsetDTcoerce <- function(dt, pset, suppWgsFor = character(0), ...)
   propsetDTfmt(dt, pset, fmtCoerce, suppWgsFor, ...)
-
-#' @return :chDT
-#' @export
-assertDTpropset <- function(dt, pset) {
-  chPropset(pset)
-  assertDTcols(dt, pset@props)
-}
