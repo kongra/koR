@@ -412,25 +412,55 @@ propsetDTfmt <- function(dt, pset, f, props, fmt, suppWgsFor, ...) chDT({
 
 #' @return :chDT
 #' @export
-propsetDT2Strings <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmt2Strings, props, fmt, suppWgsFor, ...)
+propsetDT2Strings <- function(
+  dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...) propsetDTfmt(
+    dt         = dt,
+    pset       = pset,
+    f          = fmt2Strings,
+    props      = props,
+    fmt        = fmt,
+    suppWgsFor = suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTFromStrings <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmtFromStrings, props, fmt, suppWgsFor, ...)
+propsetDTFromStrings <- function(
+  dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...) propsetDTfmt(
+    dt         = dt,
+    pset       = pset,
+    f          = fmtFromStrings,
+    props      = props,
+    fmt        = fmt,
+    suppWgsFor = suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDT2Uxs <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmt2Uxs, props, fmt, suppWgsFor, ...)
+propsetDT2Uxs <- function(
+  dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...) propsetDTfmt(
+    dt         = dt,
+    pset       = pset,
+    f          = fmt2Uxs,
+    props      = props,
+    fmt        = fmt,
+    suppWgsFor = suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTFromUxs <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmtFromUxs, props, fmt, suppWgsFor, ...)
+propsetDTFromUxs <- function(
+  dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...) propsetDTfmt(
+    dt         = dt,
+    pset       = pset,
+    f          = fmtFromUxs,
+    props      = props,
+    fmt        = fmt,
+    suppWgsFor = suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTcoerce <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmtCoerce, props, fmt, suppWgsFor, ...)
+propsetDTcoerce <- function(
+  dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...) propsetDTfmt(
+    dt         = dt,
+    pset       = pset,
+    f          = fmtCoerce,
+    props      = props,
+    fmt        = fmt,
+    suppWgsFor = suppWgsFor, ...)
