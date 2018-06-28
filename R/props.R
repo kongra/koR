@@ -259,14 +259,14 @@ FmtFactor <- {
 
 # PROPS/PROPSETS API
 #
-setClass("koR::Prop", slots = list(
+setClass("koR::PropInfo", slots = list(
   fmt       = "koR::Fmt",
   transient = "logical"
 ))
 
 setClass("koR::Propset", slots = list(
   props = "character",
-  index = "list"
+  infos = "list"
 ))
 
 #' @export
@@ -277,9 +277,9 @@ prop <- function(name, fmt, transient = FALSE) chPropset({
   chString(name)
   chBool  (transient)
 
-  index <- list()
-  index[[name]] <- new("koR::Prop", fmt = fmt, transient = transient)
-  new("koR::Propset", props = name, index = index)
+  infos <- list()
+  infos[[name]] <- new("koR::PropInfo", fmt = fmt, transient = transient)
+  new("koR::Propset", props = name, infos = infos)
 })
 
 #' @export
@@ -293,71 +293,71 @@ propset <- function(...) chPropset({
 
   new("koR::Propset",
       props = props,
-      index = purrr::reduce(purrr::map(args, function(a) a@index), c))
+      infos = purrr::reduce(purrr::map(args, function(a) a@infos), c))
 })
 
 #' @export
-propsetDisj <- function(pset, names) chPropset({
+propsetDisj <- function(pset, props) chPropset({
   chPropset(pset)
-  chStrings(names)
+  chStrings(props)
 
-  index <- pset@index
-  for (p in names) index[[p]] <- NULL
+  infos <- pset@infos
+  for (p in props) infos[[p]] <- NULL
 
   new("koR::Propset",
-      props = disj(pset@props, names),
-      index = index)
+      props = disj(pset@props, props),
+      infos = infos)
 })
 
 #' @export
-propsetKeep <- function(pset, names) chPropset({
+propsetKeep <- function(pset, props) chPropset({
   chPropset(pset)
-  chStrings(names)
+  chStrings(props)
 
-  # names MAY NOT be a subset of pset@props
+  # props MAY NOT be a subset of pset@props
   props <- pset@props
-  index <- pset@index
-  for (p in props) if (!(p %in% names)) index[[p]] <- NULL
+  infos <- pset@infos
+  for (p in props) if (!(p %in% props)) infos[[p]] <- NULL
 
   new("koR::Propset",
-      props = props[props %in% names],
-      index = index)
+      props = props[props %in% props],
+      infos = infos)
 })
 
 #' @export
 propsetTransients <- function(pset) chStrings({
   chPropset(pset)
-  index <- pset@index
-  purrr::keep(pset@props, function(p) index[[p]]@transient)
+  infos <- pset@infos
+  purrr::keep(pset@props, function(p) infos[[p]]@transient)
 })
 
 #' @export
 propsetNonTransients <- function(pset) chStrings({
   chPropset(pset)
-  index <- pset@index
-  purrr::keep(pset@props, function(p) !(index[[p]]@transient))
+  infos <- pset@infos
+  purrr::keep(pset@props, function(p) !(infos[[p]]@transient))
 })
 
 #' @return :chFmt
 #' @export
-propFmt <- function(name, pset) {
-  prop <- pset@index[[name]]
-  if (is.null(prop)) stop(paste0("Unrecognized prop ", name))
-  prop@fmt
+propFmt <- function(prop, pset) {
+  info <- pset@infos[[prop]]
+  if (is.null(info)) stop(paste0("Unrecognized prop ", prop))
+  info@fmt
 }
 
 #' @return :chBool
 #' @export
-propTransient <- function(name, pset) pset@index[[name]]@transient
+propTransient <- function(prop, pset) pset@infos[[prop]]@transient
 
 #' @export
-propsetPropsOfFmt <- function(pset, fmt, names = NULL) chStrings({
+propsetPropsOfFmt <- function(pset, fmt, props = NULL) chStrings({
   chPropset(pset)
   chFmt    (fmt)
-  chMaybe  (chStrings, names)
+  chMaybe  (chStrings, props)
 
-  index <- pset@index
-  purrr::keep(names %or% pset@props, function(p) identical(fmt, index[[p]]))
+  infos <- pset@infos
+  purrr::keep(props %or% pset@props, function(p) identical(fmt, infos[[p]]))
 })
 
 # SOME DT (data.table) UTILS
@@ -383,16 +383,18 @@ overDTpropset <- function(dt, pset, f, ...) chDT({
   dt
 })
 
-propsetDTfmt <- function(dt, pset, f, suppWgsFor, ...) chDT({
+propsetDTfmt <- function(dt, pset, f, props, fmt, suppWgsFor, ...) chDT({
   chDT     (dt)
   chPropset(pset)
+  chMaybe  (chStrings, props)
+  chMaybe  (chFmt, fmt)
   chStrings(suppWgsFor)
 
   colNames <- colnames(dt)
-  for (p in pset@props)
+  for (p in (props %or% pset@props))
     tryCatch({
       if (p %in% colNames) { # Always forgiving (skipMissing)
-        fmt <- propFmt(p, pset)
+        fmt <- fmt %or% propFmt(p, pset)
         if (fmt@ident)
           fmt@ch(dt[[p]]) # For identities only make a check
         else
@@ -410,75 +412,25 @@ propsetDTfmt <- function(dt, pset, f, suppWgsFor, ...) chDT({
 
 #' @return :chDT
 #' @export
-propsetDT2Strings <- function(dt, pset, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmt2Strings, suppWgsFor, ...)
+propsetDT2Strings <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmt2Strings, props, fmt, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTFromStrings <- function(dt, pset, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmtFromStrings, suppWgsFor, ...)
+propsetDTFromStrings <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmtFromStrings, props, fmt, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDT2Uxs <- function(dt, pset, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmt2Uxs, suppWgsFor, ...)
+propsetDT2Uxs <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmt2Uxs, props, fmt, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTFromUxs <- function(dt, pset, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmtFromUxs, suppWgsFor, ...)
+propsetDTFromUxs <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmtFromUxs, props, fmt, suppWgsFor, ...)
 
 #' @return :chDT
 #' @export
-propsetDTcoerce <- function(dt, pset, suppWgsFor = character(0), ...)
-  propsetDTfmt(dt, pset, fmtCoerce, suppWgsFor, ...)
-
-fmtDT <- function(dt, fmt, props, f, suppWgsFor, ...) chDT({
-  chDT     (dt)
-  chFmt    (fmt)
-  chStrings(props)
-  chStrings(suppWgsFor)
-
-  colNames <- colnames(dt)
-  for (p in props)
-    tryCatch({
-      if (p %in% colNames) { # Always forgiving (skipMissing)
-        if (fmt@ident)
-          fmt@ch(dt[[p]]) # For identities only make a check
-        else
-          koR::setDT(dt, p, f(fmt, dt[[p]], ...))
-      }
-    }, error = function(e) {
-      stop("Error(s) fmt'ing prop ", p, ": ", e)
-    }, warning = function(w) {
-      if (!(p %in% suppWgsFor))
-        base::warning("Warnings(s) fmt'ing prop ", p, ": ", w)
-    })
-
-  dt
-})
-
-#' @return :chDT
-#' @export
-fmtDT2Strings <- function(dt, fmt, props, suppWgsFor = character(0), ...)
-  fmtDT(dt, fmt, props, fmt2Strings, suppWgsFor, ...)
-
-#' @return :chDT
-#' @export
-fmtDTFromStrings <- function(dt, fmt, props, suppWgsFor = character(0), ...)
-  fmtDT(dt, fmt, props, fmtFromStrings, suppWgsFor, ...)
-
-#' @return :chDT
-#' @export
-fmtDT2Uxs <- function(dt, fmt, props, suppWgsFor = character(0), ...)
-  fmtDT(dt, fmt, props, fmt2Uxs, suppWgsFor, ...)
-
-#' @return :chDT
-#' @export
-fmtDTFromUxs <- function(dt, fmt, props, suppWgsFor = character(0), ...)
-  fmtDT(dt, fmt, props, fmtFromUxs, suppWgsFor, ...)
-
-#' @return :chDT
-#' @export
-fmtDTcoerce <- function(dt, fmt, props, suppWgsFor = character(0), ...)
-  fmtDT(dt, fmt, props, fmtCoerce, suppWgsFor, ...)
+propsetDTcoerce <- function(dt, pset, props = NULL, fmt = NULL, suppWgsFor = character(0), ...)
+  propsetDTfmt(dt, pset, fmtCoerce, props, fmt, suppWgsFor, ...)
