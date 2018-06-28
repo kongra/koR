@@ -350,6 +350,16 @@ propFmt <- function(name, pset) {
 #' @export
 propTransient <- function(name, pset) pset@index[[name]]@transient
 
+#' @export
+propsetPropsOfFmt <- function(pset, fmt, names = NULL) chStrings({
+  chPropset(pset)
+  chFmt    (fmt)
+  chMaybe  (chStrings, names)
+
+  index <- pset@index
+  purrr::keep(names %or% pset@props, function(p) identical(fmt, index[[p]]))
+})
+
 # SOME DT (data.table) UTILS
 #
 
