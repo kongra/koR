@@ -394,11 +394,11 @@ propsetDTfmt <- function(dt, pset, f, props, fmt, suppWgsFor, ...) chDT({
   for (p in (props %or% pset@props))
     tryCatch({
       if (p %in% colNames) { # Always forgiving (skipMissing)
-        fmt <- fmt %or% propFmt(p, pset)
-        if (fmt@ident)
-          fmt@ch(dt[[p]]) # For identities only make a check
+        pfmt <- fmt %or% propFmt(p, pset)
+        if (pfmt@ident)
+          pfmt@ch(dt[[p]]) # For identities only make a check
         else
-          koR::setDT(dt, p, f(fmt, dt[[p]], ...))
+          koR::setDT(dt, p, f(pfmt, dt[[p]], ...))
       }
     }, error = function(e) {
       stop("Error(s) fmt'ing prop ", p, ": ", e)
