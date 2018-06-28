@@ -383,23 +383,24 @@ overDTpropset <- function(dt, pset, f, ...) chDT({
   dt
 })
 
-propsetDTfmt <- function(dt, pset, f, props, fmt, suppWgsFor, ...) chDT({
+propsetDTfmt <- function(dt, pset, f, props, fmt, suppWgsFor, ...) { # chDT
   chDT     (dt)
   chPropset(pset)
   chMaybe  (chStrings, props)
   chMaybe  (chFmt, fmt)
   chStrings(suppWgsFor)
 
-  colNames <- colnames(dt)
-  for (p in (props %or% pset@props))
+  props <- props %or% pset@props
+  # Skip missing
+  props <- props[props %in% colnames(dt) & props %in% pset@props]
+
+  for (p in props)
     tryCatch({
-      if (p %in% colNames) { # Always forgiving (skipMissing)
-        pfmt <- fmt %or% propFmt(p, pset)
-        if (pfmt@ident)
-          pfmt@ch(dt[[p]]) # For identities only make a check
-        else
-          koR::setDT(dt, p, f(pfmt, dt[[p]], ...))
-      }
+      pfmt <- fmt %or% propFmt(p, pset)
+      if (pfmt@ident)
+        pfmt@ch(dt[[p]]) # For identities only make a check
+      else
+        koR::setDT(dt, p, f(pfmt, dt[[p]], ...))
     }, error = function(e) {
       stop("Error(s) fmt'ing prop ", p, ": ", e)
     }, warning = function(w) {
@@ -408,7 +409,7 @@ propsetDTfmt <- function(dt, pset, f, props, fmt, suppWgsFor, ...) chDT({
     })
 
   dt
-})
+}
 
 #' @return :chDT
 #' @export
