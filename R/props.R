@@ -357,7 +357,10 @@ propsetPropsOfFmt <- function(pset, fmt, props = NULL) chStrings({
   chMaybe  (chStrings, props)
 
   infos <- pset@infos
-  purrr::keep(props %or% pset@props, function(p) identical(fmt, infos[[p]]))
+  purrr::keep(props %or% pset@props, function(p) {
+    info <- infos[[p]]
+    !is.null(info) && identical(fmt, info@fmt)
+  })
 })
 
 # SOME DT (data.table) UTILS
