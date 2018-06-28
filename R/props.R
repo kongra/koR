@@ -340,7 +340,11 @@ propsetNonTransients <- function(pset) chStrings({
 
 #' @return :chFmt
 #' @export
-propFmt <- function(name, pset) pset@index[[name]]@fmt
+propFmt <- function(name, pset) {
+  prop <- pset@index[[name]]
+  if (is.null(prop)) stop(paste0("Can't find pset.prop ", prop, ))
+  prop@fmt
+}
 
 #' @return :chBool
 #' @export
