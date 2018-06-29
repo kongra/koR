@@ -398,8 +398,14 @@ propsetDTfmt <- function(dt, pset, f, props, fmt, suppWgsFor, ...) { # chDT
   chStrings(suppWgsFor)
 
   props <- props %or% pset@props
-  # Skip missing
-  props <- props[props %in% colnames(dt) & props %in% pset@props]
+
+  # Skip missing props
+  if (is.null(fmt))
+    props <- props[props %in% colnames(dt) & props %in% pset@props]
+  else
+    # When fmt is given explicitly, there is no need to check if a prop
+    # is in pset@props - we don't need this invariant
+    props <- props[props %in% colnames(dt)]
 
   for (p in props)
     tryCatch({
