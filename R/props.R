@@ -338,13 +338,17 @@ propsetNonTransients <- function(pset) chStrings({
   purrr::keep(pset@props, function(p) !(infos[[p]]@transient))
 })
 
-#' @return :chFmt
+#' @return PropInfo
 #' @export
-propFmt <- function(prop, pset) {
+propInfo <- function(prop, pset) {
   info <- pset@infos[[prop]]
   if (is.null(info)) stop(paste0("Unrecognized prop ", prop))
-  info@fmt
+  info
 }
+
+#' @return :chFmt
+#' @export
+propFmt <- function(prop, pset) propInfo(prop, pset)@fmt
 
 #' @return :chBool
 #' @export
