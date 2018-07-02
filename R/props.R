@@ -315,13 +315,10 @@ propsetKeep <- function(pset, props) chPropset({
   chStrings(props)
 
   # props MAY NOT be a subset of pset@props
-  props <- pset@props
-  infos <- pset@infos
-  for (p in props) if (!(p %in% props)) infos[[p]] <- NULL
-
-  new("koR::Propset",
-      props = props[props %in% props],
-      infos = infos)
+  props <- props[props %in% pset@props]
+  infos <- list()
+  for (p in props) infos[[p]] <- pset@infos[[p]]
+  new("koR::Propset", props = props, infos = infos)
 })
 
 #' @export
