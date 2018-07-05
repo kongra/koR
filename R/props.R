@@ -12,6 +12,7 @@ setClass("koR::Fmt", slots = list(
   toStrings   = "function",
   fromUxs     = "function",
   toUxs       = "function",
+  alignment   = "character",
   ident       = "logical"
 ))
 
@@ -21,8 +22,11 @@ chFmt <- chInstance("koR::Fmt")
 #' @export
 fmt <- function(ch, typePred, coercer,
                 fromStrings, toStrings, fromUxs, toUxs,
-                ident = FALSE) chFmt({
-  chBool(ident)
+                alignment, ident = FALSE) chFmt({
+  chString (alignment)
+  stopifnot(alignment %in% c("left", "center", "right"))
+  chBool   (ident)
+
   new("koR::Fmt",
       ch          = ch,
       typePred    = typePred,
@@ -31,6 +35,7 @@ fmt <- function(ch, typePred, coercer,
       toStrings   = toStrings,
       fromUxs     = fromUxs,
       toUxs       = toUxs,
+      alignment   = alignment,
       ident       = ident)
 })
 
@@ -82,6 +87,7 @@ FmtStrings <-
       toStrings   = base::identity,
       fromUxs     = base::identity,
       toUxs       = base::identity,
+      alignment   = "left",
       ident       = TRUE)
 
 #' @export
@@ -92,7 +98,8 @@ FmtInts <-
       fromStrings = as.integer,
       toStrings   = as.character,
       fromUxs     = as.integer,
-      toUxs       = as.character)
+      toUxs       = as.character,
+      alignment   = "right")
 
 #' @export
 FmtNatInts <-
@@ -102,7 +109,8 @@ FmtNatInts <-
       fromStrings = as.integer,
       toStrings   = as.character,
       fromUxs     = as.integer,
-      toUxs       = as.character)
+      toUxs       = as.character,
+      alignment   = "right")
 
 #' @export
 FmtPosInts <-
@@ -112,7 +120,8 @@ FmtPosInts <-
       fromStrings = as.integer,
       toStrings   = as.character,
       fromUxs     = as.integer,
-      toUxs       = as.character)
+      toUxs       = as.character,
+      alignment   = "right")
 
 #' @export
 FmtDoubles <-
@@ -122,7 +131,8 @@ FmtDoubles <-
       fromStrings = as.double,
       toStrings   = as.character,
       fromUxs     = as.double,
-      toUxs       = as.character)
+      toUxs       = as.character,
+      alignment   = "right")
 
 #' @export
 FmtBools <-
@@ -132,7 +142,8 @@ FmtBools <-
       fromStrings = as.logical,
       toStrings   = as.character,
       fromUxs     = as.logical,
-      toUxs       = as.character)
+      toUxs       = as.character,
+      alignment   = "right")
 
 #' @export
 FmtDates <-
@@ -142,7 +153,8 @@ FmtDates <-
       fromStrings = as.Date,
       toStrings   = as.character,
       fromUxs     = as.Date,
-      toUxs       = as.character)
+      toUxs       = as.character,
+      alignment   = "right")
 
 # FORMATTING SUPPORT
 #
@@ -201,7 +213,8 @@ FmtUSDates <- {
       fromStrings = fromStrings,
       toStrings   = toStrings,
       fromUxs     = fromStrings,
-      toUxs       = toStrings)
+      toUxs       = toStrings,
+      alignment   = "right")
 }
 
 #' @export
@@ -218,7 +231,8 @@ FmtUSD <-
         suppressWarnings(as.double(s))
       },
 
-      toUxs = formatUSD)
+      toUxs       = formatUSD,
+      alignment   = "right")
 
 #' @export
 FmtNumerics <-
@@ -228,7 +242,8 @@ FmtNumerics <-
       fromStrings = as.numeric,
       toStrings   = as.character,
       fromUxs     = as.numeric,
-      toUxs       = formatNumerics)
+      toUxs       = formatNumerics,
+      alignment   = "right")
 
 #' @export
 FmtFactor <- {
@@ -238,7 +253,8 @@ FmtFactor <- {
                  fromStrings = as.factor,
                  toStrings   = as.character,
                  fromUxs     = as.factor,
-                 toUxs       = as.character)
+                 toUxs       = as.character,
+                 alignment   = "left")
 
   function(levels = NULL) {
     if (is.null(levels))
@@ -252,7 +268,8 @@ FmtFactor <- {
           fromStrings = asFactor,
           toStrings   = as.character,
           fromUxs     = asFactor,
-          toUxs       = as.character)
+          toUxs       = as.character,
+          alignment   = "left")
     }
   }
 }
