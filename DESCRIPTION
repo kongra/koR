@@ -22,7 +22,8 @@ Imports:
     stringr,
     proxy,
     readr,
-    purrr
+    purrr,
+    openxlsx
 RoxygenNote: 6.0.1
 ByteCompile: true
 LinkingTo: Rcpp

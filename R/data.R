@@ -204,3 +204,24 @@ setDT <- function(dt, col, value) {
 overDT <- function(dt, col, f, ...) {
   setDT(dt, col, f(dt[[col]], ...))
 }
+
+#' Generates a report file for data.table dt in a particular year
+#' @export
+writeReportFile <- function(dt, year = NULL, problem = NULL) chUnit({
+  chDT   (dt)
+  chMaybe(chPosInt, year)
+  chMaybe(chString, problem)
+
+  fileName <- trimws(paste0(year, " ", problem))
+  fileName <- paste0(fileName, ".xlsx")
+  if (nrow(dt) == 0L) {
+    cat("No data for file", fileName, ", skipping\n")
+  } else {
+    cat("Writing file", fileName, "\n")
+    wb    <- openxlsx::createWorkbook()
+    sheet <- openxlsx::addWorksheet(wb, "Data")
+    openxlsx::writeData(wb, sheet, dt)
+    openxlsx::saveWorkbook(wb, fileName, overwrite = TRUE)
+  }
+  NULL
+})
