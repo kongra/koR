@@ -4,7 +4,7 @@
 
 # DEFINE CLASSES WITH REFERENCE SEMANTICS HERE
 #
-REF_SEM_CLASSES <- c(
+REF_CLASSES <- c(
   "data.table"
 )
 
@@ -13,11 +13,11 @@ copyDeref.data.table <- data.table::copy
 
 # INSTRUMENTATION
 #
-for (rc in REF_SEM_CLASSES) setOldClass(rc)
-setClassUnion("koR::RefSemClass", members = REF_SEM_CLASSES)
+for (rc in REF_CLASSES) setOldClass(rc)
+setClassUnion("koR::RefClass", members = REF_CLASSES)
 
-R <- setClass("koR::R", slots = list(deref = "koR::RefSemClass"))
-V <- setClass("koR::V", slots = list(deref = "koR::RefSemClass"))
+R <- setClass("koR::R", slots = list(deref = "koR::RefClass"))
+V <- setClass("koR::V", slots = list(deref = "koR::RefClass"))
 
 # API
 #
