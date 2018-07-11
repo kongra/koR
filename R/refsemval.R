@@ -16,11 +16,15 @@ copyDeref.data.table <- data.table::copy
 for (rc in REF_CLASSES) setOldClass(rc)
 setClassUnion("koR.RefClass", members = REF_CLASSES)
 
-R <- setClass("koR.R", slots = list(deref = "koR.RefClass"))
-V <- setClass("koR.V", slots = list(deref = "koR.RefClass"))
-
 # API
 #
+
+#' @export
+R <- setClass("koR.R", slots = list(deref = "koR.RefClass"))
+
+#' @export
+V <- setClass("koR.V", slots = list(deref = "koR.RefClass"))
+
 #' @export
 isR <- function(x) inherits(x, "koR.R")
 
