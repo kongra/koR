@@ -65,21 +65,21 @@ strWrapAll <- function(s, pattern, prefix, suffix, ignoreCase = TRUE) {
 }
 
 #' @export
-chTrimmeds <- chInstance ("koR::Trimmed")
+chTrimmeds <- chInstance ("koR.Trimmed")
 #' @export
-chTrimmed  <- chInstance1("koR::Trimmed")
+chTrimmed  <- chInstance1("koR.Trimmed")
 
 #' Trims given strings (both ends)
 #' @param s a vector of strings to trim
 #' @return a vector of trimmed strings
 #' @export
 trimmeds <- function(s) {
-  if (inherits(s, "koR::Trimmed"))
+  if (inherits(s, "koR.Trimmed"))
     s
   else {
     chStrings(s)
     ofClass(if (length(s) < 150L) trimws(s) else stringr::str_trim(s),
-            "koR::Trimmed")
+            "koR.Trimmed")
   }
 }
 
@@ -90,13 +90,13 @@ trimmeds <- function(s) {
 #' @export
 asTrimmeds <- function(s) {
   chStrings(s)
-  ofClass(s, "koR::Trimmed")
+  ofClass(s, "koR.Trimmed")
 }
 
 #' @export
-chNonBlanks <- chInstance ("koR::NonBlank")
+chNonBlanks <- chInstance ("koR.NonBlank")
 #' @export
-chNonBlank  <- chInstance1("koR::NonBlank")
+chNonBlank  <- chInstance1("koR.NonBlank")
 
 #' Explicitly marks given strings as trimmed and non-blank.
 #' User takes responsibility.
@@ -105,20 +105,20 @@ chNonBlank  <- chInstance1("koR::NonBlank")
 #' @export
 asNonBlanks <- function(s) {
   chStrings(s)
-  ofClass(s, c("koR::Trimmed", "koR::NonBlank"))
+  ofClass(s, c("koR.Trimmed", "koR.NonBlank"))
 }
 
-#' Asserts non-blankness and returns koR::Trimmed strings as NonBlank.
-#' @param s koR::Trimmed strings
-#' @return koR::NonBlank strings
+#' Asserts non-blankness and returns koR.Trimmed strings as NonBlank.
+#' @param s koR.Trimmed strings
+#' @return koR.NonBlank strings
 #' @export
 nonBlanks <- function(s) {
-  if (inherits(s, "koR::NonBlank"))
+  if (inherits(s, "koR.NonBlank"))
     s
   else {
     chTrimmeds(s)
     i <- which(s == "")
     if (length(i) != 0L) stop("Blank string(s) at ", i)
-    ofClass(s, c("koR::Trimmed", "koR::NonBlank"))
+    ofClass(s, c("koR.Trimmed", "koR.NonBlank"))
   }
 }

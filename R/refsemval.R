@@ -14,18 +14,18 @@ copyDeref.data.table <- data.table::copy
 # INSTRUMENTATION
 #
 for (rc in REF_CLASSES) setOldClass(rc)
-setClassUnion("koR::RefClass", members = REF_CLASSES)
+setClassUnion("koR.RefClass", members = REF_CLASSES)
 
-R <- setClass("koR::R", slots = list(deref = "koR::RefClass"))
-V <- setClass("koR::V", slots = list(deref = "koR::RefClass"))
+R <- setClass("koR.R", slots = list(deref = "koR.RefClass"))
+V <- setClass("koR.V", slots = list(deref = "koR.RefClass"))
 
 # API
 #
 #' @export
-isR <- function(x) inherits(x, "koR::R")
+isR <- function(x) inherits(x, "koR.R")
 
 #' @export
-isV <- function(x) inherits(x, "koR::V")
+isV <- function(x) inherits(x, "koR.V")
 
 #' @export
 asR <- function(x, copy = TRUE) {
@@ -60,20 +60,3 @@ chV <- function(check, x) {
   check(x@deref)
   x
 }
-
-# TESTS
-#
-# library(data.table)
-# library(chR)
-# library(koR)
-# library(purrr)
-# library(microbenchmark)
-#
-# dt1 <- data.table(x = 1L, y = 2L)
-# r1  <- new("koR::R", deref = dt1)
-# v1  <- asV(r1)
-#
-# microbenchmark(
-#   asV(r1),
-#   asV(asV(r1))
-# )

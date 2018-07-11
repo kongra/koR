@@ -2,16 +2,16 @@
 % Please edit documentation in R/str.R
 \name{nonBlanks}
 \alias{nonBlanks}
-\title{Asserts non-blankness and returns koR::Trimmed strings as NonBlank.}
+\title{Asserts non-blankness and returns koR.Trimmed strings as NonBlank.}
 \usage{
 nonBlanks(s)
 }
 \arguments{
-\item{s}{koR::Trimmed strings}
+\item{s}{koR.Trimmed strings}
 }
 \value{
-koR::NonBlank strings
+koR.NonBlank strings
 }
 \description{
-Asserts non-blankness and returns koR::Trimmed strings as NonBlank.
+Asserts non-blankness and returns koR.Trimmed strings as NonBlank.
 }

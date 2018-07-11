@@ -4,7 +4,7 @@
 
 # FORMATTERS API
 #
-setClass("koR::Fmt", slots = list(
+setClass("koR.Fmt", slots = list(
   ch          = "function",
   typePred    = "function",
   coercer     = "function",
@@ -17,7 +17,7 @@ setClass("koR::Fmt", slots = list(
 ))
 
 #' @export
-chFmt <- chInstance("koR::Fmt")
+chFmt <- chInstance("koR.Fmt")
 
 #' @export
 fmt <- function(ch, typePred, coercer,
@@ -27,7 +27,7 @@ fmt <- function(ch, typePred, coercer,
   stopifnot(alignment %in% c("left", "center", "right"))
   chBool   (ident)
 
-  new("koR::Fmt",
+  new("koR.Fmt",
       ch          = ch,
       typePred    = typePred,
       coercer     = coercer,
@@ -276,18 +276,18 @@ FmtFactor <- {
 
 # PROPS/PROPSETS API
 #
-setClass("koR::PropInfo", slots = list(
-  fmt       = "koR::Fmt",
+setClass("koR.PropInfo", slots = list(
+  fmt       = "koR.Fmt",
   transient = "logical"
 ))
 
-setClass("koR::Propset", slots = list(
+setClass("koR.Propset", slots = list(
   props = "character",
   infos = "list"
 ))
 
 #' @export
-chPropset <- chInstance("koR::Propset")
+chPropset <- chInstance("koR.Propset")
 
 #' @export
 prop <- function(name, fmt, transient = FALSE) chPropset({
@@ -295,8 +295,8 @@ prop <- function(name, fmt, transient = FALSE) chPropset({
   chBool  (transient)
 
   infos <- list()
-  infos[[name]] <- new("koR::PropInfo", fmt = fmt, transient = transient)
-  new("koR::Propset", props = name, infos = infos)
+  infos[[name]] <- new("koR.PropInfo", fmt = fmt, transient = transient)
+  new("koR.Propset", props = name, infos = infos)
 })
 
 #' @export
@@ -308,7 +308,7 @@ propset <- function(...) chPropset({
   if (length(dups) > 0L) stop(
     "Duplicates occured: ", paste(dups, collapse = ", "))
 
-  new("koR::Propset",
+  new("koR.Propset",
       props = props,
       infos = purrr::reduce(purrr::map(args, function(a) a@infos), c))
 })
@@ -321,7 +321,7 @@ propsetDisj <- function(pset, props) chPropset({
   infos <- pset@infos
   for (p in props) infos[[p]] <- NULL
 
-  new("koR::Propset",
+  new("koR.Propset",
       props = disj(pset@props, props),
       infos = infos)
 })
@@ -335,7 +335,7 @@ propsetKeep <- function(pset, props) chPropset({
   props <- props[props %in% pset@props]
   infos <- list()
   for (p in props) infos[[p]] <- pset@infos[[p]]
-  new("koR::Propset", props = props, infos = infos)
+  new("koR.Propset", props = props, infos = infos)
 })
 
 #' @export
