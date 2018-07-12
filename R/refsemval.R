@@ -16,14 +16,17 @@ copyDeref.data.table <- data.table::copy
 for (rc in REF_CLASSES) setOldClass(rc)
 setClassUnion("koR.RefClass", members = REF_CLASSES)
 
+R <- setClass("koR.R", slots = list(deref = "koR.RefClass"))
+V <- setClass("koR.V", slots = list(deref = "koR.RefClass"))
+
 # API
 #
 
 #' @export
-R <- setClass("koR.R", slots = list(deref = "koR.RefClass"))
+makeR <- function(deref) R(deref = deref)
 
 #' @export
-V <- setClass("koR.V", slots = list(deref = "koR.RefClass"))
+makeV <- function(deref) V(deref = deref)
 
 #' @export
 isR <- function(x) inherits(x, "koR.R")
@@ -37,7 +40,7 @@ asR <- function(x, copy = TRUE) {
     x
   else {
     x <- if (isV(x)) x@deref else x
-    R(deref = if (copy) copyDeref(x) else x)
+    makeR(if (copy) copyDeref(x) else x)
   }
 }
 
@@ -47,7 +50,7 @@ asV <- function(x, copy = TRUE) {
     x
   else {
     x <- if (isR(x)) x@deref else x
-    V(deref = if (copy) copyDeref(x) else x)
+    makeV(if (copy) copyDeref(x) else x)
   }
 }
 

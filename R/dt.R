@@ -17,7 +17,7 @@ getDT <- function(dt, prop) {
 # library(purrr)
 #
 # dt1 <- data.table(x = 1L)
-# r1  <- R(deref = dt1)
+# r1  <- makeR(deref = dt1)
 #
 # microbenchmark(
 #   dt1[["x"]],
