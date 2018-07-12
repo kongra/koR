@@ -2,13 +2,145 @@
 # Created 2015-07-20
 #
 
+# hasDTcols         -> hasDTprops (sprawdzić, jak jest używany)
+# assertDTcols      -> assertDTprops
+# writeReportFile   -> writeDTexcel
+# reduceDTcols      -> reduceDTprops
+# withDTcols        -> withoutDTprops
+# withoutDTcols     -> withoutDTprops
+# getDTcolsMatching -> getDTpropsMatching
+
+# NON-DESTRUCTIVES
+#
+
+#' @param x chDT|chR(chDT)|chV(chDT)
+#' @export
 asDT <- function(x) if (is.data.table(x)) x else chDT(x@deref)
 
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @return chVector
 #' @export
 getDT <- function(dt, prop) {
   chString(prop)
   asDT(dt)[[prop]]
 }
+
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @export
+hasDTprops <- function(dt, props) chBool({
+  dt <- asDT(dt)
+  chStrings(props)
+  all(props %in% colnames(dt))
+})
+
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @return dt argument
+#' @export
+assertDTprops <- function(dt, props) {
+  chStrings(props)
+  dups <- props[duplicated(props)]
+  if (length(dups) != 0)
+    stop("props contains duplicated value(s) ", dups)
+
+  orig     <- dt # The original dt argument ...
+  dt       <- asDT(dt)
+  colNames <- colnames(dt)
+  dups     <- colNames[duplicated(colNames)]
+  if (length(dups) != 0)
+    stop("dt contains duplicated column(s) ", dups)
+
+  diff1 <- setdiff(colNames, props)
+  diff2 <- setdiff(props, colNames)
+
+  if (length(diff1) != 0) stop("colnames(dt) contains unrecognized column(s) ", diff1)
+  if (length(diff2) != 0) stop("colnames(dt) lacks required column(s) "       , diff2)
+
+  # ... is returned untouched
+  orig
+}
+
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @export
+writeDTexcel <- function(dt, name, sheetName = "Data") chUnit({
+  dt <- asDT(dt)
+  chString(name)
+  chString(sheetName)
+
+  fileName <- paste0(trimws(name), ".xlsx")
+  if (nrow(dt) == 0L) {
+    cat("No data for file", fileName, ", skipping\n")
+  } else {
+    cat("Writing file", fileName, "\n")
+    wb    <- openxlsx::createWorkbook()
+    sheet <- openxlsx::addWorksheet(wb, sheetName)
+    openxlsx::writeData(wb, sheet, dt)
+    openxlsx::saveWorkbook(wb, fileName, overwrite = TRUE)
+  }
+  NULL
+})
+
+# CONSTRUCTORS/ITERATORS
+#
+
+#' @export
+bindDTs <- function(..., fill = FALSE) chDT({
+  chBool(fill)
+  rbindlist(purrr::map(list(...), asDT), fill = fill)
+})
+
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @export
+mapDT <- function(dt, f, fill = FALSE) chDT({
+  dt <- asDT(dt)
+  chFun (f)
+  chBool(fill)
+  rows <- by(dt, seq_len(nrow(dt)), f)
+  rbindlist(rows, fill = fill)
+})
+
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @export
+forDT <- function(dt, f) chUnit({
+  dt <- asDT(dt)
+  chFun(f)
+  by(dt, seq_len(nrow(dt)), f)
+  NULL
+})
+
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @export
+reduceDTprops <- function(dt, props, f, ...) chVector({
+  dt <- asDT(f)
+  chStrings(props)
+  chFun    (f)
+  purrr::reduce(as.list(props), function(x, c) f(x, dt[[c]]), ...)
+})
+
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @export
+withDTprops <- function(dt, props) chDT({
+  chStrings(props)
+  asDT(dt)[, ..props]
+})
+
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @export
+withoutDTprops <- function(dt, props) chDT({
+  dt <- asDT(dt)
+  chStrings(props)
+
+  colNames <- colnames(dt)
+  if (!all(props %in% colNames)) stop("all props must be in colnames(dt)")
+  props <- setdiff(colNames, props)
+  dt[, ..props]
+})
+
+getDTpropsMatching <- function(dt, pred, quant = any) chStrings({
+  dt <- asDT(dt)
+  chFun(pred)
+  chFun(quant)
+  purrr::keep(. = colnames(dt), .p = function(p) quant(pred(dt[[p]])))
+})
 
 # library(data.table)
 # library(microbenchmark)
@@ -17,23 +149,7 @@ getDT <- function(dt, prop) {
 # library(purrr)
 #
 # dt1 <- data.table(x = 1L)
-# r1  <- makeR(deref = dt1)
-#
-# microbenchmark(
-#   dt1[["x"]],
-#   getDT(dt1, "x"),
-#   getDT(r1,  "x")
-# )
-
-# hasDTprops   (hasDTcols)
-# assertDTprops(assertDTcols)
-# writeDTExcel    (writeReportFile)
-
-# CONSTRUCTORS
-#
-# withDTprops    (withDTcols)
-# withoutDTprops (withoutDTcols)
-# ...            (getDTcolsMatching)
+# r1  <- asR(dt1)
 
 # DESTRUCTIVE
 #
@@ -44,134 +160,6 @@ getDT <- function(dt, prop) {
 # setDTpropsorder (setDTcolorder)
 # setDTnames
 # setDTkey
-
-# reduceDTprops (reduceDTcols )
-# bindDTs
-# mapDT
-# forDT
-
-
-#' Binds the data.table arguments into one data.table, optionally filling
-#' @return the resulting data.table
-#' @export
-bindDTs <- function(..., fill = FALSE) chDT({
-  chBool(fill)
-  result <- NULL
-  for (dt in list(...)) {
-    chDT(dt)
-    if (is.null(result))
-      result <- dt
-    else
-      result <- rbindlist(list(result, dt), fill = fill)
-  }
-  result
-})
-
-#' Maps f over each singleton data.tables representing the rows of dt
-#' @param dt chDT
-#' @param f chFun chDT1 → chDT
-#' @param fill a Bool
-#' @return chDT
-#' @export
-mapDT <- function(dt, f, fill = FALSE) chDT({
-  chDT(dt)
-  chFun(f)
-  chBool(fill)
-  result <- data.table()
-  by(dt, seq_len(nrow(dt)), function (row) {
-    result <<- rbindlist(list(result, chDT(f(row))), fill = fill)
-  })
-  result
-})
-
-#' Executes f for every row of dt
-#' @export
-forDT <- function(dt, f) chUnit({
-  chDT(dt)
-  chFun(f)
-  by(dt, seq_len(nrow(dt)), f)
-  NULL
-})
-
-#' @export
-reduceDTcols <- function(dt, cols, f, ...) chVector({
-  chDT(dt)
-  chStrings(cols)
-  chFun(f)
-  purrr::reduce(as.list(cols), function(x, c) f(x, dt[[c]]), ...)
-})
-
-#'Thanks to: https://stackoverflow.com/questions/18339370/reordering-columns-in-a-large-dataframe
-#' @export
-moveNames <- function(names, toMove, pos = "last", what = NULL) chStrings({
-  chStrings(names)
-  chStrings(toMove)
-  chString (pos)
-  chMaybe  (chString, what)
-
-  assert_that(all(toMove %in% names))
-
-  temp <- setdiff(names, toMove)
-  switch(pos,
-         first = c(toMove, temp),
-         last  = c(temp, toMove),
-         before = {
-           if (is.null(what)) stop("what must be specified when using `before`")
-           assert_that(what %in% names)
-           append(temp, values = toMove, after = (match(what, temp)-1))
-         },
-         after = {
-           if (is.null(what)) stop("what must be specified when using `after`")
-           assert_that(what %in% names)
-           append(temp, values = toMove, after = (match(what, temp)))
-         })
-})
-
-#' Takes a vector of Strings and returns a new vector with a new String s2 moving
-#' it onto a pos related to s1.
-#' @param s a vector of Strings
-#' @param s2 a new String
-#' @param pos see \code{moveNames}
-#' @param s1 an element in s according to which we position s2
-#' @return a new vector of Strings with s2 pos(itioned) according to s1
-#' @export
-withStr <- function(s, s2, pos = "after", s1) chStrings({
-  chStrings(s)
-  chString (s1)
-  chString (s2)
-  moveNames(c(s, s2), s2, pos, s1)
-})
-
-#' Asserts that colnames(dt) equals cols
-#' @export
-assertDTcols <- function(dt, cols) chDT({
-  chDT     (dt)
-  chStrings(cols)
-
-  colNames <- colnames(dt)
-
-  dups <- colNames[duplicated(colNames)]
-  if (length(dups) != 0) stop("dt contains duplicated column(s) ", dups)
-
-  dups <- cols[duplicated(cols)]
-  if (length(dups) != 0) stop("cols contain duplicated value(s) ", dups)
-
-  diff1 <- setdiff(colNames, cols)
-  diff2 <- setdiff(cols, colNames)
-
-  if (length(diff1) != 0) stop("colnames(dt) contain unrecognized column(s) ", diff1)
-  if (length(diff2) != 0) stop("colnames(dt) lack required column(s) "       , diff2)
-
-  dt
-})
-
-#' Checks if cols are valid colnames(dt)
-#' @export
-hasDTcols <- function(dt, cols) chBools({
-  chDT     (dt)
-  chStrings(cols)
-  all(cols %in% colnames(dt))
-})
 
 #' Sets columns ordering in dt
 #' @export
@@ -188,47 +176,6 @@ moveDTcols <- function(dt, ...) chDT({
   chDT(dt)
   setDTcolorder(dt, moveNames(colnames(dt), ...))
   dt
-})
-
-#' Builds a data.table by using only cols of dt
-#' @param dt a data.table
-#' @param cols a vector of Strings
-#' @export
-withDTcols <- function(dt, cols) chDT({
-  chDT(dt)
-  chStrings(cols)
-  assert_that(all(cols %in% colnames(dt)))
-  dt[, ..cols]
-})
-
-#' Builds a data.table by removing cols of dt
-#' @param dt a data.table
-#' @param cols a vector of Strings
-#' @export
-withoutDTcols <- function(dt, cols) chDT({
-  chDT(dt)
-  chStrings(cols)
-
-  colNames <- colnames(dt)
-  assert_that(all(cols %in% colNames))
-  cols <- setdiff(colNames, cols)
-  dt[, ..cols]
-})
-
-#' Returns a set of dt columns c such that match predicate pred on values.
-#' @param dt a data.table
-#' @param pred a function
-#' @param quant rows-related quantifier function, e.g. any, every
-#' @return a resulting set of columns
-#' @export
-getDTcolsMatching <- function(dt, pred, quant = any) chStrings({
-  chDT (dt)
-  chFun(pred)
-  chFun(quant)
-  purrr::keep(. = colnames(dt), .p = function(c) {
-    vals <- dt[, get(c)]
-    quant(pred(vals))
-  })
 })
 
 #' Sets data.table's column value to value and returns the data.table.
@@ -253,24 +200,3 @@ setDT <- function(dt, col, value) {
 overDT <- function(dt, col, f, ...) {
   setDT(dt, col, f(dt[[col]], ...))
 }
-
-#' Generates a report file for data.table dt in a particular year
-#' @export
-writeReportFile <- function(dt, year = NULL, problem = NULL) chUnit({
-  chDT   (dt)
-  chMaybe(chPosInt, year)
-  chMaybe(chString, problem)
-
-  fileName <- trimws(paste0(year, " ", problem))
-  fileName <- paste0(fileName, ".xlsx")
-  if (nrow(dt) == 0L) {
-    cat("No data for file", fileName, ", skipping\n")
-  } else {
-    cat("Writing file", fileName, "\n")
-    wb    <- openxlsx::createWorkbook()
-    sheet <- openxlsx::addWorksheet(wb, "Data")
-    openxlsx::writeData(wb, sheet, dt)
-    openxlsx::saveWorkbook(wb, fileName, overwrite = TRUE)
-  }
-  NULL
-})

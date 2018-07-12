@@ -23,12 +23,6 @@ V <- setClass("koR.V", slots = list(deref = "koR.RefClass"))
 #
 
 #' @export
-makeR <- function(deref) R(deref = deref)
-
-#' @export
-makeV <- function(deref) V(deref = deref)
-
-#' @export
 isR <- function(x) inherits(x, "koR.R")
 
 #' @export
@@ -40,7 +34,7 @@ asR <- function(x, copy = TRUE) {
     x
   else {
     x <- if (isV(x)) x@deref else x
-    makeR(if (copy) copyDeref(x) else x)
+    R(deref = if (copy) copyDeref(x) else x)
   }
 }
 
@@ -50,7 +44,7 @@ asV <- function(x, copy = TRUE) {
     x
   else {
     x <- if (isR(x)) x@deref else x
-    makeV(if (copy) copyDeref(x) else x)
+    V(deref = if (copy) copyDeref(x) else x)
   }
 }
 
