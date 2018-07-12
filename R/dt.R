@@ -2,6 +2,55 @@
 # Created 2015-07-20
 #
 
+asDT <- function(x) if (is.data.table(x)) x else chDT(x@deref)
+
+#' @export
+getDT <- function(dt, prop) {
+  chString(prop)
+  asDT(dt)[[prop]]
+}
+
+# library(data.table)
+# library(microbenchmark)
+# library(chR)
+# library(koR)
+# library(purrr)
+#
+# dt1 <- data.table(x = 1L)
+# r1  <- R(deref = dt1)
+#
+# microbenchmark(
+#   dt1[["x"]],
+#   getDT(dt1, "x"),
+#   getDT(r1,  "x")
+# )
+
+# hasDTprops   (hasDTcols)
+# assertDTprops(assertDTcols)
+# writeDTExcel    (writeReportFile)
+
+# CONSTRUCTORS
+#
+# withDTprops    (withDTcols)
+# withoutDTprops (withoutDTcols)
+# ...            (getDTcolsMatching)
+
+# DESTRUCTIVE
+#
+# setDT
+# overDT
+# delDTprops
+# moveDTprops     (moveDTcols)
+# setDTpropsorder (setDTcolorder)
+# setDTnames
+# setDTkey
+
+# reduceDTprops (reduceDTcols )
+# bindDTs
+# mapDT
+# forDT
+
+
 #' Binds the data.table arguments into one data.table, optionally filling
 #' @return the resulting data.table
 #' @export
