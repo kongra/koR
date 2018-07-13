@@ -161,8 +161,8 @@ getDTpropsMatching <- function(dt, pred, quant = any) chStrings({
 #' @param dt chDT|chR(chDT)
 #' @return the dt argument
 #' @export
-setDT <- function(dt, i = NULL, j, v) {
-  data.table::set(x = asDTmut(dt), i = i, j = j, value = v)
+setDT <- function(dt, j, v) {
+  data.table::set(x = asDTmut(dt), j = j, value = v)
   dt
 }
 
