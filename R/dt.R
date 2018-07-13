@@ -2,20 +2,26 @@
 # Created 2015-07-20
 #
 
-# hasDTcols         -> hasDTprops (sprawdzić, jak jest używany)
-# assertDTcols      -> assertDTprops
-# writeReportFile   -> writeDTexcel
-# reduceDTcols      -> reduceDTprops
-# withDTcols        -> withoutDTprops
-# withoutDTcols     -> withoutDTprops
-# getDTcolsMatching -> getDTpropsMatching
-
 # NON-DESTRUCTIVES
 #
 
 #' @param x chDT|chR(chDT)|chV(chDT)
+#' @return chDT
 #' @export
 asDT <- function(x) if (is.data.table(x)) x else chDT(x@deref)
+
+#' @param x chDT|chR(chDT)
+#' @return chDT
+#' @export
+asDTmut <- function(x) {
+  if (is.data.table(x))
+    x
+  else if (isR(x))
+    chDT(x@deref)
+  else
+    stop("Only chDT or chR(chDT) are supported,",
+         chR::errMessage(x))
+}
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
 #' @return chVector
@@ -26,36 +32,43 @@ getDT <- function(dt, prop) {
 }
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
+#' @return chBool
 #' @export
-hasDTprops <- function(dt, props) chBool({
+hasDTprops <- function(dt, props) {
   dt <- asDT(dt)
   chStrings(props)
   all(props %in% colnames(dt))
-})
+}
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
-#' @return dt argument
+#' @return the dt argument
 #' @export
-assertDTprops <- function(dt, props) {
+assertDTprops <- function(dt, props, checkDups = TRUE) {
   chStrings(props)
-  dups <- props[duplicated(props)]
-  if (length(dups) != 0)
-    stop("props contains duplicated value(s) ", dups)
+  chBool   (checkDups)
+  orig <- dt
 
-  orig     <- dt # The original dt argument ...
+  if (checkDups) {
+    dups <- props[duplicated(props)]
+    if (length(dups) != 0L)
+      stop("props contains duplicated value(s) ", dups)
+  }
+
   dt       <- asDT(dt)
   colNames <- colnames(dt)
-  dups     <- colNames[duplicated(colNames)]
-  if (length(dups) != 0)
-    stop("dt contains duplicated column(s) ", dups)
 
-  diff1 <- setdiff(colNames, props)
-  diff2 <- setdiff(props, colNames)
+  if (checkDups) {
+    dups <- colNames[duplicated(colNames)]
+    if (length(dups) != 0L)
+      stop("dt contains duplicated column(s) ", dups)
+  }
 
-  if (length(diff1) != 0) stop("colnames(dt) contains unrecognized column(s) ", diff1)
-  if (length(diff2) != 0) stop("colnames(dt) lacks required column(s) "       , diff2)
+  diff1 <- colNames[!(colNames %in% props)] # setdiff(colNames, props)
+  diff2 <- props   [!(props %in% colNames)] # setdiff(props, colNames)
 
-  # ... is returned untouched
+  if (length(diff1) != 0L) stop("colnames(dt) contains unrecognized column(s) ", diff1)
+  if (length(diff2) != 0L) stop("colnames(dt) lacks required column(s) "       , diff2)
+
   orig
 }
 
@@ -109,12 +122,12 @@ forDT <- function(dt, f) chUnit({
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
 #' @export
-reduceDTprops <- function(dt, props, f, ...) chVector({
+reduceDTprops <- function(dt, props, f, ...) {
   dt <- asDT(f)
   chStrings(props)
   chFun    (f)
   purrr::reduce(as.list(props), function(x, c) f(x, dt[[c]]), ...)
-})
+}
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
 #' @export
@@ -142,61 +155,100 @@ getDTpropsMatching <- function(dt, pred, quant = any) chStrings({
   purrr::keep(. = colnames(dt), .p = function(p) quant(pred(dt[[p]])))
 })
 
-# library(data.table)
-# library(microbenchmark)
-# library(chR)
-# library(koR)
-# library(purrr)
-#
-# dt1 <- data.table(x = 1L)
-# r1  <- asR(dt1)
-
 # DESTRUCTIVE
 #
-# setDT
-# overDT
-# delDTprops
-# moveDTprops     (moveDTcols)
-# setDTpropsorder (setDTcolorder)
-# setDTnames
-# setDTkey
 
-#' Sets columns ordering in dt
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
 #' @export
-setDTcolorder <- function(dt, neworder) chDT({
-  chDT        (dt)
-  chStrings   (neworder)
-  assertDTcols(dt, neworder)
-  setcolorder (dt, neworder)
-})
-
-#' Uses \code{moveNames} to set a new column ordering (destructive on dt)
-#' @export
-moveDTcols <- function(dt, ...) chDT({
-  chDT(dt)
-  setDTcolorder(dt, moveNames(colnames(dt), ...))
-  dt
-})
-
-#' Sets data.table's column value to value and returns the data.table.
-#' @param dt a data.table
-#' @param col a column of dt
-#' @param value to set
-#' @return dt
-#' @export
-setDT <- function(dt, col, value) {
-  data.table::set(x = dt, j = col, value = value)
+setDT <- function(dt, i = NULL, j, v) {
+  data.table::set(x = asDTmut(dt), i = i, j = j, value = v)
   dt
 }
 
-#' Sets data.table's new value of a column to a value of a function call
-#' with an old value of the column. Does not check if column exists in dt.
-#' @param dt a data.table
-#' @param col a column of dt
-#' @param f a function
-#' @param ... additional arguments to f call
-#' @return dt
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
 #' @export
-overDT <- function(dt, col, f, ...) {
-  setDT(dt, col, f(dt[[col]], ...))
+overDT <- function(dt, j, f, ...) {
+  orig <- dt
+  dt   <- asDTmut(dt)
+  data.table::set(x = dt, j = j, value = f(dt[[j]], ...))
+  orig
+}
+
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
+#' @export
+setDTkey <- function(dt, ...) {
+  setkey(asDTmut(dt), ...)
+  dt
+}
+
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
+#' @export
+setDTprops <- function(dt, old, new) {
+  chStrings(old)
+  chStrings(new)
+  setnames(x = asDTmut(dt), old = old, new = new)
+  dt
+}
+
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
+#' @export
+delDTprops <- function(dt, props) {
+  orig <- dt
+  dt   <- asDTmut(dt)
+  chStrings(props)
+  for (p in props) data.table::set(x = dt, j = p, value = NULL)
+  orig
+}
+
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
+#' @export
+setDTpropsorder <- function(dt, neworder) {
+  orig <- dt
+  dt   <- asDTmut(dt)
+  chStrings  (neworder)
+  setcolorder(dt, neworder)
+  orig
+}
+
+#' Diagnostic version of \code{setDTpropsorder}
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
+#' @export
+setDTpropsorder__ <- function(dt, neworder) {
+  orig <- dt
+  dt   <- asDTmut(dt)
+  chStrings    (neworder)
+  assertDTprops(dt, neworder)
+  setcolorder  (dt, neworder)
+  orig
+}
+
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
+#' @export
+moveDTprops <- function(dt, ...) {
+  orig     <- dt
+  dt       <- asDTmut(dt)
+  neworder <- moveNames(colnames(dt), ...)
+  setcolorder(dt, neworder)
+  orig
+}
+
+#' Diagnostic version of \code{moveDTprops}
+#' @param dt chDT|chR(chDT)
+#' @return the dt argument
+#' @export
+moveDTprops__ <- function(dt, ...) {
+  orig     <- dt
+  dt       <- asDTmut(dt)
+  neworder <- moveNames(colnames(dt), ...)
+  assertDTprops(dt, neworder)
+  setcolorder  (dt, neworder)
+  orig
 }
