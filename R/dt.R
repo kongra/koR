@@ -26,9 +26,8 @@ asDTmut <- function(x) {
 #' @param dt chDT|chR(chDT)|chV(chDT)
 #' @return chVector
 #' @export
-getDT <- function(dt, prop) {
-  chString(prop)
-  asDT(dt)[[prop]]
+getDT <- function(dt, j) {
+  .subset2(asDT(dt), j)
 }
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
@@ -126,7 +125,7 @@ reduceDTprops <- function(dt, props, f, ...) {
   dt <- asDT(dt)
   chStrings(props)
   chFun    (f)
-  purrr::reduce(as.list(props), function(x, c) f(x, dt[[c]]), ...)
+  purrr::reduce(as.list(props), function(x, c) f(x, .subset2(dt, c)), ...)
 }
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
@@ -148,11 +147,13 @@ withoutDTprops <- function(dt, props) chDT({
   dt[, ..props]
 })
 
+#' @param dt chDT|chR(chDT)|chV(chDT)
+#' @export
 getDTpropsMatching <- function(dt, pred, quant = any) chStrings({
   dt <- asDT(dt)
   chFun(pred)
   chFun(quant)
-  purrr::keep(. = colnames(dt), .p = function(p) quant(pred(dt[[p]])))
+  purrr::keep(. = colnames(dt), .p = function(p) quant(pred(.subset2(dt, p))))
 })
 
 # DESTRUCTIVE
@@ -172,7 +173,7 @@ setDT <- function(dt, j, v) {
 overDT <- function(dt, j, f, ...) {
   orig <- dt
   dt   <- asDTmut(dt)
-  data.table::set(x = dt, j = j, value = f(dt[[j]], ...))
+  data.table::set(x = dt, j = j, value = f(.subset2(dt, j), ...))
   orig
 }
 
