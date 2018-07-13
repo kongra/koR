@@ -14,9 +14,9 @@ asDT <- function(x) {
   else if (!is.list(x))
     stop("Only chDT|chR(chDT)|chV(chDT) are supported,", chR::errMessage(x))
   else
-    .subset2(x, "d3R3f") %or%
-    .subset2(x, "d3V3f") %or%
-    stop("Only chDT|chR(chDT)|chV(chDT) are supported,", chR::errMessage(x))
+    chDT(.subset2(x, "d3R3f") %or%
+         .subset2(x, "d3V3f") %or%
+         stop("Only chDT|chR(chDT)|chV(chDT) are supported,", chR::errMessage(x)))
 }
 
 #' @param x chDT|chR(chDT)
@@ -28,8 +28,8 @@ asDTmut <- function(x) {
   else if (!is.list(x))
     stop("Only chDT or chR(chDT) are supported,", chR::errMessage(x))
   else
-    .subset2(x, "d3R3f") %or%
-    stop("Only chDT or chR(chDT) are supported,", chR::errMessage(x))
+    chDT(.subset2(x, "d3R3f") %or%
+         stop("Only chDT or chR(chDT) are supported,", chR::errMessage(x)))
 }
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
@@ -134,7 +134,7 @@ reduceDTprops <- function(dt, props, f, ...) {
   dt <- asDT(dt)
   chStrings(props)
   chFun    (f)
-  purrr::reduce(as.list(props), function(x, c) f(x, .subset2(dt, c)), ...)
+  purrr::reduce(as.list(props), function(x, p) f(x, .subset2(dt, p)), ...)
 }
 
 #' @param dt chDT|chR(chDT)|chV(chDT)
