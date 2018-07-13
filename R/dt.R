@@ -8,7 +8,16 @@
 #' @param x chDT|chR(chDT)|chV(chDT)
 #' @return chDT
 #' @export
-asDT <- function(x) if (is.data.table(x)) x else chDT(x@deref)
+asDT <- function(x) {
+  if (is.data.table(x))
+    x
+  else if (!is.list(x))
+    stop("Only chDT|chR(chDT)|chV(chDT) are supported,", chR::errMessage(x))
+  else
+    .subset2(x, "d3R3f") %or%
+    .subset2(x, "d3V3f") %or%
+    stop("Only chDT|chR(chDT)|chV(chDT) are supported,", chR::errMessage(x))
+}
 
 #' @param x chDT|chR(chDT)
 #' @return chDT
@@ -16,11 +25,11 @@ asDT <- function(x) if (is.data.table(x)) x else chDT(x@deref)
 asDTmut <- function(x) {
   if (is.data.table(x))
     x
-  else if (isR(x))
-    chDT(x@deref)
+  else if (!is.list(x))
+    stop("Only chDT or chR(chDT) are supported,", chR::errMessage(x))
   else
-    stop("Only chDT or chR(chDT) are supported,",
-         chR::errMessage(x))
+    .subset2(x, "d3R3f") %or%
+    stop("Only chDT or chR(chDT) are supported,", chR::errMessage(x))
 }
 
 #' @param dt chDT|chR(chDT)|chV(chDT)

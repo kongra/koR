@@ -2,39 +2,34 @@
 # Created 2018-07-10
 #
 
-# DEFINE CLASSES WITH REFERENCE SEMANTICS HERE
-#
-REF_CLASSES <- c(
-  "data.table"
-)
+#' @export
+makeR <- function(x) {
+  if (is.null(x)) stop("NULL arg is not allowed,", chR::errMessage(x))
+  list("d3R3f" = x)
+}
+
+#' @export
+makeV <- function(x) {
+  if (is.null(x)) stop("NULL arg is not allowed,", chR::errMessage(x))
+  list("d3V3f" = x)
+}
+
+#' @export
+isR <- function(x) is.list(x) && !is.null(.subset2(x, "d3R3f"))
+
+#' @export
+isV <- function(x) is.list(x) && !is.null(.subset2(x, "d3V3f"))
 
 copyDeref <- function(x) UseMethod("copyDeref")
 copyDeref.data.table <- data.table::copy
-
-# INSTRUMENTATION
-#
-for (rc in REF_CLASSES) setOldClass(rc)
-setClassUnion("koR.RefClass", members = REF_CLASSES)
-
-R <- setClass("koR.R", slots = list(deref = "koR.RefClass"))
-V <- setClass("koR.V", slots = list(deref = "koR.RefClass"))
-
-# API
-#
-
-#' @export
-isR <- function(x) inherits(x, "koR.R")
-
-#' @export
-isV <- function(x) inherits(x, "koR.V")
 
 #' @export
 asR <- function(x, copy = TRUE) {
   if (isR(x))
     x
   else {
-    x <- if (isV(x)) x@deref else x
-    R(deref = if (copy) copyDeref(x) else x)
+    x <- (if (is.list(x)) .subset2(x, "d3V3f")) %or% x
+    makeR(if (copy) copyDeref(x) else x)
   }
 }
 
@@ -43,21 +38,21 @@ asV <- function(x, copy = TRUE) {
   if (isV(x))
     x
   else {
-    x <- if (isR(x)) x@deref else x
-    V(deref = if (copy) copyDeref(x) else x)
+    x <- (if (is.list(x)) .subset2(x, "d3R3f")) %or% x
+    makeV(if (copy) copyDeref(x) else x)
   }
 }
 
 #' @export
 chR <- function(check, x) {
-  if (!isR(x)) stop(chR::errMessage(x))
-  check(x@deref)
-  x
+  deref <- if (is.list(x)) .subset2(x, "d3R3f")
+  if (is.null(deref)) stop(chR::errMessage(x))
+  check(deref)
 }
 
 #' @export
 chV <- function(check, x) {
-  if (!isV(x)) stop(chR::errMessage(x))
-  check(x@deref)
-  x
+  deref <- if (is.list(x)) .subset2(x, "d3V3f")
+  if (is.null(deref)) stop(chR::errMessage(x))
+  check(deref)
 }
