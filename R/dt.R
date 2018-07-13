@@ -123,7 +123,7 @@ forDT <- function(dt, f) chUnit({
 #' @param dt chDT|chR(chDT)|chV(chDT)
 #' @export
 reduceDTprops <- function(dt, props, f, ...) {
-  dt <- asDT(f)
+  dt <- asDT(dt)
   chStrings(props)
   chFun    (f)
   purrr::reduce(as.list(props), function(x, c) f(x, dt[[c]]), ...)
