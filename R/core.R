@@ -454,3 +454,11 @@ withStr <- function(s, s2, pos = "after", s1) chStrings({
   chString (s2)
   moveNames(c(s, s2), s2, pos, s1)
 })
+
+#' A faster (trivial) version of stopifnot.
+#' @export
+stopIfNot <- function(expr) if (!expr) stop("expr not TRUE")
+
+#' Alias for \code{base::stopifnot}
+#' @export
+stopIfNot__ <- base::stopifnot
