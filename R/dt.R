@@ -46,8 +46,9 @@ assertDTprops <- function(dt, props, checkDups = TRUE) {
   dt
 }
 
+#' @return chUnit/NULL
 #' @export
-writeDTexcel <- function(dt, name, sheetName = "Data") chUnit({
+writeDTexcel <- function(dt, name, sheetName = "Data") {
   chDT    (dt)
   chString(name)
   chString(sheetName)
@@ -63,7 +64,7 @@ writeDTexcel <- function(dt, name, sheetName = "Data") chUnit({
     openxlsx::saveWorkbook(wb, fileName, overwrite = TRUE)
   }
   NULL
-})
+}
 
 # CONSTRUCTORS/ITERATORS
 #
@@ -85,7 +86,7 @@ mapDT <- function(dt, f, fill = FALSE) {
   rbindlist(rows, fill = fill)
 }
 
-#' @return chUnit(NULL)
+#' @return chUnit/NULL
 #' @export
 forDT <- function(dt, f) {
   chDT (dt)
@@ -147,7 +148,7 @@ overDT <- function(dt, j, f, ...) {
 #' @return chDT
 #' @export
 setDTkey <- function(dt, ...) {
-  setkey(dt, ...)
+  data.table::setkey(dt, ...)
   dt
 }
 
@@ -157,7 +158,7 @@ setDTprops <- function(dt, old, new) {
   chDT     (dt)
   chStrings(old)
   chStrings(new)
-  setnames(x = dt, old = old, new = new)
+  setnames (x = dt, old = old, new = new)
   dt
 }
 
