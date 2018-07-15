@@ -5,8 +5,9 @@
 # NON-DESTRUCTIVES
 #
 
+#' Alias for \code{.subset2}
 #' @export
-getDT <- function(dt, j) .subset2(dt, j)
+getProp <- .subset2
 
 #' @return chBool
 #' @export
