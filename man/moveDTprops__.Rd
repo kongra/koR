@@ -6,11 +6,8 @@
 \usage{
 moveDTprops__(dt, ...)
 }
-\arguments{
-\item{dt}{chDT|chR(chDT)}
-}
 \value{
-the dt argument
+chDT
 }
 \description{
 Diagnostic version of \code{moveDTprops}

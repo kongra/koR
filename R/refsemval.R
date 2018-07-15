@@ -9,11 +9,25 @@ makeR <- function(x) {
   list("d3R3f" = x)
 }
 
+#' @export
+derefR <- function(x) {
+  d <- .subset2(x, "d3R3f")
+  if (is.null(d)) stop("Not derefR(able),", chR::errMessage(x))
+  d
+}
+
 #' @return chV(...)
 #' @export
 makeV <- function(x) {
   if (is.null(x)) stop("NULL arg is not allowed,", chR::errMessage(x))
   list("d3V3f" = x)
+}
+
+#' @export
+derefV <- function(x) {
+  d <- .subset2(x, "d3V3f")
+  if (is.null(d)) stop("Not derefV(able),", chR::errMessage(x))
+  d
 }
 
 #' @return chBool
@@ -47,20 +61,4 @@ asV <- function(x, copy = TRUE) {
     x <- (if (is.list(x)) .subset2(x, "d3R3f")) %or% x
     makeV(if (copy) copyDeref(x) else x)
   }
-}
-
-#' @return x the arg
-#' @export
-chR <- function(check, x) {
-  deref <- if (is.list(x)) .subset2(x, "d3R3f")
-  if (is.null(deref)) stop(chR::errMessage(x))
-  check(deref)
-}
-
-#' @return x the arg
-#' @export
-chV <- function(check, x) {
-  deref <- if (is.list(x)) .subset2(x, "d3V3f")
-  if (is.null(deref)) stop(chR::errMessage(x))
-  check(deref)
 }

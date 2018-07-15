@@ -6,11 +6,8 @@
 \usage{
 setDTpropsorder__(dt, neworder)
 }
-\arguments{
-\item{dt}{chDT|chR(chDT)}
-}
 \value{
-the dt argument
+chDT
 }
 \description{
 Diagnostic version of \code{setDTpropsorder}
