@@ -7,7 +7,7 @@
 moveDTprops__(dt, ...)
 }
 \value{
-chDT
+dt
 }
 \description{
 Diagnostic version of \code{moveDTprops}

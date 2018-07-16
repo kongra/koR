@@ -17,7 +17,7 @@ hasDTprops <- function(dt, props) {
   all(props %in% colnames(dt))
 }
 
-#' @return chDT
+#' @return dt
 #' @export
 assertDTprops <- function(dt, props, checkDups = TRUE) {
   chDT     (dt)
@@ -132,28 +132,28 @@ getDTpropsMatching <- function(dt, pred, quant = any) {
 # DESTRUCTIVE
 #
 
-#' @return chDT
+#' @return dt
 #' @export
 setDT <- function(dt, j, v) {
   data.table::set(x = dt, j = j, value = v)
   dt
 }
 
-#' @return chDT
+#' @return dt
 #' @export
 overDT <- function(dt, j, f, ...) {
   data.table::set(x = dt, j = j, value = f(.subset2(dt, j), ...))
   dt
 }
 
-#' @return chDT
+#' @return dt
 #' @export
 setDTkey <- function(dt, ...) {
   data.table::setkey(dt, ...)
   dt
 }
 
-#' @return chDT
+#' @return dt
 #' @export
 setDTprops <- function(dt, old, new) {
   chDT     (dt)
@@ -163,7 +163,7 @@ setDTprops <- function(dt, old, new) {
   dt
 }
 
-#' @return chDT
+#' @return dt
 #' @export
 delDTprops <- function(dt, props) {
   chStrings(props)
@@ -171,7 +171,7 @@ delDTprops <- function(dt, props) {
   dt
 }
 
-#' @return chDT
+#' @return dt
 #' @export
 setDTpropsorder <- function(dt, neworder) {
   chDT     (dt)
@@ -181,7 +181,7 @@ setDTpropsorder <- function(dt, neworder) {
 }
 
 #' Diagnostic version of \code{setDTpropsorder}
-#' @return chDT
+#' @return dt
 #' @export
 setDTpropsorder__ <- function(dt, neworder) {
   chDT     (dt)
@@ -191,7 +191,7 @@ setDTpropsorder__ <- function(dt, neworder) {
   dt
 }
 
-#' @return chDT
+#' @return dt
 #' @export
 moveDTprops <- function(dt, ...) {
   data.table::setcolorder(dt, moveNames(colnames(dt), ...))
@@ -199,7 +199,7 @@ moveDTprops <- function(dt, ...) {
 }
 
 #' Diagnostic version of \code{moveDTprops}
-#' @return chDT
+#' @return dt
 #' @export
 moveDTprops__ <- function(dt, ...) {
   neworder <- moveNames(colnames(dt), ...)

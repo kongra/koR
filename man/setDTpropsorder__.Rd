@@ -7,7 +7,7 @@
 setDTpropsorder__(dt, neworder)
 }
 \value{
-chDT
+dt
 }
 \description{
 Diagnostic version of \code{setDTpropsorder}
