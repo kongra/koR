@@ -9,10 +9,14 @@ makeR <- function(x) {
   list("d3R3f" = x)
 }
 
+#' @return chBool
 #' @export
-derefR <- function(x) {
+isR <- function(x) is.list(x) && !is.null(.subset2(x, "d3R3f"))
+
+#' @export
+unsafeR <- function(x) {
   d <- .subset2(x, "d3R3f")
-  if (is.null(d)) stop("Not derefR(able),", chR::errMessage(x))
+  if (is.null(d)) stop("Not unsafeR(able),", chR::errMessage(x))
   d
 }
 
@@ -23,42 +27,24 @@ makeV <- function(x) {
   list("d3V3f" = x)
 }
 
-#' @export
-derefV <- function(x) {
-  d <- .subset2(x, "d3V3f")
-  if (is.null(d)) stop("Not derefV(able),", chR::errMessage(x))
-  d
-}
-
-#' @return chBool
-#' @export
-isR <- function(x) is.list(x) && !is.null(.subset2(x, "d3R3f"))
-
 #' @return chBool
 #' @export
 isV <- function(x) is.list(x) && !is.null(.subset2(x, "d3V3f"))
 
-copyDeref <- function(x) UseMethod("copyDeref")
-copyDeref.data.table <- data.table::copy
-
-#' @return chR(...)
 #' @export
-asR <- function(x, copy = TRUE) {
-  if (isR(x))
-    x
-  else {
-    x <- (if (is.list(x)) .subset2(x, "d3V3f")) %or% x
-    makeR(if (copy) copyDeref(x) else x)
-  }
+unsafeV <- function(x) {
+  d <- .subset2(x, "d3V3f")
+  if (is.null(d)) stop("Not unsafeV(able),", chR::errMessage(x))
+  d
 }
 
-#' @return chV(...)
 #' @export
-asV <- function(x, copy = TRUE) {
-  if (isV(x))
-    x
-  else {
-    x <- (if (is.list(x)) .subset2(x, "d3R3f")) %or% x
-    makeV(if (copy) copyDeref(x) else x)
-  }
+safeV <- function(x) {
+  d <- .subset2(x, "d3V3f")
+  if (is.null(d)) stop("Not safeV(able),", chR::errMessage(x))
+  copyV(d)
 }
+
+#' @export
+copyV <- function(x) UseMethod("copyV")
+copyV.data.table <- data.table::copy
