@@ -167,7 +167,20 @@ setDTprops <- function(dt, old, new) {
 #' @export
 delDTprops <- function(dt, props) {
   chStrings(props)
-  for (p in props) data.table::set(x = dt, j = p, value = NULL)
+  for (p in props)
+    data.table::set(x = dt, j = p, value = NULL)
+
+  dt
+}
+
+#' @return dt
+#' @export
+keepDTprops <- function(dt, props) {
+  chStrings(props)
+  colNames <- colnames(dt)
+  for (p in colNames[!(colNames %in% props)])
+    data.table::set(x = dt, j = p, value = NULL)
+
   dt
 }
 
