@@ -2,6 +2,8 @@
 # Created 2015-07-20
 #
 
+source("R/refsemval.R")
+
 ## NON-DESTRUCTIVES
 
 #' Alias for \code{.subset2}

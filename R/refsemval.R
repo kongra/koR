@@ -5,6 +5,8 @@
 ## VALUE SEMANTICS FOR OBJECTS WITH REFERENCES (data.table, env, etc.)
 
 ## INSTRUMENTATION
+library(data.table)
+
 REF_CLASSES <- c(
   "data.table"
 )
