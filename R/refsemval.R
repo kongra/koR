@@ -2,49 +2,39 @@
 # Created 2018-07-10
 #
 
-#' @return chR(...)
-#' @export
-makeR <- function(x) {
-  if (is.null(x)) stop("NULL arg is not allowed,", chR::errMessage(x))
-  list("d3R3f" = x)
-}
+## VALUE SEMANTICS FOR OBJECTS WITH REFERENCES (data.table, env, etc.)
 
-#' @return chBool
-#' @export
-isR <- function(x) is.list(x) && !is.null(.subset2(x, "d3R3f"))
+## INSTRUMENTATION
+REF_CLASSES <- c(
+  "data.table"
+)
 
-#' @export
-unsafeR <- function(x) {
-  d <- .subset2(x, "d3R3f")
-  if (is.null(d)) stop("Not unsafeR(able),", chR::errMessage(x))
-  d
-}
+safeCopy <- function(x) UseMethod("safeCopy")
+safeCopy.data.table <- data.table::copy
 
-#' @return chV(...)
-#' @export
-makeV <- function(x) {
-  if (is.null(x)) stop("NULL arg is not allowed,", chR::errMessage(x))
-  list("d3V3f" = x)
-}
+for (rc in REF_CLASSES) setOldClass(rc)
+setClassUnion("koR.RefClass", members = REF_CLASSES)
 
-#' @return chBool
-#' @export
-isV <- function(x) is.list(x) && !is.null(.subset2(x, "d3V3f"))
+V <- setClass("koR.V", slots = list(unsafeV = "koR.RefClass"))
+
+## API
 
 #' @export
-unsafeV <- function(x) {
-  d <- .subset2(x, "d3V3f")
-  if (is.null(d)) stop("Not unsafeV(able),", chR::errMessage(x))
-  d
-}
+makeV <- function(x) V(unsafeV = x)
 
 #' @export
-safeV <- function(x) {
-  d <- .subset2(x, "d3V3f")
-  if (is.null(d)) stop("Not safeV(able),", chR::errMessage(x))
-  copyV(d)
-}
+isV <- function(x) inherits(x, "koR.V")
 
 #' @export
-copyV <- function(x) UseMethod("copyV")
-copyV.data.table <- data.table::copy
+chV <- function(check, x) check(x@unsafeV)
+
+#' @export
+safeV <- function(x) safeCopy(x@unsafeV)
+
+#' @export
+unsafeVrapper <- function(f)
+  function(x, ...) f(x@unsafeV, ...)
+
+#' @export
+safeVrapper <- function(f)
+  function(x, ...) f(safeV(x), ...)

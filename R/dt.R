@@ -2,12 +2,14 @@
 # Created 2015-07-20
 #
 
-# NON-DESTRUCTIVES
-#
+## NON-DESTRUCTIVES
 
 #' Alias for \code{.subset2}
 #' @export
 getProp <- .subset2
+
+#' @export
+getPropV <- unsafeVrapper(.subset2)
 
 #' @return chBool
 #' @export
@@ -16,6 +18,9 @@ hasDTprops <- function(dt, props) {
   chStrings(props)
   all(props %in% colnames(dt))
 }
+
+#' @export
+hasDTpropsV <- unsafeVrapper(hasDTprops)
 
 #' @return dt
 #' @export
@@ -47,6 +52,9 @@ assertDTprops <- function(dt, props, checkDups = TRUE) {
   dt
 }
 
+#' @export
+assertDTpropsV <- unsafeVrapper(assertDTprops)
+
 #' @return chUnit/NULL
 #' @export
 writeDTexcel <- function(dt, name, sheetName = "Data") {
@@ -67,8 +75,10 @@ writeDTexcel <- function(dt, name, sheetName = "Data") {
   NULL
 }
 
-# CONSTRUCTORS/ITERATORS
-#
+#' @export
+writeDTexcelV <- unsafeVrapper(writeDTexcel)
+
+## CONSTRUCTORS/ITERATORS
 
 #' @return chDT
 #' @export
@@ -79,7 +89,7 @@ bindDTs <- function(..., fill = FALSE) {
 
 #' @return chDT
 #' @export
-mapDT <- function(dt, f, fill = FALSE) {
+mapDTrows <- function(dt, f, fill = FALSE) {
   chDT  (dt)
   chFun (f)
   chBool(fill)
@@ -87,14 +97,20 @@ mapDT <- function(dt, f, fill = FALSE) {
   rbindlist(rows, fill = fill)
 }
 
+#' @export
+mapDTrowsV <- unsafeVrapper(mapDTrows)
+
 #' @return chUnit/NULL
 #' @export
-forDT <- function(dt, f) {
+forDTrows <- function(dt, f) {
   chDT (dt)
   chFun(f)
   by(dt, seq_len(nrow(dt)), f)
   NULL
 }
+
+#' @export
+forDTrowsV <- unsafeVrapper(forDTrows)
 
 #' @export
 reduceDTprops <- function(dt, props, f, ...) {
@@ -104,12 +120,18 @@ reduceDTprops <- function(dt, props, f, ...) {
   purrr::reduce(as.list(props), function(x, p) f(x, .subset2(dt, p)), ...)
 }
 
+#' @export
+reduceDTpropsV <- unsafeVrapper(reduceDTprops)
+
 #' @return chDT
 #' @export
 withDTprops <- function(dt, props) {
   chStrings(props)
   dt[, ..props]
 }
+
+#' @export
+withDTpropsV <- unsafeVrapper(withDTprops)
 
 #' @return chDT
 #' @export
@@ -120,6 +142,9 @@ withoutDTprops <- function(dt, props) {
   dt[, ..props]
 }
 
+#' @export
+withoutDTpropsV <- unsafeVrapper(withoutDTprops)
+
 #' @return chStrings
 #' @export
 getDTpropsMatching <- function(dt, pred, quant = any) {
@@ -129,22 +154,30 @@ getDTpropsMatching <- function(dt, pred, quant = any) {
   purrr::keep(. = colnames(dt), .p = function(p) quant(pred(.subset2(dt, p))))
 }
 
-# DESTRUCTIVE
-#
+#' @export
+getDTpropsMatchingV <- unsafeVrapper(getDTpropsMatching)
+
+## DESTRUCTIVE
 
 #' @return dt
 #' @export
-setDT <- function(dt, j, v) {
+setDTprop <- function(dt, j, v) {
   data.table::set(x = dt, j = j, value = v)
   dt
 }
 
+#' @export
+setDTpropV <- safeVrapper(setDTprop)
+
 #' @return dt
 #' @export
-overDT <- function(dt, j, f, ...) {
+overDTprop <- function(dt, j, f, ...) {
   data.table::set(x = dt, j = j, value = f(.subset2(dt, j), ...))
   dt
 }
+
+#' @export
+overDTpropV <- safeVrapper(overDTprop)
 
 #' @return dt
 #' @export
@@ -153,15 +186,21 @@ setDTkey <- function(dt, ...) {
   dt
 }
 
+#' @export
+setDTkeyV <- safeVrapper(setDTkey)
+
 #' @return dt
 #' @export
-setDTprops <- function(dt, old, new) {
+setDTnames <- function(dt, old, new) {
   chDT     (dt)
   chStrings(old)
   chStrings(new)
   setnames (x = dt, old = old, new = new)
   dt
 }
+
+#' @export
+setDTnamesV <- safeVrapper(setDTnames)
 
 #' @return dt
 #' @export
@@ -172,6 +211,9 @@ delDTprops <- function(dt, props) {
 
   dt
 }
+
+#' @export
+delDTpropsV <- safeVrapper(delDTprops)
 
 #' @return dt
 #' @export
@@ -184,14 +226,20 @@ keepDTprops <- function(dt, props) {
   dt
 }
 
+#' @export
+keepDTpropsV <- safeVrapper(keepDTprops)
+
 #' @return dt
 #' @export
 setDTpropsorder <- function(dt, neworder) {
-  chDT     (dt)
-  chStrings(neworder)
+  chDT       (dt)
+  chStrings  (neworder)
   setcolorder(dt, neworder)
   dt
 }
+
+#' @export
+setDTpropsorderV <- safeVrapper(setDTpropsorder)
 
 #' Diagnostic version of \code{setDTpropsorder}
 #' @return dt
@@ -204,12 +252,18 @@ setDTpropsorder__ <- function(dt, neworder) {
   dt
 }
 
+#' @export
+setDTpropsorderV__ <- safeVrapper(setDTpropsorder__)
+
 #' @return dt
 #' @export
 moveDTprops <- function(dt, ...) {
   data.table::setcolorder(dt, moveNames(colnames(dt), ...))
   dt
 }
+
+#' @export
+moveDTpropsV <- safeVrapper(moveDTprops)
 
 #' Diagnostic version of \code{moveDTprops}
 #' @return dt
@@ -220,3 +274,6 @@ moveDTprops__ <- function(dt, ...) {
   data.table::setcolorder(dt, neworder)
   dt
 }
+
+#' @export
+moveDTpropsV__ <- safeVrapper(moveDTprops__)
