@@ -400,7 +400,7 @@ overDTpropset <- function(dt, pset, f, ...) chDT({
   colNames <- colnames(dt)
   for (p in pset@props)
     if (p %in% colNames)
-      overDT(dt, p, f, ...)
+      overDTprop(dt, p, f, ...)
   dt
 })
 
@@ -427,7 +427,7 @@ propsetDTfmt <- function(dt, pset, f, props, fmt, suppWgsFor, ...) { # chDT
       if (pfmt@ident)
         pfmt@ch(dt[[p]]) # For identities only make a check
       else
-        koR::setDT(dt, p, f(pfmt, dt[[p]], ...))
+        koR::setDTprop(dt, p, f(pfmt, dt[[p]], ...))
     }, error = function(e) {
       stop("Error(s) fmt'ing prop ", p, ": ", e)
     }, warning = function(w) {
