@@ -28,7 +28,10 @@ makeV <- function(x) V(unsafeV = x)
 isV <- function(x) inherits(x, "koR.V")
 
 #' @export
-chV <- function(check, x) check(x@unsafeV)
+chV <- function(check, x) {
+  check(x@unsafeV)
+  x
+}
 
 #' @export
 safeV <- function(x) safeCopy(x@unsafeV)
