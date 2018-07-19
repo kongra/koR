@@ -35,11 +35,3 @@ chV <- function(check, x) {
 
 #' @export
 safeV <- function(x) safeCopy(x@unsafeV)
-
-#' @export
-unsafeVrapper <- function(f)
-  function(x, ...) f(x@unsafeV, ...)
-
-#' @export
-safeVrapper <- function(f)
-  function(x, ...) f(safeV(x), ...)

@@ -2,7 +2,15 @@
 # Created 2015-07-20
 #
 
-source("R/refsemval.R")
+## UTILS
+
+#' @export
+unsafeVrapper <- function(f)
+  function(x, ...) f(x@unsafeV, ...)
+
+#' @export
+safeVrapper <- function(f)
+  function(x, ...) f(safeV(x), ...)
 
 ## NON-DESTRUCTIVES
 
