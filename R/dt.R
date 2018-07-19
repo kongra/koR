@@ -6,6 +6,9 @@ source("R/refsemval.R")
 
 ## NON-DESTRUCTIVES
 
+#' @export
+nrowV <- unsafeVrapper(base::nrow)
+
 #' Alias for \code{.subset2}
 #' @export
 getProp <- .subset2
@@ -81,6 +84,16 @@ writeDTexcel <- function(dt, name, sheetName = "Data") {
 writeDTexcelV <- unsafeVrapper(writeDTexcel)
 
 ## CONSTRUCTORS/ITERATORS
+
+#' @return chDT
+#' @export
+selectDTrows <- function(dt, expr) {
+  chDT(dt)
+  dt[expr]
+}
+
+#' @export
+selectDTrowsV <- unsafeVrapper(selectDTrows)
 
 #' @return chDT
 #' @export
