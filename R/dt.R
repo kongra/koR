@@ -56,8 +56,8 @@ assertDTprops <- function(dt, props, checkDups = TRUE) {
       stop("dt contains duplicated column(s) ", dups)
   }
 
-  diff1 <- colNames[!(colNames %in% props)] # setdiff(colNames, props)
-  diff2 <- props   [!(props %in% colNames)] # setdiff(props, colNames)
+  diff1 <- disj(colNames, props)
+  diff2 <- disj(props, colNames)
 
   if (length(diff1) != 0L) stop("colnames(dt) contains unrecognized column(s) ", diff1)
   if (length(diff2) != 0L) stop("colnames(dt) lacks required column(s) "       , diff2)
@@ -161,7 +161,7 @@ withDTpropsV <- unsafeVrapper(withDTprops)
 withoutDTprops <- function(dt, props) {
   chStrings(props)
   colNames <- colnames(dt)
-  props    <- colNames[!(colNames %in% props)] # setdiff(colNames, props)
+  props    <- disj(colNames, props)
   dt[, ..props]
 }
 
@@ -243,9 +243,7 @@ delDTpropsV <- safeVrapper(delDTprops)
 keepDTprops <- function(dt, props) {
   chStrings(props)
   colNames <- colnames(dt)
-  for (p in colNames[!(colNames %in% props)])
-    data.table::set(x = dt, j = p, value = NULL)
-
+  for (p in disj(colNames, props)) data.table::set(x = dt, j = p, value = NULL)
   dt
 }
 
