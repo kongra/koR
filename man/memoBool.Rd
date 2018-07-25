@@ -2,12 +2,10 @@
 % Please edit documentation in R/memo.R
 \name{memoBool}
 \alias{memoBool}
-\title{A fast memoizer for values of function call depending on some logical
-condition.}
+\title{A fast memoizer for values of depending on some logical condition.}
 \usage{
-memoBool(f, ...)
+memoBool(forTrue, forFalse)
 }
 \description{
-A fast memoizer for values of function call depending on some logical
-condition.
+A fast memoizer for values of depending on some logical condition.
 }
