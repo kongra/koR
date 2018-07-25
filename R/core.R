@@ -40,8 +40,7 @@ catimela <- function(expr, msg = "", off = FALSE) {
     expr
   else {
     start <- as.double(Sys.time())
-    force(expr)
-    value <- expr
+    value <- force(expr)
     end   <- as.double(Sys.time())
     pfx   <- if (msg != "") paste0(msg, " elapsed") else "elapsed"
     cat(pfx, (end - start) * 1e3, "msecs\n")
