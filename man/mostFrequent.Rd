@@ -2,12 +2,12 @@
 % Please edit documentation in R/core.R
 \name{mostFrequent}
 \alias{mostFrequent}
-\title{Returns a data.table of n most frequent elements in vector x
-together with their frequencies.}
+\title{Returns a vector xs sorted by the (decreasing) frequency of appearance of
+its elements.}
 \usage{
-mostFrequent(x, n = 10)
+mostFrequent(xs, ...)
 }
 \description{
-Returns a data.table of n most frequent elements in vector x
-together with their frequencies.
+Returns a vector xs sorted by the (decreasing) frequency of appearance of
+its elements.
 }

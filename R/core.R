@@ -99,14 +99,13 @@ chatty <- function(f, prefix = "Processing ") chFun({
   }
 })
 
-#' Returns a data.table of n most frequent elements in vector x
-#' together with their frequencies.
+#' Returns a vector xs sorted by the (decreasing) frequency of appearance of
+#' its elements.
 #' @export
-mostFrequent <- function(x, n = 10) chDT({
-  chVector(x)
-  dt <- data.table(x = x)
-  head(dt[, .(freq = .N), by = x][order(-freq)], n)
-})
+mostFrequent <- function(xs, ...) {
+  r   <- rle(xs)
+  getProp(r, "values")[order(getProp(r, "lengths"), decreasing = TRUE)]
+}
 
 #' Returns a data.table of mode values, together with their frequency.
 #' @export
