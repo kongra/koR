@@ -45,11 +45,24 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// countWorkdays
+std::size_t countWorkdays(const std::size_t dayOfWeek, const std::size_t daysCount);
+RcppExport SEXP _koR_countWorkdays(SEXP dayOfWeekSEXP, SEXP daysCountSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::size_t >::type dayOfWeek(dayOfWeekSEXP);
+    Rcpp::traits::input_parameter< const std::size_t >::type daysCount(daysCountSEXP);
+    rcpp_result_gen = Rcpp::wrap(countWorkdays(dayOfWeek, daysCount));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_koR_boolsAndInterveawe", (DL_FUNC) &_koR_boolsAndInterveawe, 2},
     {"_koR_copyInts", (DL_FUNC) &_koR_copyInts, 5},
     {"_koR_copyDoubles", (DL_FUNC) &_koR_copyDoubles, 5},
+    {"_koR_countWorkdays", (DL_FUNC) &_koR_countWorkdays, 2},
     {NULL, NULL, 0}
 };
 

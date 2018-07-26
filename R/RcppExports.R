@@ -18,3 +18,10 @@ copyDoubles <- function(src, srcPos, dest, destPos, length) {
     invisible(.Call('_koR_copyDoubles', PACKAGE = 'koR', src, srcPos, dest, destPos, length))
 }
 
+#' Computes number of work days (1-5/Mon-Fri) fot the total number of days and
+#' starting with the initial day of week (1-7/Mon-Sun).
+#' @export
+countWorkdays <- function(dayOfWeek, daysCount) {
+    .Call('_koR_countWorkdays', PACKAGE = 'koR', dayOfWeek, daysCount)
+}
+

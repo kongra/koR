@@ -37,3 +37,20 @@ void copyInts(IntegerVector src, size_t srcPos, IntegerVector dest, size_t destP
 void copyDoubles(DoubleVector src, size_t srcPos, DoubleVector dest, size_t destPos, size_t length) {
   arraycopy(src, srcPos, dest, destPos, length);
 }
+
+//' Computes number of work days (1-5/Mon-Fri) fot the total number of days and
+//' starting with the initial day of week (1-7/Mon-Sun).
+//' @export
+// [[Rcpp::export]]
+std::size_t countWorkdays(const std::size_t dayOfWeek, const std::size_t daysCount) {
+  std::size_t count = 0;
+  std::size_t day = dayOfWeek;
+  for (std::size_t i = 0; i < daysCount; i++) {
+    if (day < 6) count++;
+    if (day == 7)
+      day = 1;
+    else
+      day++;
+  }
+  return count;
+}
