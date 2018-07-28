@@ -23,7 +23,8 @@ Imports:
     proxy,
     readr,
     purrr,
-    openxlsx
-RoxygenNote: 6.0.1
+    openxlsx,
+    shiny
+RoxygenNote: 6.1.0
 ByteCompile: true
 LinkingTo: Rcpp

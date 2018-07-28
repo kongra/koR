@@ -4,7 +4,8 @@
 \alias{doCall}
 \title{Works like \code{do.call} but optionaly removes all NULL args.}
 \usage{
-doCall(what, args, quote = FALSE, envir = parent.frame(), null.rm = TRUE)
+doCall(what, args, quote = FALSE, envir = parent.frame(),
+  null.rm = TRUE)
 }
 \description{
 Works like \code{do.call} but optionaly removes all NULL args.

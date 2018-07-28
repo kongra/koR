@@ -11,6 +11,10 @@ memoBool <- function(forTrue, forFalse) {
 
 CAPT_ARGS <- hash::hash()
 
+procCaptArg                <- function(x) UseMethod("procCaptArg")
+procCaptArg.default        <- base::identity
+procCaptArg.reactivevalues <- shiny::reactiveValuesToList
+
 #' Captures the arguments for calling f. When called without f returns
 #' the last captured args for given id.
 #' @export
@@ -21,7 +25,7 @@ captArgs <- function(id, f = NULL, ...) {
   if (is.null(f))
     .subset2(CAPT_ARGS, id)
   else {
-    CAPT_ARGS[[id]] <- list(...)
+    CAPT_ARGS[[id]] <- purrr::map(list(...), procCaptArg)
     f(...)
   }
 }
