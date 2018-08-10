@@ -20,21 +20,33 @@ LogicalVector boolsAndInterveawe(LogicalVector b, LogicalVector other) {
 }
 
 template<typename T>
-static inline void arraycopy(T src, size_t srcPos, T dest, size_t destPos, size_t length) {
+static inline void arraycopy(const T src,
+                             const std::size_t srcPos,
+                             T dest,
+                             const std::size_t destPos,
+                             const std::size_t length) {
   for (size_t i = 0; i < length; i++) dest[i + destPos] = src[i + srcPos];
 }
 
 //' Works like System.arraycopy(...) in Java for integer vectors.
 //' @export
 // [[Rcpp::export]]
-void copyInts(IntegerVector src, size_t srcPos, IntegerVector dest, size_t destPos, size_t length) {
+void copyInts(const IntegerVector src,
+              const std::size_t srcPos,
+              IntegerVector dest,
+              const std::size_t destPos,
+              const std::size_t length) {
   arraycopy(src, srcPos, dest, destPos, length);
 }
 
 //' Works like System.arraycopy(...) in Java for double vectors.
 //' @export
 // [[Rcpp::export]]
-void copyDoubles(DoubleVector src, size_t srcPos, DoubleVector dest, size_t destPos, size_t length) {
+void copyDoubles(const DoubleVector src,
+                 const std::size_t srcPos,
+                 DoubleVector dest,
+                 const std::size_t destPos,
+                 const std::size_t length) {
   arraycopy(src, srcPos, dest, destPos, length);
 }
 
