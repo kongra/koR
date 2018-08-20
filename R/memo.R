@@ -9,7 +9,7 @@ memoBool <- function(forTrue, forFalse) {
   function(b) .subset2(cache, if (b) 1L else 2L)
 }
 
-CAPT_ARGS <- hash::hash()
+CAPT_ARGS <- new.env(hash = TRUE, parent = emptyenv())
 
 procCaptArg                <- function(x) UseMethod("procCaptArg")
 procCaptArg.default        <- base::identity
