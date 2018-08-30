@@ -298,3 +298,7 @@ moveDTprops__ <- function(dt, ...) {
 
 #' @export
 moveDTpropsV__ <- safeVrapper(moveDTprops__)
+
+#' @export
+readDTrds <- function(file, refhook = NULL)
+  as.data.table(readRDS(file = file, refhook = refhook))
